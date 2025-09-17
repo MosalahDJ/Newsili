@@ -6,12 +6,12 @@ import 'package:newsily/constants/constant_strings.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_state.dart';
 
 class FetchCubit extends Cubit<FetchState> {
-  FetchCubit(this.modelUrl) : super(Initialdata());
+  FetchCubit() : super(Initialdata());
 
   static final String _apiKey = dotenv.env['API_KEY']!;
-  final String modelUrl;
 
-  Future<String> fetchData() async {
+  Future<String> fetchData(modelUrl) async {
+    
     try {
       emit(DataLoading());
       final response = await http.get(Uri.parse("$baseUrl$modelUrl$_apiKey"));

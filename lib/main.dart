@@ -17,16 +17,7 @@ class Newsily extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => FetchCubit("")),
-        BlocProvider(create: (context) => FetchCubit("")),
-        BlocProvider(create: (context) => FetchCubit("")),
-        BlocProvider(create: (context) => FetchCubit("")),
-
-        // BlocProvider(create: (context) => WorldNewsFetchCubit()),
-        // BlocProvider(create: (context) => SportFetchCubit()),
-        // BlocProvider(create: (context) => EconomiqueFetchCubit()),
-      ],
+      providers: [BlocProvider(create: (context) => FetchCubit())],
       child: MaterialApp(
         initialRoute: "home",
         debugShowCheckedModeBanner: false,

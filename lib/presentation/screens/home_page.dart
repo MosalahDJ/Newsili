@@ -14,7 +14,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
-    context.read<FetchCubit>().fetchData();
+    context.read<FetchCubit>().fetchData("");
+    context.read<FetchCubit>().fetchData("");
+    context.read<FetchCubit>().fetchData("");
+    context.read<FetchCubit>().fetchData("");
     super.initState();
   }
 
