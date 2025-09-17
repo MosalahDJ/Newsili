@@ -9,7 +9,7 @@ class DatabaseHelper {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('economic_news.db');
+    _database = await _initDB('technology_news.db');
     return _database!;
   }
 
@@ -22,7 +22,7 @@ class DatabaseHelper {
 
   Future<void> _createDB(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE economic_news(
+      CREATE TABLE technology_news(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT,
         description TEXT,
@@ -39,11 +39,11 @@ class DatabaseHelper {
     final db = await database;
     await db.transaction((txn) async {
       // Clear old data
-      await txn.delete('economic_news');
+      await txn.delete('technology_news');
 
       // Insert new articles
       for (var article in articles) {
-        await txn.insert('economic_news', {
+        await txn.insert('technology_news', {
           ...article,
           'timestamp': DateTime.now().millisecondsSinceEpoch,
         }, conflictAlgorithm: ConflictAlgorithm.replace);
@@ -53,7 +53,7 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> getNews() async {
     final db = await database;
-    return await db.query('economic_news', orderBy: 'timestamp DESC');
+    return await db.query('technology_news', orderBy: 'timestamp DESC');
   }
 
   Future<void> deleteOldNews() async {
@@ -62,7 +62,7 @@ class DatabaseHelper {
         .subtract(const Duration(hours: 1))
         .millisecondsSinceEpoch;
     await db.delete(
-      'economic_news',
+      'technology_news',
       where: 'timestamp < ?',
       whereArgs: [oneHourAgo],
     );
