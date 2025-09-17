@@ -15,11 +15,33 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     context.read<FetchCubit>().fetchData(
-      "top-headlines?category=sports&apiKey=",
+      "top-headlines?category=general&apiKey=",
+      "general",
     );
-    // context.read<FetchCubit>().fetchData("");
-    // context.read<FetchCubit>().fetchData("");
-    // context.read<FetchCubit>().fetchData("");
+    context.read<FetchCubit>().fetchData(
+      "top-headlines?category=business&apiKey=",
+      "business",
+    );
+    context.read<FetchCubit>().fetchData(
+      "top-headlines?category=entertainment&apiKey=",
+      "entertainment",
+    );
+    context.read<FetchCubit>().fetchData(
+      "top-headlines?category=health&apiKey=",
+      "health",
+    );
+    context.read<FetchCubit>().fetchData(
+      "top-headlines?category=science&apiKey=",
+      "science",
+    );
+    context.read<FetchCubit>().fetchData(
+      "top-headlines?category=sports&apiKey=",
+      "sports",
+    );
+    context.read<FetchCubit>().fetchData(
+      "top-headlines?category=technology&apiKey=",
+      "technology",
+    );
     super.initState();
   }
 
