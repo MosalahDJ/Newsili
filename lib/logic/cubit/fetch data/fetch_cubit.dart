@@ -10,7 +10,7 @@ class FetchCubit extends Cubit<FetchState> {
 
   static final String _apiKey = dotenv.env['API_KEY']!;
 
-  Future<String> fetchData(modelUrl) async {
+  Future<String> fetchData(String modelUrl, String category) async {
     
     try {
       emit(DataLoading());
