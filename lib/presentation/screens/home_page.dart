@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:newsily/logic/fetch%20data/fetch_cubit.dart';
-import 'package:newsily/logic/fetch%20data/fetch_state.dart';
+import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
+import 'package:newsily/logic/cubit/fetch%20data/fetch_state.dart';
 import '../widgets/category_section.dart';
 
 class HomePage extends StatefulWidget {
