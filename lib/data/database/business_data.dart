@@ -22,17 +22,19 @@ class BusinessData {
 
   Future<void> _createDB(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE business_news(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT,
-        description TEXT,
-        url TEXT,
-        urlToImage TEXT,
-        publishedAt TEXT,
-        content TEXT,
-        timestamp INTEGER
-      )
-    ''');
+    CREATE TABLE business_news(
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      sourceId TEXT,
+      sourceName TEXT,
+      title TEXT,
+      description TEXT,
+      url TEXT,
+      urlToImage TEXT,
+      publishedAt TEXT,
+      content TEXT,
+      timestamp INTEGER
+    )
+  ''');
   }
 
   Future<void> insertNews(List<Map<String, dynamic>> articles) async {
