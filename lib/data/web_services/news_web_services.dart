@@ -16,8 +16,7 @@ class NewsWebServices {
         return {"Error": response.statusCode};
       }
     } catch (e) {
-      // print(e);
-      return {};
+      return {"Error": e.toString()};
     }
   }
 }
