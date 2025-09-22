@@ -5,9 +5,12 @@ class NewsDataRepository {
   final NewsWebServices newsWebServices;
 
   NewsDataRepository({required this.newsWebServices});
-
-  Future<NewsData> getAllNews(String modelUrl) async {
-    final news = await newsWebServices.getAllNews(modelUrl);
-    return NewsData.fromJson(news);
+  late NewsData response;
+  late List<Articles> articles;
+  Future<List<Articles>> getResponse(String modelUrl) async {
+    final news = await newsWebServices.getResponse(modelUrl);
+    response = NewsData.fromJson(news);
+    articles = response.articles!.toList();
+    return articles;
   }
 }

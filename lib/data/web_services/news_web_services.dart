@@ -5,7 +5,7 @@ import 'package:newsily/constants/constant_strings.dart';
 class NewsWebServices {
   static final String _apiKey = dotenv.env['API_KEY']!;
 
-  Future<Map<String, dynamic>> getAllNews(String modelUrl) async {
+  Future<Map<String, dynamic>> getResponse(String modelUrl) async {
     try {
       var request = http.Request('GET', Uri.parse("$baseUrl$modelUrl$_apiKey"));
       http.StreamedResponse response = await request.send();
