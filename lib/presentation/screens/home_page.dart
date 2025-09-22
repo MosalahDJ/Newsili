@@ -14,9 +14,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
-    context.read<FetchCubit>().fetchData(
+    context.read<FetchCubit>().getArticles(
       "top-headlines?category=general&apiKey=",
-      "general",
     );
     // context.read<FetchCubit>().fetchData(
     //   "top-headlines?category=business&apiKey=",
@@ -81,7 +80,7 @@ class _HomePageState extends State<HomePage> {
             );
           }
           return Center(child: Text("No data"));
-        },
+        }, 
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,

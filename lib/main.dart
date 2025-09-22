@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:newsily/helper/app_router.dart';
-import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -16,13 +14,10 @@ class Newsily extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => FetchCubit())],
-      child: MaterialApp(
-        initialRoute: "home",
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: appRoutter.generateRoute,
-      ),
+    return MaterialApp(
+      initialRoute: "home",
+      debugShowCheckedModeBanner: false,
+      onGenerateRoute: appRoutter.generateRoute,
     );
   }
 }
