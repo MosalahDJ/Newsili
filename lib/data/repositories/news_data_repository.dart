@@ -12,9 +12,7 @@ class NewsDataRepository {
     try {
       final news = await newsWebServices.getResponse(modelUrl);
       final response = NewsData.fromJson(jsonDecode(news));
-      
       return response.articles ?? [];
-      
     } catch (e) {
       print('Error fetching articles: $e');
       return [];
