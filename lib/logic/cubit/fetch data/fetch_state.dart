@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:newsily/data/models/news_data_model.dart';
 
 @immutable
 sealed class FetchState {
@@ -15,9 +16,9 @@ final class DataLoading extends FetchState {
 }
 
 final class DataLoaded extends FetchState {
-  final Map? data;
+  final List<Articles>? news;
 
-  const DataLoaded(this.data);
+  const DataLoaded(this.news);
 }
 
 final class DataError extends FetchState {

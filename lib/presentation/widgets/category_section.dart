@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:newsily/data/models/news_data_model.dart';
 import 'news_card.dart';
 
 class CategorySection extends StatelessWidget {
   final String title;
-  final List articles;
+  final List<Articles> articles;
 
   const CategorySection({super.key, required this.title, required this.articles});
 
@@ -31,7 +32,7 @@ class CategorySection extends StatelessWidget {
             controller: PageController(viewportFraction: 0.85),
             itemCount: articles.length > 4 ? 4 : articles.length,
             itemBuilder: (context, index) {
-              return NewsCard(article: articles[index]);
+              return NewsCard(article: articles,i: index,);
             },
           ),
         ),

@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index) {
                 return CategorySection(
                   title: categories[index],
-                  articles: state.data?['articles'] as List<dynamic>,
+                  articles: state.news!,
                 );
               },
             );
