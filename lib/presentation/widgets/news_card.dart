@@ -24,12 +24,19 @@ class NewsCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.network(
-                "${article[i].urlToImage}",
-                height: 150,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+              article[i].urlToImage == null
+                  ? Image.asset(
+                      "lib/assets/images/helper_images/no_image.jpg",
+                      height: 150,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.network(
+                      "${article[i].urlToImage}",
+                      height: 150,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(

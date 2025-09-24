@@ -30,9 +30,6 @@ class NewsDataRepository {
         return await getArticles("top-headlines?category=sports&apiKey=");
 
       case Category.general:
-        return await getArticles("top-headlines?category=sports&apiKey=");
-
-      default:
         return await getArticles("top-headlines?category=general&apiKey=");
     }
   }
