@@ -7,7 +7,9 @@ class NewsWebServices {
 
   getResponse(String modelUrl) async {
     try {
-      http.Response response =await http.get(Uri.parse("$baseUrl$modelUrl$_apiKey"));
+      http.Response response = await http.get(
+        Uri.parse("$baseUrl$modelUrl$_apiKey"),
+      );
 
       if (response.statusCode == 200) {
         return response.body;
