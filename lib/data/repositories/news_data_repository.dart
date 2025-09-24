@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:newsily/constants/constant_Enums.dart';
+import 'package:newsily/constants/constant_enum.dart';
 import 'package:newsily/data/models/news_data_model.dart';
 import 'package:newsily/data/web_services/news_web_services.dart';
 
@@ -11,28 +11,29 @@ class NewsDataRepository {
   Future handleCases(Enum category) async {
     switch (category) {
       case Category.technology:
-        await getArticles("top-headlines?category=technology&apiKey=");
-        break;
+        return await getArticles("top-headlines?category=technology&apiKey=");
       case Category.business:
-        await getArticles("top-headlines?category=business&apiKey=");
-        break;
+        return await getArticles("top-headlines?category=business&apiKey=");
+
       case Category.entertainment:
-        await getArticles("top-headlines?category=entertainment&apiKey=");
-        break;
+        return await getArticles(
+          "top-headlines?category=entertainment&apiKey=",
+        );
+
       case Category.health:
-        await getArticles("top-headlines?category=health&apiKey=");
-        break;
+        return await getArticles("top-headlines?category=health&apiKey=");
+
       case Category.science:
-        await getArticles("top-headlines?category=science&apiKey=");
-        break;
+        return await getArticles("top-headlines?category=science&apiKey=");
+
       case Category.sports:
-        await getArticles("top-headlines?category=sports&apiKey=");
-        break;
+        return await getArticles("top-headlines?category=sports&apiKey=");
+
       case Category.general:
-        await getArticles("top-headlines?category=sports&apiKey=");
-        break;
+        return await getArticles("top-headlines?category=sports&apiKey=");
+
       default:
-        await getArticles("top-headlines?category=general&apiKey=");
+        return await getArticles("top-headlines?category=general&apiKey=");
     }
   }
 
