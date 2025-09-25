@@ -13,7 +13,7 @@ class BusinessData {
   Future<Database> initDB() async {
     String path = await getDatabasesPath();
     return await openDatabase(
-      join(path, 'news_database.db'),
+      join(path, 'buisness_news_database.db'),
       onCreate: (database, version) async {
         await database.execute('''
           CREATE TABLE buisness_news (
@@ -42,4 +42,3 @@ class BusinessData {
     return await db.rawQuery(query);
   }
 }
-
