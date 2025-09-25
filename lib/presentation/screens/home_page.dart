@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:newsily/constants/constant_enum.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_state.dart';
 import '../widgets/category_section.dart';
@@ -19,15 +18,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  final List<String> categories = [
-    "General",
-    "Business",
-    "Entertainment",
-    "Health",
-    "Science",
-    "Sports",
-    "Technology",
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -43,25 +33,22 @@ class _HomePageState extends State<HomePage> {
           } else if (state is DataError) {
             return Center(child: Text("Error: ${state.errortext}"));
           } else if (state is DataLoaded) {
-            return ListView.builder(
+            return ListView(
               padding: EdgeInsets.all(12),
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                return CategorySection(
-                  title: categories[index],
-                  businessNews: state.businessNews,
-                  entertainmentNews: state.entertainmentNews,
-                  generalNews: state.generalNews,
-                  healthNews: state.healthNews,
-                  scienceNews: state.scienceNews,
-                  sportsNews: state.sportsNews,
-                  technologyNews: state.technologyNews,
-                );
-              },
+              children: [
+                CategorySection(title: "General", articles: state.generalNews!, ),
+                CategorySection(title: "Business", articles: state.businessNews!),
+                CategorySection(title: "Entertainment", articles: state.entertainmentNews!),
+                CategorySection(title: "Health", articles: state.healthNews!),
+                CategorySection(title: "Science", articles: state.scienceNews!),
+                CategorySection(title: "Sports", articles: state.sportsNews!),
+                CategorySection(title: "Technology", articles: state.technologyNews!),
+
+              ],
             );
           }
           return Center(child: Text("No data"));
-        }, 
+        },
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
