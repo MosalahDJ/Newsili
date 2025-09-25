@@ -13,7 +13,7 @@ class EntertainmentData {
   Future<Database> initDB() async {
     String path = await getDatabasesPath();
     return await openDatabase(
-      join(path, 'entertainment_news_database.db'),
+      join(path, 'entertainment_news.db'),
       onCreate: (database, version) async {
         await database.execute('''
           CREATE TABLE entertainment_news (

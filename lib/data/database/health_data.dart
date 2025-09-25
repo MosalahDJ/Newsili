@@ -13,7 +13,7 @@ class HealthData {
   Future<Database> initDB() async {
     String path = await getDatabasesPath();
     return await openDatabase(
-      join(path, 'health_news_database.db'),
+      join(path, 'health_news.db'),
       onCreate: (database, version) async {
         await database.execute('''
           CREATE TABLE health_news (

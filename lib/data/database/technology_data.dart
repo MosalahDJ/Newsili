@@ -13,7 +13,7 @@ class TechnologyData {
   Future<Database> initDB() async {
     String path = await getDatabasesPath();
     return await openDatabase(
-      join(path, 'technology_news_database.db'),
+      join(path, 'technology_news.db'),
       onCreate: (database, version) async {
         await database.execute('''
           CREATE TABLE technology_news (
