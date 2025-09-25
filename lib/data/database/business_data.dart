@@ -24,32 +24,24 @@ class BusinessData {
     await db.execute('''
     CREATE TABLE business_news(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      sourceId TEXT,
-      sourceName TEXT,
-      title TEXT,
-      description TEXT,
-      url TEXT,
-      urlToImage TEXT,
-      publishedAt TEXT,
       content TEXT,
       timestamp INTEGER
     )
   ''');
   }
 
-  Future<void> insertNews(List<Map> articles) async {
+  Future<void> insertNews(Map articles) async {
     final db = await database;
     await db.transaction((txn) async {
       // Clear old data
       await txn.delete('business_news');
 
       // Insert new articles
-      for (var article in articles) {
+      
         await txn.insert('business_news', {
-          ...article,
+          'content': articles,
           'timestamp': DateTime.now().millisecondsSinceEpoch,
         }, conflictAlgorithm: ConflictAlgorithm.replace);
-      }
     });
   }
 

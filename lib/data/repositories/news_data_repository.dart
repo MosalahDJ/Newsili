@@ -42,6 +42,7 @@ class NewsDataRepository {
     try {
       final articles = await newsWebServices.getResponse(modelUrl);
       final response = NewsData.fromJson(articles);
+      print("=========================================");
       print(response.articles);
       return response.articles ?? [];
     } catch (e) {

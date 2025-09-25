@@ -16,7 +16,7 @@ class NewsWebServices {
       );
       if (response.statusCode == 200) {
         Map body = jsonDecode(response.body);
-        businessData.insertNews(body["articles"]);
+        await businessData.insertNews(body);
         List<Map> articles = await businessData.getNews();
         print("===================articles========================");
         print(articles);
