@@ -8,9 +8,9 @@ class FetchCubit extends Cubit<FetchState> {
   final NewsDataRepository newsDataRepository;
   FetchCubit(this.newsDataRepository) : super(Initialdata());
 
-  getArticles() async {
+  getArticles(Category category) async {
     List<Articles> news = await newsDataRepository.handleCases(
-      Category.health,
+      category,
     );
     emit(DataLoaded(news));
   }

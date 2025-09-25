@@ -37,7 +37,7 @@ class BusinessData {
   ''');
   }
 
-  Future<void> insertNews(List<Map<String, dynamic>> articles) async {
+  Future<void> insertNews(List<Map> articles) async {
     final db = await database;
     await db.transaction((txn) async {
       // Clear old data
@@ -53,7 +53,7 @@ class BusinessData {
     });
   }
 
-  Future<List<Map<String, dynamic>>> getNews() async {
+  Future<List<Map>> getNews() async {
     final db = await database;
     return await db.query('business_news', orderBy: 'timestamp DESC');
   }

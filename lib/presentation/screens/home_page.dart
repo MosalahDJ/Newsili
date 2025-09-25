@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:newsily/constants/constant_enum.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_state.dart';
 import '../widgets/category_section.dart';
@@ -14,7 +15,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
-    context.read<FetchCubit>().getArticles();
+    context.read<FetchCubit>().getArticles(Category.business);
+    // context.read<FetchCubit>().getArticles(Category.entertainment);
+    // context.read<FetchCubit>().getArticles(Category.general);
+    // context.read<FetchCubit>().getArticles(Category.health);
+    // context.read<FetchCubit>().getArticles(Category.science);
+    // context.read<FetchCubit>().getArticles(Category.technology);
+    // context.read<FetchCubit>().getArticles(Category.sports);
     super.initState();
   }
 
