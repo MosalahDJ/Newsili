@@ -16,9 +16,14 @@ final class DataLoading extends FetchState {
 }
 
 final class DataLoaded extends FetchState {
-  final List<Articles>? news;
-
-  const DataLoaded(this.news);
+  final List<Articles>? businessNews;
+  final List<Articles>? entertainmentNews;
+  final List<Articles>? generalNews;
+  final List<Articles>? healthNews;
+  final List<Articles>? scienceNews;
+  final List<Articles>? sportsNews;
+  final List<Articles>? technologyNews;
+  const DataLoaded({ this.businessNews, this.entertainmentNews, this.generalNews, this.healthNews, this.scienceNews, this.sportsNews, this.technologyNews});
 }
 
 final class DataError extends FetchState {

@@ -15,13 +15,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
-    context.read<FetchCubit>().getArticles(Category.general);
-    // context.read<FetchCubit>().getArticles(Category.entertainment);
-    // context.read<FetchCubit>().getArticles(Category.general);
-    // context.read<FetchCubit>().getArticles(Category.health);
-    // context.read<FetchCubit>().getArticles(Category.science);
-    // context.read<FetchCubit>().getArticles(Category.technology);
-    // context.read<FetchCubit>().getArticles(Category.sports);
+    context.read<FetchCubit>().getArticles();
     super.initState();
   }
 
@@ -55,7 +49,13 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index) {
                 return CategorySection(
                   title: categories[index],
-                  articles: state.news!,
+                  businessNews: state.businessNews,
+                  entertainmentNews: state.entertainmentNews,
+                  generalNews: state.generalNews,
+                  healthNews: state.healthNews,
+                  scienceNews: state.scienceNews,
+                  sportsNews: state.sportsNews,
+                  technologyNews: state.technologyNews,
                 );
               },
             );
