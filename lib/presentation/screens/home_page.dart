@@ -18,7 +18,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,25 +27,32 @@ class _HomePageState extends State<HomePage> {
       ),
       body: BlocBuilder<FetchCubit, FetchState>(
         builder: (context, state) {
-          if (state is DataLoading) {
-            return Center(child: CircularProgressIndicator());
-          } else if (state is DataError) {
+          if (state is DataError) {
             return Center(child: Text("Error: ${state.errortext}"));
           } else if (state is DataLoaded) {
             return ListView(
               padding: EdgeInsets.all(12),
               children: [
-                CategorySection(title: "General", articles: state.generalNews!, ),
-                CategorySection(title: "Business", articles: state.businessNews!),
-                CategorySection(title: "Entertainment", articles: state.entertainmentNews!),
+                CategorySection(title: "General", articles: state.generalNews!),
+                CategorySection(
+                  title: "Business",
+                  articles: state.businessNews!,
+                ),
+                CategorySection(
+                  title: "Entertainment",
+                  articles: state.entertainmentNews!,
+                ),
                 CategorySection(title: "Health", articles: state.healthNews!),
                 CategorySection(title: "Science", articles: state.scienceNews!),
                 CategorySection(title: "Sports", articles: state.sportsNews!),
-                CategorySection(title: "Technology", articles: state.technologyNews!),
+                CategorySection(
+                  title: "Technology",
+                  articles: state.technologyNews!,
+                ),
               ],
             );
           }
-          return Center(child: Text("No data"));
+          return Center(child: CircularProgressIndicator());
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
