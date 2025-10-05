@@ -14,7 +14,7 @@ class NewsCard extends StatelessWidget {
         Navigator.pushNamed(context, "/detail", arguments: article);
       },
       child: Hero(
-        tag: "${article[i].url}",
+        tag: "${article[i].url}-$i",
         child: Card(
           margin: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
           shape: RoundedRectangleBorder(

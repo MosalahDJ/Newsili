@@ -32,8 +32,8 @@ class SportsData {
     try {
       await db.rawInsert(query, parameters);
     } catch (e) {
-      print('Database insertion error: $e');
-      throw e;
+      // print('Database insertion error: $e');
+      rethrow;
     }
   }
 

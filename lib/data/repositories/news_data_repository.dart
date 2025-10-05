@@ -40,11 +40,11 @@ class NewsDataRepository {
     try {
       final articles = await newsWebServices.getResponse(modelUrl,category);
       // final response = NewsData.fromJson();
-      print("=========================================");
+      // print("=========================================");
       // print(response.articles);
       return articles ;
     } catch (e) {
-      print('Error fetching articles: $e');
+      // print('Error fetching articles: $e');
       return [];
     }
   }

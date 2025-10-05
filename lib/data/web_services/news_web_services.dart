@@ -23,32 +23,33 @@ class NewsWebServices {
   TechnologyData technologyData = TechnologyData();
 
   Future<List<Articles>> getResponse(String modelUrl, Enum category) async {
+    // ignore: prefer_typing_uninitialized_variables
     var database;
     String? tableName;
 
-  switch (category) {
-    case Category.technology:
-      database = technologyData;
-      tableName = 'technology_news';
-    case Category.business:
-      database = businessData;
-      tableName = 'buisness_news';
-    case Category.entertainment:
-      database = entertainmentData;
-      tableName = 'entertainment_news';
-    case Category.health:
-      database = healthData;
-      tableName = 'health_news';
-    case Category.science:
-      database = scienceData;
-      tableName = 'science_news';
-    case Category.sports:
-      database = sportsData;
-      tableName = 'sports_news';
-    case Category.general:
-      database = generalData;
-      tableName = 'general_news';
-  }
+    switch (category) {
+      case Category.technology:
+        database = technologyData;
+        tableName = 'technology_news';
+      case Category.business:
+        database = businessData;
+        tableName = 'buisness_news';
+      case Category.entertainment:
+        database = entertainmentData;
+        tableName = 'entertainment_news';
+      case Category.health:
+        database = healthData;
+        tableName = 'health_news';
+      case Category.science:
+        database = scienceData;
+        tableName = 'science_news';
+      case Category.sports:
+        database = sportsData;
+        tableName = 'sports_news';
+      case Category.general:
+        database = generalData;
+        tableName = 'general_news';
+    }
     try {
       http.Response response = await http.get(
         Uri.parse("$baseUrl$modelUrl$_apiKey"),
@@ -77,11 +78,11 @@ class NewsWebServices {
         }
         return [];
       } else {
-        print('Error: ${response.statusCode}');
+        // print('Error: ${response.statusCode}');
         return [];
       }
     } catch (e) {
-      print('Error: ${e.toString()}');
+      // print('Error: ${e.toString()}');
       return [];
     }
   }

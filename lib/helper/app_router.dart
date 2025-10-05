@@ -5,7 +5,6 @@ import 'package:newsily/data/web_services/news_web_services.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
 import 'package:newsily/presentation/screens/category_page.dart';
 import 'package:newsily/presentation/screens/home_page.dart';
-import 'package:path/path.dart';
 
 class AppRoutter {
   late NewsDataRepository newsDataRepository;
