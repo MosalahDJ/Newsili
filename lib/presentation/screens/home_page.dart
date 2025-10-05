@@ -43,7 +43,6 @@ class _HomePageState extends State<HomePage> {
                 CategorySection(title: "Science", articles: state.scienceNews!),
                 CategorySection(title: "Sports", articles: state.sportsNews!),
                 CategorySection(title: "Technology", articles: state.technologyNews!),
-
               ],
             );
           }
