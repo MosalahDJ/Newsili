@@ -23,17 +23,21 @@ class CategorySection extends StatelessWidget {
             Text(
               title,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  "/category",
-                  arguments: {"category": title, "articles": articles},
-                );
-              },
-              child: const Text("See All"),
-            ),
+            ),TextButton(
+  onPressed: () {
+    
+      Navigator.pushNamed(
+        context,
+        "/category",
+        arguments: {
+          "category": title,
+          "articles": articles,
+        },
+      );
+  },
+  child: const Text("See All"),
+),
+
           ],
         ),
         SizedBox(
@@ -42,7 +46,7 @@ class CategorySection extends StatelessWidget {
             controller: PageController(viewportFraction: 0.85),
             itemCount: articles.length > 4 ? 4 : articles.length,
             itemBuilder: (context, index) {
-              return NewsCard(article: articles, i: index);
+              return NewsCard(article: articles[index], i: index);
             },
           ),
         ),

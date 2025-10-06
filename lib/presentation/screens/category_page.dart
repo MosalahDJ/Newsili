@@ -29,7 +29,7 @@ class CategoryPage extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               itemCount: articles.length,
               itemBuilder: (context, index) {
-                return NewsCard(article: articles, i: categoryIndex);
+                return NewsCard(article: articles[index], i: categoryIndex);
               },
             ),
     );
