@@ -13,36 +13,56 @@ class NewsDataRepository {
   Future handleCases(Enum category) async {
     switch (category) {
       case Category.technology:
-        return await getArticles("top-headlines?category=technology&apiKey=",category);
+        return await getArticles(
+          "top-headlines?category=technology&apiKey=",
+          category,
+        );
       case Category.business:
-        return await getArticles("top-headlines?category=business&apiKey=",category);
+        return await getArticles(
+          "top-headlines?category=business&apiKey=",
+          category,
+        );
 
       case Category.entertainment:
         return await getArticles(
-          "top-headlines?category=entertainment&apiKey=",category
+          "top-headlines?category=entertainment&apiKey=",
+          category,
         );
 
       case Category.health:
-        return await getArticles("top-headlines?category=health&apiKey=",category);
+        return await getArticles(
+          "top-headlines?category=health&apiKey=",
+          category,
+        );
 
       case Category.science:
-        return await getArticles("top-headlines?category=science&apiKey=",category);
+        return await getArticles(
+          "top-headlines?category=science&apiKey=",
+          category,
+        );
 
       case Category.sports:
-        return await getArticles("top-headlines?category=sports&apiKey=",category);
+        return await getArticles(
+          "top-headlines?category=sports&apiKey=",
+          category,
+        );
 
       case Category.general:
-        return await getArticles("top-headlines?category=general&apiKey=",category);
+        return await getArticles(
+          "top-headlines?category=general&apiKey=",
+          category,
+        );
     }
   }
 
-  Future<List<Articles>> getArticles(String modelUrl,Enum category) async {
+  Future<List<Articles>> getArticles(String modelUrl, Enum category) async {
     try {
-      final articles = await newsWebServices.getResponse(modelUrl,category);
-      // final response = NewsData.fromJson();
+      final articles = await newsWebServices.getResponse(modelUrl, category);
       // print("=========================================");
-      // print(response.articles);
-      return articles ;
+      // print("$category : ${articles.length}");
+      // print("=========================================");
+
+      return articles;
     } catch (e) {
       // print('Error fetching articles: $e');
       return [];
