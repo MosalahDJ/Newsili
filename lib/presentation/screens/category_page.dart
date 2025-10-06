@@ -35,11 +35,3 @@ class CategoryPage extends StatelessWidget {
     );
   }
 }
-
-
-/*
-we ensured that all data are taken
-now when we need to pass this data
-we must do that in home page becase its the place where we can find buttons of 
-navigation
-*/
