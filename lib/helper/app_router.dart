@@ -16,20 +16,20 @@ class AppRoutter {
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => FetchCubit(
-              NewsDataRepository(newsWebServices: newsWebServices,),
+              NewsDataRepository(newsWebServices: newsWebServices),
             ),
             child: HomePage(),
           ),
-        );case "/category":
-  final args = setting.arguments as Map;
-  return MaterialPageRoute(
-    builder: (_) => CategoryPage(
-      category: args["category"],
-      articles: args["articles"],
-      categoryIndex: 0, // you can pass an index if needed
-    ),
-  );
-
+        );
+      case "/category":
+        final args = setting.arguments as Map;
+        return MaterialPageRoute(
+          builder: (_) => CategoryPage(
+            category: args["category"],
+            articles: args["articles"],
+            categoryIndex: 0, // you can pass an index if needed
+          ),
+        );
     }
     return null;
   }

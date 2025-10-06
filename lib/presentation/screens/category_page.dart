@@ -9,15 +9,18 @@ class CategoryPage extends StatelessWidget {
   const CategoryPage({
     required this.category,
     required this.articles,
-    super.key, required this.categoryIndex,
+    super.key,
+    required this.categoryIndex,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(category,
-            style: const TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(
+          category,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
       ),
       body: articles.isEmpty
@@ -26,7 +29,7 @@ class CategoryPage extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               itemCount: articles.length,
               itemBuilder: (context, index) {
-                return NewsCard(article: articles, i: categoryIndex,);
+                return NewsCard(article: articles, i: categoryIndex);
               },
             ),
     );

@@ -26,50 +26,47 @@ class CategorySection extends StatelessWidget {
             Text(
               title,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),TextButton(
-  onPressed: () {
-    final state = context.read<FetchCubit>().state;
+            ),
+            TextButton(
+              onPressed: () {
+                final state = context.read<FetchCubit>().state;
 
-    if (state is DataLoaded) {
-      List<Articles> selectedList = [];
+                if (state is DataLoaded) {
+                  List<Articles> selectedList = [];
 
-      switch (title) {
-        case "Business":
-          selectedList = state.businessNews ?? [];
-          break;
-        case "Entertainment":
-          selectedList = state.entertainmentNews ?? [];
-          break;
-        case "General":
-          selectedList = state.generalNews ?? [];
-          break;
-        case "Health":
-          selectedList = state.healthNews ?? [];
-          break;
-        case "Science":
-          selectedList = state.scienceNews ?? [];
-          break;
-        case "Sports":
-          selectedList = state.sportsNews ?? [];
-          break;
-        case "Technology":
-          selectedList = state.technologyNews ?? [];
-          break;
-      }
+                  switch (title) {
+                    case "Business":
+                      selectedList = state.businessNews ?? [];
+                      break;
+                    case "Entertainment":
+                      selectedList = state.entertainmentNews ?? [];
+                      break;
+                    case "General":
+                      selectedList = state.generalNews ?? [];
+                      break;
+                    case "Health":
+                      selectedList = state.healthNews ?? [];
+                      break;
+                    case "Science":
+                      selectedList = state.scienceNews ?? [];
+                      break;
+                    case "Sports":
+                      selectedList = state.sportsNews ?? [];
+                      break;
+                    case "Technology":
+                      selectedList = state.technologyNews ?? [];
+                      break;
+                  }
 
-      Navigator.pushNamed(
-        context,
-        "/category",
-        arguments: {
-          "category": title,
-          "articles": selectedList,
-        },
-      );
-    }
-  },
-  child: const Text("See All"),
-),
-
+                  Navigator.pushNamed(
+                    context,
+                    "/category",
+                    arguments: {"category": title, "articles": selectedList},
+                  );
+                }
+              },
+              child: const Text("See All"),
+            ),
           ],
         ),
         SizedBox(
