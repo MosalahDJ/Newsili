@@ -5,10 +5,15 @@ class NewsCard extends StatelessWidget {
   final Articles article;
   final int i;
 
-  const NewsCard({super.key, required this.article, required this.i});
+  const NewsCard({
+    super.key,
+    required this.article,
+    required this.i,
+  });
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, "/detail", arguments: article);

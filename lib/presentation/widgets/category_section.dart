@@ -46,7 +46,7 @@ class CategorySection extends StatelessWidget {
             controller: PageController(viewportFraction: 0.85),
             itemCount: articles.length > 4 ? 4 : articles.length,
             itemBuilder: (context, index) {
-              return NewsCard(article: articles[index], i: index);
+              return NewsCard(article: articles[index], i: index ,);
             },
           ),
         ),

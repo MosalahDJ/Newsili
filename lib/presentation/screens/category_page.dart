@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:newsily/data/models/news_data_model.dart';
 import '../widgets/news_card.dart';
 
@@ -29,7 +30,9 @@ class CategoryPage extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               itemCount: articles.length,
               itemBuilder: (context, index) {
-                return NewsCard(article: articles[index], i: categoryIndex);
+                return Hero(
+                  tag: "$index category page",
+                  child: NewsCard(article: articles[index], i: categoryIndex,));
               },
             ),
     );
