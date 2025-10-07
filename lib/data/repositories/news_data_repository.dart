@@ -58,13 +58,9 @@ class NewsDataRepository {
   Future<List<Articles>> getArticles(String modelUrl, Enum category) async {
     try {
       final articles = await newsWebServices.getResponse(modelUrl, category);
-      // print("=========================================");
-      // print("$category : ${articles.length}");
-      // print("=========================================");
 
       return articles;
     } catch (e) {
-      // print('Error fetching articles: $e');
       return [];
     }
   }
