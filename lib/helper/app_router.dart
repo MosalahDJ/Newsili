@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:newsily/data/models/news_data_model.dart';
 import 'package:newsily/data/repositories/news_data_repository.dart';
 import 'package:newsily/data/web_services/news_web_services.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
@@ -33,9 +34,9 @@ class AppRoutter {
         );
 
       case "/article":
-        final args = setting.arguments as Map;
+        final article = setting.arguments as Articles;
         return MaterialPageRoute(
-          builder: (_) => ArticleDescriptionPage(article: args["article"]),
+          builder: (_) => ArticleDescriptionPage(article: article),
         );
     }
     return null;
