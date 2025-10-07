@@ -5,24 +5,17 @@ class NewsCard extends StatelessWidget {
   final Articles article;
   final int i;
 
-  const NewsCard({
-    super.key,
-    required this.article,
-    required this.i,
-  });
+  const NewsCard({super.key, required this.article, required this.i});
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, "/detail", arguments: article);
+        Navigator.pushNamed(context, "/article", arguments: article);
       },
       child: Card(
         margin: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         clipBehavior: Clip.hardEdge,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
