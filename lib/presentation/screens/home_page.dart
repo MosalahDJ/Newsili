@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_state.dart';
-import 'package:newsily/presentation/widgets/article_description.dart';
+import 'package:newsily/presentation/screens/article_description.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../data/models/news_data_model.dart';
 
@@ -62,6 +62,7 @@ class HomePage extends StatelessWidget {
                       SizedBox(
                         height: 280,
                         child: PageView.builder(
+
                           controller: _pageController,
                           itemCount: latestNews.length > 4
                               ? 4
@@ -79,6 +80,7 @@ class HomePage extends StatelessWidget {
                           controller: _pageController,
                           count: latestNews.length > 4 ? 4 : latestNews.length,
                           effect: ExpandingDotsEffect(
+                            
                             dotHeight: 8,
                             dotWidth: 8,
                             activeDotColor: Theme.of(
@@ -115,20 +117,6 @@ class HomePage extends StatelessWidget {
           }
           return const SizedBox();
         },
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.grid_view_rounded),
-            label: "Categories",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bookmark),
-            label: "Bookmarks",
-          ),
-        ],
       ),
     );
   }

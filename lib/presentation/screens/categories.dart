@@ -12,11 +12,7 @@ class Categories extends StatefulWidget {
 }
 
 class _CategoriesState extends State<Categories> {
-  @override
-  void initState() {
-    context.read<FetchCubit>().getArticles();
-    super.initState();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -54,20 +50,6 @@ class _CategoriesState extends State<Categories> {
           }
           return Center(child: CircularProgressIndicator());
         },
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.category),
-            label: "Categories",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bookmark),
-            label: "Bookmarks",
-          ),
-        ],
       ),
     );
   }
