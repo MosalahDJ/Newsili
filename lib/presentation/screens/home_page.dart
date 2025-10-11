@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_state.dart';
 import 'package:newsily/presentation/screens/article_description.dart';
+import 'package:newsily/presentation/widgets/suggesion_banner.dart';
+import 'package:newsily/presentation/widgets/top_stories_section.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../data/models/news_data_model.dart';
 
@@ -62,7 +64,6 @@ class HomePage extends StatelessWidget {
                       SizedBox(
                         height: 280,
                         child: PageView.builder(
-
                           controller: _pageController,
                           itemCount: latestNews.length > 4
                               ? 4
@@ -80,7 +81,6 @@ class HomePage extends StatelessWidget {
                           controller: _pageController,
                           count: latestNews.length > 4 ? 4 : latestNews.length,
                           effect: ExpandingDotsEffect(
-                            
                             dotHeight: 8,
                             dotWidth: 8,
                             activeDotColor: Theme.of(
@@ -103,12 +103,12 @@ class HomePage extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
 
-                      _buildTopStoriesSection(context, topStories),
+                      buildTopStoriesSection(context, topStories),
 
                       const SizedBox(height: 24),
 
                       // ==== OPTIONAL: Suggestion Section ====
-                      _buildSuggestionBanner(context),
+                      buildSuggestionBanner(context),
                     ],
                   ),
                 ),
@@ -209,109 +209,6 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  // ======= Top Stories Section =======
-  Widget _buildTopStoriesSection(
-    BuildContext context,
-    List<Articles> topStories,
-  ) {
-    return SizedBox(
-      height: 140,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: topStories.length > 10 ? 10 : topStories.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 12),
-        itemBuilder: (context, index) {
-          final article = topStories[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => ArticleDescriptionPage(article: article),
-                ),
-              );
-            },
-            child: Hero(
-              tag: "${article.url}-top-$index",
-              child: Container(
-                width: 120,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  image: DecorationImage(
-                    image: NetworkImage(article.urlToImage ?? ""),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.black.withValues(alpha: 0.1),
-                        Colors.black.withValues(alpha: 0.7),
-                      ],
-                    ),
-                  ),
-                  padding: const EdgeInsets.all(8),
-                  alignment: Alignment.bottomLeft,
-                  child: Text(
-                    article.title ?? "",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  // ======= Suggestion / Banner Section =======
-  Widget _buildSuggestionBanner(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Theme.of(context).colorScheme.primary,
-            Colors.deepPurpleAccent,
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Stay Informed",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            "Get the latest updates on world events, business, and more.",
-            style: TextStyle(color: Colors.white70),
-          ),
-        ],
       ),
     );
   }
