@@ -53,3 +53,11 @@ class _CategoriesState extends State<Categories> {
     );
   }
 }
+
+
+
+
+
+
+
+//TODO: iwsch create this page like the skeletonizer page
