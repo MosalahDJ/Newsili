@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_state.dart';
+import 'package:newsily/presentation/widgets/categories_page_skeletonizer.dart';
 import '../widgets/category_section.dart';
 
 class Categories extends StatefulWidget {
@@ -12,8 +13,6 @@ class Categories extends StatefulWidget {
 }
 
 class _CategoriesState extends State<Categories> {
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +47,7 @@ class _CategoriesState extends State<Categories> {
               ],
             );
           }
-          return Center(child: CircularProgressIndicator());
+          return CategoriesPageSkeleton();
         },
       ),
     );
