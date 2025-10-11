@@ -4,14 +4,14 @@ import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_state.dart';
 import '../widgets/category_section.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class Categories extends StatefulWidget {
+  const Categories({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<Categories> createState() => _CategoriesState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _CategoriesState extends State<Categories> {
   @override
   void initState() {
     context.read<FetchCubit>().getArticles();

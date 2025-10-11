@@ -6,7 +6,7 @@ import 'package:newsily/data/web_services/news_web_services.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
 import 'package:newsily/presentation/screens/article_description.dart';
 import 'package:newsily/presentation/screens/category_page.dart';
-import 'package:newsily/presentation/screens/home_page.dart';
+import 'package:newsily/presentation/screens/categories.dart';
 
 class AppRoutter {
   late NewsDataRepository newsDataRepository;
@@ -20,7 +20,7 @@ class AppRoutter {
             create: (context) => FetchCubit(
               NewsDataRepository(newsWebServices: newsWebServices),
             ),
-            child: HomePage(),
+            child: Categories(),
           ),
         );
       case "/category":
