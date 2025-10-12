@@ -17,29 +17,6 @@ class CategorySection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),TextButton(
-  onPressed: () {
-    
-      Navigator.pushNamed(
-        context,
-        "/category",
-        arguments: {
-          "category": title,
-          "articles": articles,
-        },
-      );
-  },
-  child: const Text("See All"),
-),
-
-          ],
-        ),
         SizedBox(
           height: 260,
           child: PageView.builder(
