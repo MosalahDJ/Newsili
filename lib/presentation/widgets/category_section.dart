@@ -31,3 +31,6 @@ class CategorySection extends StatelessWidget {
     );
   }
 }
+
+
+//TODO: I schould remove this page
