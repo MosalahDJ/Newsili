@@ -6,6 +6,7 @@ class HomePageSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: SafeArea(
@@ -21,10 +22,7 @@ class HomePageSkeleton extends StatelessWidget {
                   // Title: Breaking News
                   const Text(
                     "Breaking News",
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
 
@@ -33,8 +31,10 @@ class HomePageSkeleton extends StatelessWidget {
                     height: 240,
                     child: PageView.builder(
                       itemCount: 3,
-                      controller:
-                          PageController(viewportFraction: 0.9, initialPage: 0),
+                      controller: PageController(
+                        viewportFraction: 0.9,
+                        initialPage: 0,
+                      ),
                       itemBuilder: (_, __) => Padding(
                         padding: const EdgeInsets.only(right: 12),
                         child: ClipRRect(
@@ -44,24 +44,25 @@ class HomePageSkeleton extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  height: 150,
-                                  color: Colors.grey[300],
-                                ),
+                                Container(height: 150, color: Colors.grey[300]),
                                 const Padding(
                                   padding: EdgeInsets.all(12),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text("Article title goes here",
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold)),
+                                      Text(
+                                        "Article title goes here",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                       SizedBox(height: 6),
                                       Text(
-                                          "Short description of the article appears here.",
-                                          style: TextStyle(fontSize: 13)),
+                                        "Short description of the article appears here.",
+                                        style: TextStyle(fontSize: 13),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -77,10 +78,7 @@ class HomePageSkeleton extends StatelessWidget {
                   // Title: Top Stories
                   const Text(
                     "Top Stories",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 12),
 
@@ -99,10 +97,7 @@ class HomePageSkeleton extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                height: 70,
-                                color: Colors.grey[300],
-                              ),
+                              Container(height: 70, color: Colors.grey[300]),
                               const Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
@@ -118,6 +113,58 @@ class HomePageSkeleton extends StatelessWidget {
                       ),
                     ),
                   ),
+
+                  const SizedBox(height: 24),
+
+                  // === Suggestion Banner Skeleton (added) ===
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      // use neutral background so Skeletonizer will shimmer it
+                      color: Colors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Title placeholder
+                          Container(
+                            height: 18,
+                            width: width * 0.45,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          // Description line 1
+                          Container(
+                            height: 12,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          // Description line 2 (shorter)
+                          Container(
+                            height: 12,
+                            width: width * 0.7,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // Extra spacing to match real layout
+                  const SizedBox(height: 100),
                 ],
               ),
             ),
