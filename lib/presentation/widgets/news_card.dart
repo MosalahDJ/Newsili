@@ -26,11 +26,11 @@ class NewsCard extends StatelessWidget {
               width: double.infinity,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
-                return Image.asset(
-                  "lib/assets/images/helper_images/no_image.jpg",
+                return Container(
                   height: 150,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
+                  color: Colors.grey[300],
+                  alignment: Alignment.center,
+                  child: const Icon(Icons.broken_image, size: 60),
                 );
               },
             ),
