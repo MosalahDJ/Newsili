@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
+import 'package:newsily/presentation/screens/bookmarks_page.dart';
 import 'package:newsily/presentation/screens/categorypage.dart';
 import 'package:newsily/presentation/screens/home_page.dart';
+import 'package:newsily/presentation/screens/profile_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -23,8 +25,8 @@ class _MainPageState extends State<MainPage> {
   final List<Widget> _pages = [
     HomePage(),
     const CategoryPage(),
-    // BookmarkPage(),
-    // ProfilePage(),
+    BookmarksPage(),
+    ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -64,14 +66,14 @@ class _MainPageState extends State<MainPage> {
               icon: Icon(Icons.category_rounded),
               label: "Categories",
             ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.bookmark_rounded),
-            //   label: "Bookmarks",
-            // ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.person_rounded),
-            //   label: "Profile",
-            // ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.bookmark_rounded),
+              label: "Bookmarks",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_rounded),
+              label: "Profile",
+            ),
           ],
         ),
       ),
