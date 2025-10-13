@@ -26,17 +26,17 @@ class AppRoutter {
         );
       case "categories":
         return MaterialPageRoute(builder: (_) => CategoryPage());
-      case "category":
-        final args = setting.arguments as Map;
-        return MaterialPageRoute(
-          builder: (_) => Categoryposts(
-            category: args["category"],
-            articles: args["articles"],
-            categoryIndex: 0, // you can pass an index if needed
-          ),
-        );
+      // case "category":
+      //   final args = setting.arguments as Map;
+      //   return MaterialPageRoute(
+      //     builder: (_) => Categoryposts(
+      //       category: args["category"],
+      //       articles: args["articles"],
+      //       categoryIndex: 0, // you can pass an index if needed
+      //     ),
+      //   );
 
-      case "article":
+      case "/article":
         final article = setting.arguments as Articles;
         return MaterialPageRoute(
           builder: (_) => ArticleDescriptionPage(article: article),

@@ -27,6 +27,7 @@ class ArticleDescriptionPage extends StatelessWidget {
               tag: "${article.url}-${article.publishedAt}",
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
+
                 child: article.urlToImage != null
                     ? Image.network(
                         article.urlToImage!,

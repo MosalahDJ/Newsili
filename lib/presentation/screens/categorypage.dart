@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:newsily/data/models/news_data_model.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_state.dart';
 import 'package:newsily/presentation/widgets/categories_page_skeletonizer.dart';
@@ -136,7 +137,14 @@ class _CategoryPageState extends State<CategoryPage>
                       itemCount: articles.length,
                       separatorBuilder: (_, __) => const SizedBox(height: 16),
                       itemBuilder: (context, index) {
-                        return NewsCard(article: articles[index], i: index);
+                        return InkWell(
+                          onTap: () => Navigator.pushNamed(
+                            context,
+                            "/article",
+                            arguments: articles,
+                          ),
+                          child: NewsCard(article: articles[index], i: index),
+                        );
                       },
                     );
                   }).toList(),

@@ -1,36 +1,36 @@
-import 'package:flutter/material.dart';
-import 'package:newsily/data/models/news_data_model.dart';
-import 'news_card.dart';
+// import 'package:flutter/material.dart';
+// import 'package:newsily/data/models/news_data_model.dart';
+// import 'news_card.dart';
 
-class CategorySection extends StatelessWidget {
-  final String title;
-  final List<Articles> articles;
+// class CategorySection extends StatelessWidget {
+//   final String title;
+//   final List<Articles> articles;
 
-  const CategorySection({
-    super.key,
-    required this.title,
-    required this.articles,
-  });
+//   const CategorySection({
+//     super.key,
+//     required this.title,
+//     required this.articles,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 260,
-          child: PageView.builder(
-            controller: PageController(viewportFraction: 0.85),
-            itemCount: articles.length > 4 ? 4 : articles.length,
-            itemBuilder: (context, index) {
-              return NewsCard(article: articles[index], i: index ,);
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         SizedBox(
+//           height: 260,
+//           child: PageView.builder(
+//             controller: PageController(viewportFraction: 0.85),
+//             itemCount: articles.length > 4 ? 4 : articles.length,
+//             itemBuilder: (context, index) {
+//               return NewsCard(article: articles[index], i: index ,);
+//             },
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 
-//TODO: I schould remove this page
+// //TODO: I schould remove this page

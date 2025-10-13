@@ -12,7 +12,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-
   @override
   void initState() {
     context.read<FetchCubit>().getArticles();
@@ -43,7 +42,7 @@ class _MainPageState extends State<MainPage> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha:  0.08),
+              color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 8,
               offset: const Offset(0, -2),
             ),
@@ -53,7 +52,7 @@ class _MainPageState extends State<MainPage> {
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: Colors.redAccent,
+          selectedItemColor: Colors.deepPurpleAccent,
           unselectedItemColor: Colors.grey,
           showUnselectedLabels: true,
           items: const [
