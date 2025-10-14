@@ -57,7 +57,7 @@ class _ProfileHeader extends StatelessWidget {
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: Theme.of(
                   context,
-                ).colorScheme.onPrimaryContainer.withOpacity(0.85),
+                ).colorScheme.onPrimaryContainer.withValues(alpha:0.85),
               ),
             ),
           ],
