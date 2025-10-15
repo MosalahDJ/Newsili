@@ -6,7 +6,7 @@ part 'save_articles_state.dart';
 
 class SaveArticlesCubit extends Cubit<SaveArticlesState> {
   SaveArticlesCubit() : super(SaveArticlesInitial());
-  addArticle(){
-    
-  }
+  // to morrow I schould solve the problem of using  a list of initial artikles
+  getArtikles() {}
+  addArticle() {}
 }
