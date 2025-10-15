@@ -6,7 +6,8 @@ sealed class SaveArticlesState {
 }
 
 final class SaveArticlesInitial extends SaveArticlesState {
-  const SaveArticlesInitial();
+  final List<Articles>? oldArticlessaved;
+  const SaveArticlesInitial({this.oldArticlessaved});
 }
 
 final class SaveArticlesloading extends SaveArticlesState {
