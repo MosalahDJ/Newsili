@@ -10,3 +10,5 @@ class SaveArticlesCubit extends Cubit<SaveArticlesState> {
   getArtikles() {}
   addArticle() {}
 }
+
+//schould I do something for solve this problem even I will re stdy the blockkurs
