@@ -39,4 +39,3 @@ class BookmarksCubit extends Cubit<BookmarksState> {
   }
 }
 
-// tomorrow schould I use this cubit in the interface
