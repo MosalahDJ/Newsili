@@ -1,24 +1,29 @@
-part of 'save_articles_cubit.dart';
+import 'package:newsily/data/models/news_data_model.dart';
 
-sealed class SaveArticlesState {
-  const SaveArticlesState();
+abstract class BookmarksState {
+  const BookmarksState();
+
+  List<Object?> get props => [];
 }
 
-final class SaveArticlesInitial extends SaveArticlesState {
-  final List<Articles>? oldArticlessaved;
-  const SaveArticlesInitial({this.oldArticlessaved});
+class BookmarksInitial extends BookmarksState {}
+
+class BookmarksLoading extends BookmarksState {}
+
+class BookmarksLoaded extends BookmarksState {
+  final List<Articles> savedArticles;
+
+  const BookmarksLoaded(this.savedArticles);
+
+  @override
+  List<Object?> get props => [savedArticles];
 }
 
-final class SaveArticlesloading extends SaveArticlesState {
-  const SaveArticlesloading();
-}
+class BookmarksError extends BookmarksState {
+  final String message;
 
-final class SaveArticlesLoaded extends SaveArticlesState {
-  final List<Articles>? savedArticles;
-  const SaveArticlesLoaded({this.savedArticles});
-}
+  const BookmarksError(this.message);
 
-final class SaveArticlesError extends SaveArticlesState {
-  final String? errorText;
-  const SaveArticlesError({this.errorText});
+  @override
+  List<Object?> get props => [message];
 }
