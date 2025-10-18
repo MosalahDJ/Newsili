@@ -41,3 +41,6 @@ class BookmarksCubit extends Cubit<BookmarksState> {
     emit(BookmarksLoaded([]));
   }
 }
+
+
+// tomorrow schould I use this cubit in the interfave
