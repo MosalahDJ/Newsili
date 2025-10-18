@@ -1,6 +1,5 @@
 part of 'save_articles_cubit.dart';
 
-@immutable
 sealed class SaveArticlesState {
   const SaveArticlesState();
 }
