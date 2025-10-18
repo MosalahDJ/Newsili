@@ -20,27 +20,24 @@ class BookmarksCubit extends Cubit<BookmarksState> {
   void addBookmark(Articles article) {
     SavedArtikles.instance.saveArticle(article);
     emit(BookmarksLoaded([]));
-
   }
 
   /// Remove an article from bookmarks
   void removeBookmark(Articles article) {
     SavedArtikles.instance.removeArticle(article.url!);
     emit(BookmarksLoaded([]));
-
   }
 
   /// Check if an article is saved
-  Future<bool> isBookmarked(Articles article) async{
+  Future<bool> isBookmarked(Articles article) async {
     return await SavedArtikles.instance.isArticleSaved(article.url!);
   }
 
   /// Clear all bookmarks
   void clearBookmarks() {
-    
     emit(BookmarksLoaded([]));
   }
 }
 
 
-// tomorrow schould I use this cubit in the interfave
+// tomorrow schould I use this cubit in the interface
