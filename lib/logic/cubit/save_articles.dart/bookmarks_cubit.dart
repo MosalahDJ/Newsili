@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/data/database/saved_artikles.dart';
 import 'package:newsily/data/models/news_data_model.dart';
-import 'package:newsily/logic/cubit/save_articles.dart/save_articles_state.dart';
+import 'package:newsily/logic/cubit/save_articles.dart/bookmarks_state.dart';
 
 class BookmarksCubit extends Cubit<BookmarksState> {
   BookmarksCubit() : super(BookmarksInitial());

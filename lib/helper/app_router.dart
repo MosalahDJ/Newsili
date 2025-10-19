@@ -4,6 +4,7 @@ import 'package:newsily/data/models/news_data_model.dart';
 import 'package:newsily/data/repositories/news_data_repository.dart';
 import 'package:newsily/data/web_services/news_web_services.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
+import 'package:newsily/logic/cubit/save_articles.dart/bookmarks_cubit.dart';
 import 'package:newsily/presentation/main_page.dart';
 import 'package:newsily/presentation/screens/article_description.dart';
 import 'package:newsily/presentation/screens/categorypage.dart';
@@ -16,10 +17,13 @@ class AppRoutter {
     switch (setting.name) {
       case "home":
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => FetchCubit(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => FetchCubit(
               NewsDataRepository(newsWebServices: newsWebServices),
-            ),
+            ),),
+            BlocProvider(create: (context) => BookmarksCubit(),)
+            ],
             child: MainPage(),
           ),
         );
