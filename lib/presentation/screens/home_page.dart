@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_state.dart';
+import 'package:newsily/logic/cubit/save_articles.dart/bookmarks_cubit.dart';
 import 'package:newsily/presentation/screens/article_description.dart';
 import 'package:newsily/presentation/widgets/home_page_skeleton.dart';
 import 'package:newsily/presentation/widgets/suggesion_banner.dart';
@@ -198,8 +199,17 @@ class HomePage extends StatelessWidget {
                             Icons.bookmark_border,
                             color: Colors.white,
                           ),
-                          onPressed: () {
-                            // TODO: Add save functionality
+                          onPressed: () async {
+                            bool isBookmarked = await context
+                                .read<BookmarksCubit>()
+                                .isBookmarked(article);
+                            isBookmarked
+                                ? context.read<BookmarksCubit>().removeBookmark(
+                                    article,
+                                  )
+                                : context.read<BookmarksCubit>().addBookmark(
+                                    article,
+                                  );
                           },
                         ),
                       ],

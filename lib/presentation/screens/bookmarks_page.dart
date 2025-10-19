@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:newsily/logic/cubit/save_articles.dart/bookmarks_cubit.dart';
 
-class BookmarksPage extends StatelessWidget {
+class BookmarksPage extends StatefulWidget {
   const BookmarksPage({super.key});
+
+  @override
+  State<BookmarksPage> createState() => _BookmarksPageState();
+}
+
+class _BookmarksPageState extends State<BookmarksPage> {
+
+    @override
+  void initState() {
+    super.initState();
+    context.read<BookmarksCubit>().loadBookmarks();
+  }
 
   @override
   Widget build(BuildContext context) {
