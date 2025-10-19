@@ -9,8 +9,11 @@ class BookmarksCubit extends Cubit<BookmarksState> {
   /// Load saved articles (from local DB or memory)
   void loadBookmarks() async {
     emit(BookmarksLoading());
+    //TODO: schould I fix the problem hier  I must have a list of Articles
     try {
-      SavedArtikles.instance.getAllSavedArticles();
+      List<Articles> articles = await SavedArtikles.instance
+          .getAllSavedArticles();
+      emit(BookmarksLoaded());
     } catch (e) {
       emit(BookmarksError("Failed to load bookmarks"));
     }

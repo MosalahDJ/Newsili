@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:newsily/data/models/news_data_model.dart';
 import 'package:newsily/logic/cubit/save_articles.dart/bookmarks_cubit.dart';
+import 'package:newsily/logic/cubit/save_articles.dart/bookmarks_state.dart';
+import 'package:newsily/presentation/widgets/home_page_skeleton.dart';
 
 class BookmarksPage extends StatefulWidget {
   const BookmarksPage({super.key});
@@ -10,8 +13,7 @@ class BookmarksPage extends StatefulWidget {
 }
 
 class _BookmarksPageState extends State<BookmarksPage> {
-
-    @override
+  @override
   void initState() {
     super.initState();
     context.read<BookmarksCubit>().loadBookmarks();
@@ -25,58 +27,47 @@ class _BookmarksPageState extends State<BookmarksPage> {
         centerTitle: true,
         elevation: 0,
       ),
-      body: _buildContent(context),
+      body: BlocBuilder<BookmarksCubit, BookmarksState>(
+        builder: (context, state) {
+          if (state is BookmarksLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is BookmarksError) {
+            return Center(child: Text(state.message));
+          } else if (state is BookmarksLoaded) {
+            return RefreshIndicator(
+              onRefresh: () async {
+                context.read<BookmarksCubit>().loadBookmarks();
+              },
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  child: _buildContent(context, state.savedArticles),
+                ),
+              ),
+            );
+          }
+          return HomePageSkeleton();
+        },
+      ),
     );
   }
 
-  Widget _buildContent(BuildContext context) {
-    // You'll replace this with your Bloc later
-    // For now, show empty state or sample layout
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.bookmark_border,
-            size: 64,
-            color: Theme.of(context).colorScheme.outline,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'No bookmarks yet',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
-          ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 48),
-            child: Text(
-              'Items you save will appear here. Use the save button on other pages to bookmark content.',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-            ),
-          ),
-        ],
-      ),
-    );
-
-    // OPTIONAL: Uncomment below when you add real data later
-    /*
+  Widget _buildContent(BuildContext context, List<Articles> articles) {
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      itemCount: 0, // Replace with actual count
+      itemCount: articles.length, // Replace with actual count
       itemBuilder: (context, index) {
         return _BookmarkCard(
-          title: 'Sample Title',
-          description: 'Sample description text goes here.',
+          title: articles[index].title!,
+          description: articles[index].description,
           date: DateTime.now(),
         );
       },
     );
-    */
   }
 }
 
@@ -104,9 +95,9 @@ class _BookmarkCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
@@ -115,8 +106,8 @@ class _BookmarkCard extends StatelessWidget {
               Text(
                 description!,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -127,8 +118,8 @@ class _BookmarkCard extends StatelessWidget {
               child: Text(
                 _formatDate(date),
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
             ),
           ],
