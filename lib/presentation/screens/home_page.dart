@@ -146,9 +146,20 @@ class HomePage extends StatelessWidget {
             children: [
               // Background Image
               Positioned.fill(
-                child: article.urlToImage != null
-                    ? Image.network(article.urlToImage!, fit: BoxFit.cover)
-                    : Container(color: Colors.grey[300]),
+                child: Image.network(
+                  article.urlToImage ?? "",
+                  height: 150,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      height: 150,
+                      color: Colors.grey[300],
+                      alignment: Alignment.center,
+                      child: const Icon(Icons.broken_image, size: 60),
+                    );
+                  },
+                ),
               ),
               // Gradient overlay
               Positioned.fill(
