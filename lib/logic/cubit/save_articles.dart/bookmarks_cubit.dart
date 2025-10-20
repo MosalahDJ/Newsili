@@ -9,26 +9,42 @@ class BookmarksCubit extends Cubit<BookmarksState> {
   /// Load saved articles (from local DB or memory)
   void loadBookmarks() async {
     emit(BookmarksLoading());
-    //TODO: schould I fix the problem hier  I must have a list of Articles
     try {
-      List<Articles> articles = await SavedArtikles.instance
+      // Get the raw data from database
+      List<Map<String, dynamic>> rawArticles = await SavedArtikles.instance
           .getAllSavedArticles();
+
+      // Convert the raw data to Articles objects
+      List<Articles> articles = rawArticles
+          .map(
+            (articleMap) => Articles(
+              source: Source(name: articleMap['source']),
+              title: articleMap['title'],
+              description: articleMap['description'],
+              url: articleMap['article_id'],
+              urlToImage: articleMap['imageUrl'],
+              publishedAt: articleMap['publishedAt'],
+              content: articleMap['content'],
+            ),
+          )
+          .toList();
+
       emit(BookmarksLoaded(articles));
     } catch (e) {
-      emit(BookmarksError("Failed to load bookmarks"));
+      emit(BookmarksError("Failed to load bookmarks: ${e.toString()}"));
     }
   }
 
   /// Add an article to bookmarks
-  void addBookmark(Articles article) {
-    SavedArtikles.instance.saveArticle(article);
-    emit(BookmarksLoaded([]));
+  void addBookmark(Articles article) async {
+    await SavedArtikles.instance.saveArticle(article);
+    loadBookmarks(); // Reload bookmarks after adding
   }
 
   /// Remove an article from bookmarks
-  void removeBookmark(Articles article) {
-    SavedArtikles.instance.removeArticle(article.url!);
-    emit(BookmarksLoaded([]));
+  void removeBookmark(Articles article) async {
+    await SavedArtikles.instance.removeArticle(article.url!);
+    loadBookmarks(); // Reload bookmarks after removing
   }
 
   /// Check if an article is saved
@@ -41,5 +57,3 @@ class BookmarksCubit extends Cubit<BookmarksState> {
     emit(BookmarksLoaded([]));
   }
 }
-
-// tomorrow schould I use this cubit in the interface
