@@ -39,7 +39,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                 context.read<BookmarksCubit>().loadBookmarks();
               },
               child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
@@ -58,6 +58,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
 
   Widget _buildContent(BuildContext context, List<Articles> articles) {
     return ListView.builder(
+      shrinkWrap: true,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       itemCount: articles.length, // Replace with actual count
       itemBuilder: (context, index) {
@@ -112,7 +113,7 @@ class _BookmarkCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ],
-            const Spacer(),
+            const SizedBox(height: 8),
             Align(
               alignment: Alignment.bottomRight,
               child: Text(
