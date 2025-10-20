@@ -13,7 +13,7 @@ class BookmarksCubit extends Cubit<BookmarksState> {
     try {
       List<Articles> articles = await SavedArtikles.instance
           .getAllSavedArticles();
-      emit(BookmarksLoaded());
+      emit(BookmarksLoaded(articles));
     } catch (e) {
       emit(BookmarksError("Failed to load bookmarks"));
     }
