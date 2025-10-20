@@ -206,8 +206,9 @@ class HomePage extends StatelessWidget {
                         ),
                         const Spacer(),
                         IconButton(
-                          icon: const Icon(
-                            Icons.bookmark_border,
+                          icon: Icon(
+                            
+                            handlebookmarkicon(context, article)?Icons.bookmark_border:Icons.bookmark,
                             color: Colors.white,
                           ),
                           onPressed: () {
@@ -239,5 +240,23 @@ class HomePage extends StatelessWidget {
     } else {
       bookmarksCubit.addBookmark(article);
     }
+  }
+}
+
+Future<bool?> handlebookmarkicon(
+  BuildContext context,
+  Articles article,
+) async {
+  if (!context.mounted) return null;
+
+  final bookmarksCubit = context.read<BookmarksCubit>();
+  final isBookmarked = await bookmarksCubit.isBookmarked(article);
+
+  if (!context.mounted) return null;
+
+  if (isBookmarked) {
+    return true;
+  } else {
+    return false;
   }
 }
