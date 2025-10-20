@@ -210,17 +210,8 @@ class HomePage extends StatelessWidget {
                             Icons.bookmark_border,
                             color: Colors.white,
                           ),
-                          onPressed: () async {
-                            bool isBookmarked = await context
-                                .read<BookmarksCubit>()
-                                .isBookmarked(article);
-                            isBookmarked
-                                ? context.read<BookmarksCubit>().removeBookmark(
-                                    article,
-                                  )
-                                : context.read<BookmarksCubit>().addBookmark(
-                                    article,
-                                  );
+                          onPressed: () {
+                            _handleBookmarkPress(context, article);
                           },
                         ),
                       ],
@@ -233,5 +224,20 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _handleBookmarkPress(BuildContext context, Articles article) async {
+    if (!context.mounted) return;
+
+    final bookmarksCubit = context.read<BookmarksCubit>();
+    final isBookmarked = await bookmarksCubit.isBookmarked(article);
+
+    if (!context.mounted) return;
+
+    if (isBookmarked) {
+      bookmarksCubit.removeBookmark(article);
+    } else {
+      bookmarksCubit.addBookmark(article);
+    }
   }
 }

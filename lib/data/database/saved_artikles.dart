@@ -45,7 +45,6 @@ class SavedArtikles {
   Future<void> saveArticle(Articles article) async {
     final db = await database;
     try {
-      //TODO: schould I fix the problem hier  I must have a list of Articles
       await db.insert(
         'saved_artikles',
         {

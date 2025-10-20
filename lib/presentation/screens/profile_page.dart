@@ -134,7 +134,6 @@ class _ActionButtonsSection extends StatelessWidget {
           ];
           return FilledButton.tonal(
             onPressed: () {
-              // TODO: Add navigation or actions later
             },
             child: Text(actions[index]),
           );
