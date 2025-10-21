@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
@@ -66,15 +67,28 @@ class HomePage extends StatelessWidget {
 
                       SizedBox(
                         height: 280,
-                        child: PageView.builder(
-                          controller: _pageController,
-                          itemCount: latestNews.length > 4
-                              ? 4
-                              : latestNews.length,
-                          itemBuilder: (context, index) {
-                            final article = latestNews[index];
-                            return _buildBreakingCard(context, article, index);
-                          },
+                        child: CarouselSlider(
+                          options: CarouselOptions(
+                            height: 200, // Set your desired height
+                            autoPlay: true,
+                            autoPlayInterval: Duration(seconds: 3),
+                            autoPlayAnimationDuration: Duration(
+                              milliseconds: 500,
+                            ),
+                            autoPlayCurve: Curves.easeInOut,
+                            pauseAutoPlayOnTouch: true,
+                            aspectRatio: 16 / 9,
+                            viewportFraction: 0.8,
+                            enlargeCenterPage: true,
+                            scrollDirection: Axis.horizontal,
+                          ),
+                          items: latestNews.take(4).map((article) {
+                            return _buildBreakingCard(
+                              context,
+                              article,
+                              latestNews.indexOf(article),
+                            );
+                          }).toList(),
                         ),
                       ),
 
