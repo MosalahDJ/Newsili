@@ -221,10 +221,8 @@ class HomePage extends StatelessWidget {
                                         : Icons.bookmark_border,
                                     color: Colors.white,
                                   ),
-                                  onPressed: () async {
-                                    if (isBookmarked)
-                                      _handleBookmarkPress(context, article);
-                                  },
+                                  onPressed: () =>
+                                      _handleBookmarkPress(context, article),
                                 );
                               },
                             );

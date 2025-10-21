@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:newsily/logic/cubit/save_articles.dart/bookmarks_cubit.dart';
+import 'package:newsily/logic/cubit/save_articles.dart/bookmarks_state.dart';
 import '../../data/models/news_data_model.dart';
 
 class ArticleDescriptionPage extends StatelessWidget {
@@ -110,22 +113,70 @@ class ArticleDescriptionPage extends StatelessWidget {
             const SizedBox(height: 24),
 
             // === Visit Source Button ===
-            ElevatedButton.icon(
-              onPressed: () {
-                // open the URL in a browser (you can add url_launcher here)
-              },
-              icon: const Icon(Icons.open_in_new),
-              label: const Text("Read full article"),
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 48),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.max,
+
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () {
+                    // open the URL in a browser (you can add url_launcher here)
+                  },
+                  icon: const Icon(Icons.open_in_new),
+                  label: const Text("Read full article"),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
                 ),
-              ),
+                BlocBuilder<BookmarksCubit, BookmarksState>(
+                  builder: (context, state) {
+                    return FutureBuilder<bool>(
+                      future: context.read<BookmarksCubit>().isBookmarked(
+                        article,
+                      ),
+                      builder: (context, snapshot) {
+                        final isBookmarked = snapshot.data ?? false;
+                        return ElevatedButton.icon(
+                          onPressed: () =>
+                              _handleBookmarkPress(context, article),
+                          icon: Icon(
+                            isBookmarked
+                                ? Icons.bookmark
+                                : Icons.bookmark_border,
+                          ),
+                          label: isBookmarked ? Text("saved") : Text("save"),
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+}
+
+void _handleBookmarkPress(BuildContext context, Articles article) async {
+  if (!context.mounted) return;
+
+  final bookmarksCubit = context.read<BookmarksCubit>();
+  final isBookmarked = await bookmarksCubit.isBookmarked(article);
+
+  if (!context.mounted) return;
+
+  if (isBookmarked) {
+    bookmarksCubit.removeBookmark(article);
+  } else {
+    bookmarksCubit.addBookmark(article);
   }
 }
