@@ -207,8 +207,7 @@ class HomePage extends StatelessWidget {
                         const Spacer(),
                         IconButton(
                           icon: Icon(
-                            // tomorow I will fix this err
-                            handlebookmarkicon(context, article)?Icons.bookmark_border:Icons.bookmark,
+                            Icons.bookmark_border,
                             color: Colors.white,
                           ),
                           onPressed: () {
@@ -240,23 +239,5 @@ class HomePage extends StatelessWidget {
     } else {
       bookmarksCubit.addBookmark(article);
     }
-  }
-}
-
-Future<bool?> handlebookmarkicon(
-  BuildContext context,
-  Articles article,
-) async {
-  if (!context.mounted) return null;
-
-  final bookmarksCubit = context.read<BookmarksCubit>();
-  final isBookmarked = await bookmarksCubit.isBookmarked(article);
-
-  if (!context.mounted) return null;
-
-  if (isBookmarked) {
-    return true;
-  } else {
-    return false;
   }
 }
