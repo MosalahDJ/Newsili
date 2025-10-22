@@ -7,9 +7,10 @@ import 'package:newsily/logic/cubit/fetch%20data/fetch_state.dart';
 import 'package:newsily/logic/cubit/save_articles.dart/bookmarks_cubit.dart';
 import 'package:newsily/logic/cubit/save_articles.dart/bookmarks_state.dart';
 import 'package:newsily/presentation/screens/article_description.dart';
+// import 'package:newsily/presentation/screens/home_page.dart'
+    // as search_controller;
 import 'package:newsily/presentation/widgets/home_page_skeleton.dart';
 import 'package:newsily/presentation/widgets/suggesion_banner.dart';
-import 'package:newsily/presentation/widgets/top_stories_section.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../data/models/news_data_model.dart';
 
@@ -23,6 +24,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final CarouselSliderController _carouselController =
       CarouselSliderController();
+  final TextEditingController _searchController = TextEditingController();
   int _currentPage = 0;
   List<Articles> _cachedLatestNews = [];
 
@@ -55,7 +57,7 @@ class _HomePageState extends State<HomePage> {
           } else if (state is DataError) {
             return Center(child: Text(state.errortext));
           } else if (state is DataLoaded) {
-            return _buildContent(context, state);
+            return _buildContent(state);
           }
           return const HomePageSkeleton();
         },
@@ -63,55 +65,107 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildContent(BuildContext context, DataLoaded state) {
-    final latestNews = state.generalNews ?? [];
-    final topStories = state.businessNews ?? [];
+  Widget _buildContent(DataLoaded state) {
+    final newsMap = {
+      'general': state.generalNews ?? [],
+      'business': state.businessNews ?? [],
+      'technology': state.technologyNews ?? [],
+      'sports': state.sportsNews ?? [],
+      'entertainment': state.entertainmentNews ?? [],
+    };
 
-    if (latestNews.isEmpty) {
-      return const Center(child: Text("No news available"));
-    }
+    // Derive trending & featured from available data
+    final trendingNews = newsMap['general']?.take(3).toList() ?? [];
+    final featuredNews = newsMap['technology']?.take(2).toList() ?? [];
 
     return RefreshIndicator(
       onRefresh: () async => context.read<FetchCubit>().getArticles(),
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // ==== BREAKING NEWS ====
-              const Text(
-                "Breaking News",
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+      child: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        children: [
+          const SizedBox(height: 12),
+
+          // ==== SEARCH BAR ====
+          TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+              hintText: 'Search news...',
+              prefixIcon: const Icon(Icons.search),
+              filled: true,
+              fillColor: Theme.of(context).colorScheme.surfaceVariant,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+                borderSide: BorderSide.none,
               ),
-              const SizedBox(height: 12),
-
-              _buildCarousel(latestNews.take(4).toList()),
-
-              const SizedBox(height: 12),
-              _buildPageIndicator(
-                latestNews.length > 4 ? 4 : latestNews.length,
-              ),
-
-              const SizedBox(height: 30),
-
-              // ==== TOP STORIES ====
-              const Text(
-                "Top Stories",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 12),
-
-              buildTopStoriesSection(context, topStories),
-
-              const SizedBox(height: 24),
-
-              // ==== OPTIONAL: Suggestion Section ====
-              buildSuggestionBanner(context),
-            ],
+            ),
+            onSubmitted: (query) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text('Searching for: $query')));
+            },
           ),
-        ),
+          const SizedBox(height: 24),
+
+          // ==== BREAKING NEWS ====
+          const Text(
+            "Breaking News",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          _buildCarousel(newsMap['general']!.take(4).toList()),
+          const SizedBox(height: 8),
+          _buildPageIndicator(
+            newsMap['general']!.length > 4 ? 4 : newsMap['general']!.length,
+          ),
+          const SizedBox(height: 32),
+
+          // ==== TOP STORIES (Horizontal) ====
+          const Text(
+            "Top Stories",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey,
+            ),
+          ),
+          const SizedBox(height: 12),
+          _buildCategoryList(newsMap['business'] ?? [], 'business'),
+          const SizedBox(height: 32),
+
+          // 🔥 TRENDING NOW (Vertical List)
+          if (trendingNews.isNotEmpty) ...[
+            const Text(
+              "Trending Now",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Colors.redAccent,
+              ),
+            ),
+            const SizedBox(height: 12),
+            ...trendingNews
+                .map((article) => _buildTrendingCard(article))
+                .toList(),
+            const SizedBox(height: 32),
+          ],
+
+          // 📚 FEATURED REPORTS / EDITOR'S PICKS
+          if (featuredNews.isNotEmpty) ...[
+            const Text(
+              "Editor's Picks",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            ...featuredNews
+                .map((article) => _buildFeaturedCard(article))
+                .toList(),
+            const SizedBox(height: 32),
+          ],
+
+          // ==== SUGGESTION BANNER ====
+          buildSuggestionBanner(context),
+          const SizedBox(height: 24),
+        ],
       ),
     );
   }
@@ -259,6 +313,129 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // 🔥 Trending Card — Compact vertical list
+  Widget _buildTrendingCard(Articles article) {
+    return GestureDetector(
+      onTap: () {
+        // TODO
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: SizedBox(
+                width: 100,
+                height: 70,
+                child: article.urlToImage != null
+                    ? Image.network(article.urlToImage!, fit: BoxFit.cover)
+                    : Container(color: Colors.grey[300]),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    article.title ?? 'Untitled',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      height: 1.3,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    article.source?.name ?? '',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.labelSmall?.copyWith(color: Colors.grey),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                // todo
+              },
+              icon: const Icon(Icons.more_vert, size: 18),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 📚 Featured Card — Larger, with excerpt
+  Widget _buildFeaturedCard(Articles article) {
+    return GestureDetector(
+      onTap: () {
+        // TODO
+      },
+      child: Card(
+        margin: const EdgeInsets.only(bottom: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        clipBehavior: Clip.hardEdge,
+        elevation: 2,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AspectRatio(
+              aspectRatio: 16 / 9,
+              child: article.urlToImage != null
+                  ? Image.network(article.urlToImage!, fit: BoxFit.cover)
+                  : Container(color: Colors.grey[300]),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    article.title ?? 'Untitled',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      height: 1.3,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  if (article.description != null)
+                    Text(
+                      article.description!,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        height: 1.4,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Text(
+                        article.source?.name ?? '',
+                        style: Theme.of(
+                          context,
+                        ).textTheme.labelSmall?.copyWith(color: Colors.grey),
+                      ),
+                      const Spacer(),
+                      // _BookmarkButton(article: article),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _handleBookmarkPress(BuildContext context, Articles article) async {
     if (!context.mounted) return;
 
@@ -289,3 +466,104 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+Widget _buildCategoryList(List<Articles> articles, String categoryKey) {
+  if (articles.isEmpty) {
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 16),
+      child: Text(
+        "No articles available",
+        style: TextStyle(color: Colors.grey),
+      ),
+    );
+  }
+
+  return SizedBox(
+    height: 220,
+    child: ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: articles.length,
+      itemBuilder: (context, index) {
+        final article = articles[index];
+        return GestureDetector(
+          onTap: () {
+            //TODO
+          },
+          child: SizedBox(
+            width: 280,
+            child: Card(
+              margin: const EdgeInsets.only(right: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              clipBehavior: Clip.hardEdge,
+              elevation: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: article.urlToImage != null
+                        ? Image.network(
+                            article.urlToImage!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Container(color: Colors.grey[300]),
+                          )
+                        : Container(color: Colors.grey[300]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          article.title ?? 'Untitled',
+                          style: Theme.of(context).textTheme.titleSmall
+                              ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                height: 1.3,
+                              ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 6),
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                article.source?.name ?? '',
+                                style: Theme.of(context).textTheme.labelSmall
+                                    ?.copyWith(color: Colors.grey),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            IconButton(
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              splashRadius: 20,
+                              onPressed: () {
+                                // TODO
+                              },
+                              icon: const Icon(Icons.more_vert, size: 18),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    ),
+  );
+}
+
+// @override
+// void dispose() {
+//   search_controller.dispose();
+// }
