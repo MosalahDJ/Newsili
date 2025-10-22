@@ -283,9 +283,11 @@ class _HomePageState extends State<HomePage> {
           dotHeight: 8,
           dotWidth: 8,
           activeDotColor: Theme.of(context).colorScheme.primary,
-          dotColor: Colors.grey.withOpacity(0.3),
+          dotColor: Colors.grey.withValues(alpha: .3),
         ),
       ),
     );
   }
 }
+
+

@@ -27,52 +27,7 @@ class HomePageSkeleton extends StatelessWidget {
                   const SizedBox(height: 12),
 
                   // Fake PageView for Breaking News
-                  SizedBox(
-                    height: 240,
-                    child: PageView.builder(
-                      itemCount: 3,
-                      controller: PageController(
-                        viewportFraction: 0.9,
-                        initialPage: 0,
-                      ),
-                      itemBuilder: (_, __) => Padding(
-                        padding: const EdgeInsets.only(right: 12),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(18),
-                          child: Container(
-                            color: Colors.white,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(height: 150, color: Colors.grey[300]),
-                                const Padding(
-                                  padding: EdgeInsets.all(12),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Article title goes here",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(height: 6),
-                                      Text(
-                                        "Short description of the article appears here.",
-                                        style: TextStyle(fontSize: 13),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  _carousselSkeleton(),
                   const SizedBox(height: 24),
 
                   // Title: Top Stories
@@ -173,4 +128,69 @@ class HomePageSkeleton extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _carousselSkeleton() {
+  return SizedBox(
+      height: 280,
+      child:Card(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    clipBehavior: Clip.antiAlias,
+    elevation: 4,
+    child: Stack(
+      children: [
+        // Placeholder image area
+        Positioned.fill(child: Container(color: Colors.grey[300])),
+        // Gradient overlay (keep for visual consistency)
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withValues(alpha: .1),
+                  Colors.black.withValues(alpha: .7),
+                ],
+              ),
+            ),
+          ),
+        ),
+        // Text placeholders
+        Positioned(
+          bottom: 16,
+          left: 16,
+          right: 16,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Title placeholder
+              Container(
+                height: 20,
+                width: double.infinity,
+                color: Colors.white,
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  // Source placeholder
+                  Container(height: 16, width: 80, color: Colors.white),
+                  const Spacer(),
+                  // Bookmark icon placeholder
+                  Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  ));
 }
