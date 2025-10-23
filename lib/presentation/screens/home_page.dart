@@ -10,6 +10,7 @@ import 'package:newsily/presentation/screens/article_description.dart';
 import 'package:newsily/presentation/widgets/home_page_skeleton.dart';
 import 'package:newsily/presentation/widgets/suggesion_banner.dart';
 import 'package:newsily/presentation/widgets/top_stories_section.dart';
+import 'package:path/path.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../data/models/news_data_model.dart';
 
@@ -23,6 +24,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final CarouselSliderController _carouselController =
       CarouselSliderController();
+  final TextEditingController _searchController = TextEditingController();
+
   int _currentPage = 0;
   List<Articles> _cachedLatestNews = [];
 
@@ -80,17 +83,39 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // ==== SEARCH BAR ====
+              TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Search news...',
+                  prefixIcon: const Icon(Icons.search),
+                  filled: true,
+                  fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                onSubmitted: (query) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Searching for: $query')),
+                  );
+                },
+              ),
+              const SizedBox(height: 24),
+
               // ==== BREAKING NEWS ====
               const Text(
                 "Breaking News",
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
 
               _buildCarousel(latestNews.take(4).toList()),
 
               const SizedBox(height: 12),
               _buildPageIndicator(
+                context,
                 latestNews.length > 4 ? 4 : latestNews.length,
               ),
 
@@ -107,7 +132,36 @@ class _HomePageState extends State<HomePage> {
 
               const SizedBox(height: 24),
 
-              // ==== OPTIONAL: Suggestion Section ====
+              // 🔥 TRENDING NOW (Vertical List)
+              if (state.technologyNews != null) ...[
+                const Text(
+                  "Trending Now",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.redAccent,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                ...state.technologyNews!
+                    .take(5)
+                    .map((article) => _buildTrendingCard(context, article)),
+                const SizedBox(height: 32),
+              ],
+              // 📚 FEATURED REPORTS / EDITOR'S PICKS
+              if (state.healthNews!.isNotEmpty) ...[
+                const Text(
+                  "Editor's Picks",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
+                ...state.sportsNews!
+                    .take(2)
+                    .map((article) => _buildFeaturedCard(context, article)),
+                const SizedBox(height: 32),
+              ],
+
+              // ==== Suggestion Section ====
               buildSuggestionBanner(context),
             ],
           ),
@@ -274,7 +328,74 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Widget _buildPageIndicator(int itemCount) {
+  // 📚 Featured Card — Larger, with excerpt
+  Widget _buildFeaturedCard(BuildContext context, Articles article) {
+    return GestureDetector(
+      onTap: () {
+        // TODO
+      },
+      child: Card(
+        margin: const EdgeInsets.only(bottom: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        clipBehavior: Clip.hardEdge,
+        elevation: 2,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AspectRatio(
+              aspectRatio: 16 / 9,
+              child: article.urlToImage != null
+                  ? Image.network(article.urlToImage!, fit: BoxFit.cover)
+                  : Container(color: Colors.grey[300]),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    article.title ?? 'Untitled',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      height: 1.3,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  if (article.description != null)
+                    Text(
+                      article.description!,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        height: 1.4,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Text(
+                        article.source?.name ?? '',
+                        style: Theme.of(
+                          context,
+                        ).textTheme.labelSmall?.copyWith(color: Colors.grey),
+                      ),
+                      const Spacer(),
+                      // _BookmarkButton(article: article),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPageIndicator(context, int itemCount) {
     return Center(
       child: AnimatedSmoothIndicator(
         activeIndex: _currentPage,
@@ -288,4 +409,60 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+// 🔥 Trending Card — Compact vertical list
+Widget _buildTrendingCard(BuildContext context, Articles article) {
+  return GestureDetector(
+    onTap: () {
+      // TODO
+    },
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: SizedBox(
+              width: 100,
+              height: 70,
+              child: article.urlToImage != null
+                  ? Image.network(article.urlToImage!, fit: BoxFit.cover)
+                  : Container(color: Colors.grey[300]),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  article.title ?? 'Untitled',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    height: 1.3,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  article.source?.name ?? '',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelSmall?.copyWith(color: Colors.grey),
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              // todo
+            },
+            icon: const Icon(Icons.more_vert, size: 18),
+          ),
+        ],
+      ),
+    ),
+  );
 }
