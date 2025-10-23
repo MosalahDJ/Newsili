@@ -1,17 +1,14 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_state.dart';
-import 'package:newsily/logic/cubit/save_articles.dart/bookmarks_cubit.dart';
-import 'package:newsily/logic/cubit/save_articles.dart/bookmarks_state.dart';
-import 'package:newsily/presentation/screens/article_description.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/carousel_widget.dart';
+import 'package:newsily/presentation/widgets/homepage%20widgets/featured_card.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/home_page_skeleton.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/suggesion_banner.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/top_stories_section.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:newsily/presentation/widgets/homepage%20widgets/trending_card.dart';
 import '../../data/models/news_data_model.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,11 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final CarouselSliderController _carouselController =
-      CarouselSliderController();
   final TextEditingController _searchController = TextEditingController();
-
-  int _currentPage = 0;
   List<Articles> _cachedLatestNews = [];
 
   @override
@@ -90,7 +83,9 @@ class _HomePageState extends State<HomePage> {
                   hintText: 'Search news...',
                   prefixIcon: const Icon(Icons.search),
                   filled: true,
-                  fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  fillColor: Theme.of(
+                    context,
+                  ).colorScheme.surfaceContainerHighest,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30),
                     borderSide: BorderSide.none,
@@ -111,12 +106,9 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 16),
 
-              CarouselWidget(news:latestNews.take(4).toList()),
-
-              const SizedBox(height: 12),
-              _buildPageIndicator(
-                context,
-                latestNews.length > 4 ? 4 : latestNews.length,
+              CarouselWidget(
+                news: latestNews.take(4).toList(),
+                itemCount: latestNews.length > 4 ? 4 : latestNews.length,
               ),
 
               const SizedBox(height: 30),
@@ -145,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 12),
                 ...state.technologyNews!
                     .take(5)
-                    .map((article) => _buildTrendingCard(context, article)),
+                    .map((article) => buildTrendingCard(context, article)),
                 const SizedBox(height: 32),
               ],
               // 📚 FEATURED REPORTS / EDITOR'S PICKS
@@ -157,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 16),
                 ...state.sportsNews!
                     .take(2)
-                    .map((article) => _buildFeaturedCard(context, article)),
+                    .map((article) => buildFeaturedCard(context, article)),
                 const SizedBox(height: 32),
               ],
 
@@ -169,171 +161,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  // Widget _buildCarousel(List<Articles> news) {
-  //   return SizedBox(
-  //     height: 280,
-  //     child: CarouselSlider.builder(
-  //       carouselController: _carouselController,
-  //       itemCount: news.length,
-  //       itemBuilder: (context, index, realIndex) {
-  //         return _buildBreakingCard(context, news[index], index);
-  //       },
-  //       options: CarouselOptions(
-  //         height: 250,
-  //         autoPlay: true,
-  //         autoPlayInterval: const Duration(seconds: 3),
-  //         autoPlayAnimationDuration: const Duration(milliseconds: 500),
-  //         autoPlayCurve: Curves.easeInOut,
-  //         pauseAutoPlayOnTouch: true,
-  //         aspectRatio: 16 / 9,
-  //         viewportFraction: 0.8,
-  //         enlargeCenterPage: true,
-  //         onPageChanged: (index, reason) {
-  //           setState(() => _currentPage = index);
-  //         },
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  
-
-  // 📚 Featured Card — Larger, with excerpt
-  Widget _buildFeaturedCard(BuildContext context, Articles article) {
-    return GestureDetector(
-      onTap: () {
-        // TODO
-      },
-      child: Card(
-        margin: const EdgeInsets.only(bottom: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        clipBehavior: Clip.hardEdge,
-        elevation: 2,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AspectRatio(
-              aspectRatio: 16 / 9,
-              child: article.urlToImage != null
-                  ? Image.network(article.urlToImage!, fit: BoxFit.cover)
-                  : Container(color: Colors.grey[300]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    article.title ?? 'Untitled',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      height: 1.3,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 8),
-                  if (article.description != null)
-                    Text(
-                      article.description!,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        height: 1.4,
-                      ),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Text(
-                        article.source?.name ?? '',
-                        style: Theme.of(
-                          context,
-                        ).textTheme.labelSmall?.copyWith(color: Colors.grey),
-                      ),
-                      const Spacer(),
-                      // _BookmarkButton(article: article),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPageIndicator(context, int itemCount) {
-    return Center(
-      child: AnimatedSmoothIndicator(
-        activeIndex: _currentPage,
-        count: itemCount,
-        effect: ExpandingDotsEffect(
-          dotHeight: 8,
-          dotWidth: 8,
-          activeDotColor: Theme.of(context).colorScheme.primary,
-          dotColor: Colors.grey.withValues(alpha: .3),
-        ),
-      ),
-    );
-  }
-}
-
-// 🔥 Trending Card — Compact vertical list
-Widget _buildTrendingCard(BuildContext context, Articles article) {
-  return GestureDetector(
-    onTap: () {
-      // TODO
-    },
-    child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: SizedBox(
-              width: 100,
-              height: 70,
-              child: article.urlToImage != null
-                  ? Image.network(article.urlToImage!, fit: BoxFit.cover)
-                  : Container(color: Colors.grey[300]),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  article.title ?? 'Untitled',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    height: 1.3,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  article.source?.name ?? '',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.labelSmall?.copyWith(color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              // todo
-            },
-            icon: const Icon(Icons.more_vert, size: 18),
-          ),
-        ],
-      ),
-    ),
-  );
 }
