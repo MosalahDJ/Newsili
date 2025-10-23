@@ -10,7 +10,6 @@ import 'package:newsily/presentation/screens/article_description.dart';
 import 'package:newsily/presentation/widgets/home_page_skeleton.dart';
 import 'package:newsily/presentation/widgets/suggesion_banner.dart';
 import 'package:newsily/presentation/widgets/top_stories_section.dart';
-import 'package:path/path.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../data/models/news_data_model.dart';
 
