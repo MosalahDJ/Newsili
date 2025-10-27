@@ -1,12 +1,17 @@
-
 // 🔥 Trending Card — Compact vertical list
 import 'package:flutter/material.dart';
 import 'package:newsily/data/models/news_data_model.dart';
+import 'package:newsily/presentation/screens/article_description.dart';
 
 Widget buildTrendingCard(BuildContext context, Articles article) {
   return GestureDetector(
     onTap: () {
-      // TODO
+      Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ArticleDescriptionPage(article: article),
+              ),
+            );
     },
     child: Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
