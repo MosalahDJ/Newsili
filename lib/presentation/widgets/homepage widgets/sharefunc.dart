@@ -12,3 +12,6 @@ Future<void> shareWithAnyApp() async {
     // );
   }
 }
+
+
+// TODO: tomorow I will fix the bag of sharing func and modify some othe features

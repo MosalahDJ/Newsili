@@ -59,7 +59,7 @@ Widget buildTrendingCard(BuildContext context, Articles article) {
               onPressed: () => showArticleMoreMenu(
                 context,
                 onShare: () {
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
                   shareWithAnyApp();
                 },
                 onSave: () => handleBookmarkPress(context, article),
