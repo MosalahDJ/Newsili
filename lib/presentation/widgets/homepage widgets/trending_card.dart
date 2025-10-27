@@ -2,16 +2,17 @@
 import 'package:flutter/material.dart';
 import 'package:newsily/data/models/news_data_model.dart';
 import 'package:newsily/presentation/screens/article_description.dart';
+import 'package:newsily/presentation/widgets/homepage%20widgets/trending_more_menu.dart';
 
 Widget buildTrendingCard(BuildContext context, Articles article) {
   return GestureDetector(
     onTap: () {
       Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => ArticleDescriptionPage(article: article),
-              ),
-            );
+        context,
+        MaterialPageRoute(
+          builder: (_) => ArticleDescriptionPage(article: article),
+        ),
+      );
     },
     child: Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
@@ -53,7 +54,8 @@ Widget buildTrendingCard(BuildContext context, Articles article) {
           ),
           IconButton(
             onPressed: () {
-              // todo
+              // TODO add func to more button in trending card
+              ArticleMoreMenu(onSave: () {}, onShare: () {});
             },
             icon: const Icon(Icons.more_vert, size: 18),
           ),
