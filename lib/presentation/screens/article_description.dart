@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:newsily/logic/cubit/save_articles.dart/bookmarks_cubit.dart';
-import 'package:newsily/logic/cubit/save_articles.dart/bookmarks_state.dart';
+import 'package:newsily/logic/cubit/save_articles/bookmarks_cubit.dart';
+import 'package:newsily/logic/cubit/save_articles/bookmarks_state.dart';
 import '../../data/models/news_data_model.dart';
 
 class ArticleDescriptionPage extends StatelessWidget {

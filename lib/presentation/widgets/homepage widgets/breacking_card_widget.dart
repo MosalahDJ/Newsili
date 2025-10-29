@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/data/models/news_data_model.dart';
-import 'package:newsily/logic/cubit/save_articles.dart/bookmarks_cubit.dart';
-import 'package:newsily/logic/cubit/save_articles.dart/bookmarks_state.dart';
+import 'package:newsily/logic/cubit/save_articles/bookmarks_cubit.dart';
+import 'package:newsily/logic/cubit/save_articles/bookmarks_state.dart';
 import 'package:newsily/presentation/screens/article_description.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/handlebookmarkpress.dart';
 
