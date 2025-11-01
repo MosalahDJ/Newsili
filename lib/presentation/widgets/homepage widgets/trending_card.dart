@@ -4,7 +4,7 @@ import 'package:newsily/data/models/news_data_model.dart';
 import 'package:newsily/presentation/screens/article_description.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/handlebookmarkpress.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/schowartiklemoremenufunc.dart';
-import 'package:newsily/presentation/widgets/homepage%20widgets/sharefunc.dart';
+// import 'package:newsily/presentation/widgets/homepage%20widgets/sharefunc.dart';
 
 Widget buildTrendingCard(BuildContext context, Articles article) {
   return GestureDetector(
@@ -60,7 +60,7 @@ Widget buildTrendingCard(BuildContext context, Articles article) {
                 context,
                 onShare: () {
                   // Navigator.pop(context);
-                  shareWithAnyApp();
+                  // shareWithAnyApp();
                 },
                 onSave: () => handleBookmarkPress(context, article),
               ),
