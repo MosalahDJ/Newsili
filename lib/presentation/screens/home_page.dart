@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage> {
 
               const SizedBox(height: 24),
 
-              // 🔥 TRENDING NOW (Vertical List)
+              //  TRENDING NOW (Vertical List)
               if (state.technologyNews != null) ...[
                 const Text(
                   "Trending Now",
