@@ -19,6 +19,7 @@ class HomeCubit extends Cubit<HomeState> {
         "$title\n\nRead more: $url",subject: url),
       );
     } catch (e) {
+    if (!context.mounted) return; 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Error sharing article: $e"),
@@ -33,17 +34,18 @@ class HomeCubit extends Cubit<HomeState> {
   /// Copy article link
   Future<void> copyLink(BuildContext context, String url) async {
     await Clipboard.setData(ClipboardData(text: url));
+    if (!context.mounted) return; 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("Link copied to clipboard ✅")),
     );
   }
 
-  /// Save article (placeholder)
-  Future<void> saveArticle(BuildContext context) async {
-    // TODO: integrate with local database (e.g. sqflite or hive)
-    emit(state.copyWith(isSaved: true));
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Article saved successfully")),
-    );
-  }
+  // /// Save article (placeholder)
+  // Future<void> saveArticle(BuildContext context) async {
+  //   // TODO: integrate with local database (e.g. sqflite or hive)
+  //   emit(state.copyWith(isSaved: true));
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     const SnackBar(content: Text("Article saved successfully")),
+  //   );
+  // }
 }

@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                     .map((article) => buildTrendingCard(context, article)),
                 const SizedBox(height: 32),
               ],
-              // 📚 FEATURED REPORTS / EDITOR'S PICKS
+              //  FEATURED REPORTS / EDITOR'S PICKS
               if (state.healthNews!.isNotEmpty) ...[
                 const Text(
                   "Editor's Picks",
