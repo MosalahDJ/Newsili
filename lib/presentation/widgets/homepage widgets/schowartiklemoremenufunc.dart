@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void showArticleMoreMenu(BuildContext context, {required VoidCallback onShare, required VoidCallback onSave}) async {
+void showArticleMoreMenu(BuildContext context,IconData bookmarkicon ,String bookmarktext, {required VoidCallback onShare, required VoidCallback onSave}) async {
   final RenderBox button = context.findRenderObject() as RenderBox;
   final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
 
@@ -22,10 +22,10 @@ void showArticleMoreMenu(BuildContext context, {required VoidCallback onShare, r
           children: [Icon(Icons.share), SizedBox(width: 8), Text("Share")],
         ),
       ),
-      const PopupMenuItem<String>(
+      PopupMenuItem<String>(
         value: 'save',
         child: Row(
-          children: [Icon(Icons.bookmark_border), SizedBox(width: 8), Text("Save")],
+          children: [Icon(bookmarkicon), SizedBox(width: 8), Text(bookmarktext)],
         ),
       ),
     ],

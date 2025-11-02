@@ -61,6 +61,8 @@ Widget buildTrendingCard(BuildContext context, Articles article) {
                 return IconButton(
                   onPressed: () => showArticleMoreMenu(
                     context,
+                    state.isSaved?Icons.bookmark:Icons.bookmark_border,
+                    state.isSaved?"Saved":"Save",
                     onShare: () {
                       HomeCubit homeCubit = context.read<HomeCubit>();
 
