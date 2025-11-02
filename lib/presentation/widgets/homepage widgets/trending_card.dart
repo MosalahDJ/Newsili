@@ -1,10 +1,8 @@
-// 🔥 Trending Card — Compact vertical list
 import 'package:flutter/material.dart';
 import 'package:newsily/data/models/news_data_model.dart';
 import 'package:newsily/presentation/screens/article_description.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/handlebookmarkpress.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/schowartiklemoremenufunc.dart';
-// import 'package:newsily/presentation/widgets/homepage%20widgets/sharefunc.dart';
 
 Widget buildTrendingCard(BuildContext context, Articles article) {
   return GestureDetector(
