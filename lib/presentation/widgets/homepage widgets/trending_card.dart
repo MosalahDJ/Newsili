@@ -27,7 +27,20 @@ Widget buildTrendingCard(BuildContext context, Articles article) {
               width: 100,
               height: 70,
               child: article.urlToImage != null
-                  ? Image.network(article.urlToImage!, fit: BoxFit.cover)
+                  ? Image.network(
+                      article.urlToImage ?? "",
+                      height: 150,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 150,
+                          color: Colors.grey[300],
+                          alignment: Alignment.center,
+                          child: const Icon(Icons.broken_image, size: 60),
+                        );
+                      },
+                    )
                   : Container(color: Colors.grey[300]),
             ),
           ),
