@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/data/models/news_data_model.dart';
-import 'package:newsily/logic/cubit/home/home_cubit.dart';
+import 'package:newsily/helper/save_function.dart';
 import 'package:newsily/presentation/screens/article_description.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/handlebookmarkpress.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/schowartiklemoremenufunc.dart';
@@ -68,23 +68,18 @@ Widget buildTrendingCard(BuildContext context, Articles article) {
             ),
           ),
           Builder(
-            builder: (context) =>IconButton(
-                  onPressed: () => showArticleMoreMenu(
-                    context,
-                    article: article,
-                    isbookmarked: isbookmarked,
-                    onShare: () {
-                      HomeCubit homeCubit = context.read<HomeCubit>();
-                      homeCubit.shareArticle(
-                        context,
-                        title: article.title!,
-                        url: article.url!,
-                      );
-                    },
-                    onSave: () => handleBookmarkPress(context, article),
-                  ),
-                  icon: const Icon(Icons.more_vert, size: 18),
-                )
+            builder: (context) => IconButton(
+              onPressed: () => showArticleMoreMenu(
+                context,
+                article: article,
+                isbookmarked: ,
+                onShare: () {
+                  shareArticle(context, title: "${article.title}", url: "${article.url}");
+                },
+                onSave: () => handleBookmarkPress(context, article),
+              ),
+              icon: const Icon(Icons.more_vert, size: 18),
+            ),
           ),
         ],
       ),

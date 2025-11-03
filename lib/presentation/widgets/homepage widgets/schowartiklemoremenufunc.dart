@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/data/models/news_data_model.dart';
+import 'package:newsily/logic/cubit/save_articles/bookmarks_cubit.dart';
+import 'package:newsily/logic/cubit/save_articles/bookmarks_state.dart';
 
 void showArticleMoreMenu(
   BuildContext context, {
@@ -35,15 +38,20 @@ void showArticleMoreMenu(
       ),
       PopupMenuItem<String>(
         value: 'save',
-        child:  Row(
+        child: BlocBuilder<BookmarksCubit, BookmarksState>(
+          builder: (context, state) {
+            bool isbookmarked = context
+                                  .read<BookmarksCubit>()
+                                  .isBookmarked(article);
+            return Row(
               children: [
-                Icon(isbookmarked?Icons.bookmark:Icons.bookmark_border,),
+                Icon( isbookmarked? Icons.bookmark : Icons.bookmark_border),
                 SizedBox(width: 8),
-                Text(
-                  isbookmarked?"Saved":"Save",
-                ),
+                Text(isbookmarked ? "Saved" : "Save"),
               ],
-            )
+            );
+          },
+        ),
       ),
     ],
   );
