@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/data/models/news_data_model.dart';
 import 'package:newsily/logic/cubit/home/home_cubit.dart';
-import 'package:newsily/logic/cubit/home/home_state.dart';
 import 'package:newsily/presentation/screens/article_description.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/handlebookmarkpress.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/schowartiklemoremenufunc.dart';
@@ -69,15 +68,13 @@ Widget buildTrendingCard(BuildContext context, Articles article) {
             ),
           ),
           Builder(
-            builder: (context) => BlocBuilder<HomeCubit, HomeState>(
-              builder: (context, state) {
-                return IconButton(
+            builder: (context) =>IconButton(
                   onPressed: () => showArticleMoreMenu(
                     context,
                     article: article,
+                    isbookmarked: isbookmarked,
                     onShare: () {
                       HomeCubit homeCubit = context.read<HomeCubit>();
-
                       homeCubit.shareArticle(
                         context,
                         title: article.title!,
@@ -87,9 +84,7 @@ Widget buildTrendingCard(BuildContext context, Articles article) {
                     onSave: () => handleBookmarkPress(context, article),
                   ),
                   icon: const Icon(Icons.more_vert, size: 18),
-                );
-              },
-            ),
+                )
           ),
         ],
       ),

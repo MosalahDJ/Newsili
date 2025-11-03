@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/data/models/news_data_model.dart';
-import 'package:newsily/logic/cubit/save_articles/bookmarks_cubit.dart';
-import 'package:newsily/logic/cubit/save_articles/bookmarks_state.dart';
 
 void showArticleMoreMenu(
   BuildContext context, {
   required VoidCallback onShare,
   required VoidCallback onSave,
   required Articles article,
+  required bool isbookmarked,
 }) async {
   final RenderBox button = context.findRenderObject() as RenderBox;
   final RenderBox overlay =
@@ -37,23 +35,15 @@ void showArticleMoreMenu(
       ),
       PopupMenuItem<String>(
         value: 'save',
-        child: BlocBuilder<BookmarksCubit, BookmarksState>(
-          builder: (context, state) {
-            //TODO: Ihave some problems with future in this function tomorrow inchaalaw I will fix all that
-            // bool isbookmarked = context.read<BookmarksCubit>().isBookmarked(article);
-            return Row(
+        child:  Row(
               children: [
-                // Icon(isbookmarked?Icons.bookmark:Icons.bookmark_border,),
+                Icon(isbookmarked?Icons.bookmark:Icons.bookmark_border,),
                 SizedBox(width: 8),
                 Text(
-                  "",
-
-                  // state.isSaved?"Saved":"Save",
+                  isbookmarked?"Saved":"Save",
                 ),
               ],
-            );
-          },
-        ),
+            )
       ),
     ],
   );
