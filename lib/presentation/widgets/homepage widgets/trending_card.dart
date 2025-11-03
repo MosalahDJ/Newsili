@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/data/models/news_data_model.dart';
 import 'package:newsily/helper/save_function.dart';
 import 'package:newsily/presentation/screens/article_description.dart';
