@@ -9,7 +9,6 @@ void showArticleMoreMenu(
   required VoidCallback onShare,
   required VoidCallback onSave,
   required Articles article,
-  required bool isbookmarked,
 }) async {
   final RenderBox button = context.findRenderObject() as RenderBox;
   final RenderBox overlay =
@@ -36,23 +35,30 @@ void showArticleMoreMenu(
           children: [Icon(Icons.share), SizedBox(width: 8), Text("Share")],
         ),
       ),
+      //this is the new part where I schoold fix if there any othere err
       PopupMenuItem<String>(
         value: 'save',
         child: BlocBuilder<BookmarksCubit, BookmarksState>(
           builder: (context, state) {
-            bool isbookmarked = context
-                                  .read<BookmarksCubit>()
-                                  .isBookmarked(article);
+            bool isbookmarked = false;
+
+            if (state is BookmarksLoaded) {
+              isbookmarked = state.savedArticles.any(
+                (a) => a.url == article.url,
+              );
+            }
+
             return Row(
               children: [
-                Icon( isbookmarked? Icons.bookmark : Icons.bookmark_border),
-                SizedBox(width: 8),
+                Icon(isbookmarked ? Icons.bookmark : Icons.bookmark_border),
+                const SizedBox(width: 8),
                 Text(isbookmarked ? "Saved" : "Save"),
               ],
             );
           },
         ),
       ),
+      //===============================================================
     ],
   );
 

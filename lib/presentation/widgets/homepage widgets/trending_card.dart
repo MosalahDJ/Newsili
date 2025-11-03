@@ -71,9 +71,12 @@ Widget buildTrendingCard(BuildContext context, Articles article) {
               onPressed: () => showArticleMoreMenu(
                 context,
                 article: article,
-                isbookmarked: ,
                 onShare: () {
-                  shareArticle(context, title: "${article.title}", url: "${article.url}");
+                  shareArticle(
+                    context,
+                    title: "${article.title}",
+                    url: "${article.url}",
+                  );
                 },
                 onSave: () => handleBookmarkPress(context, article),
               ),
