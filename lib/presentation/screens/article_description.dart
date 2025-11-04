@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:newsily/helper/url_luncher_function.dart';
 import 'package:newsily/logic/cubit/save_articles/bookmarks_cubit.dart';
 import 'package:newsily/logic/cubit/save_articles/bookmarks_state.dart';
 import '../../data/models/news_data_model.dart';
@@ -120,7 +121,16 @@ class ArticleDescriptionPage extends StatelessWidget {
               children: [
                 ElevatedButton.icon(
                   onPressed: () {
-                    // open the URL in a browser (you can add url_launcher here)
+                    () async {
+                      final success = await tryOpenArticleUrl(article.url!);
+                      if (!success && context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Could not open the article"),
+                          ),
+                        );
+                      }
+                    };
                   },
                   icon: const Icon(Icons.open_in_new),
                   label: const Text("Read full article"),
