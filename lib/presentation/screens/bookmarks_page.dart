@@ -23,6 +23,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: false,
         title: const Text('Bookmarks'),
         centerTitle: true,
         elevation: 0,
