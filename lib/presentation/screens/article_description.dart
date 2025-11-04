@@ -120,17 +120,15 @@ class ArticleDescriptionPage extends StatelessWidget {
 
               children: [
                 ElevatedButton.icon(
-                  onPressed: () {
-                    () async {
-                      final success = await tryOpenArticleUrl(article.url!);
-                      if (!success && context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Could not open the article"),
-                          ),
-                        );
-                      }
-                    };
+                  onPressed: () async {
+                    final success = await tryOpenArticleUrl(article.url!);
+                    if (!success && context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Could not open the article"),
+                        ),
+                      );
+                    }
                   },
                   icon: const Icon(Icons.open_in_new),
                   label: const Text("Read full article"),
