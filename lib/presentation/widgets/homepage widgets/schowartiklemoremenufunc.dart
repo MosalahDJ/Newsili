@@ -35,14 +35,12 @@ void showArticleMoreMenu(
           children: [Icon(Icons.share), SizedBox(width: 8), Text("Share")],
         ),
       ),
-      //this is the new part where I schoold fix if there any othere err
-      //TODO: after lunching the problem is fixed but I schoud how the problem solved
       PopupMenuItem<String>(
         value: 'save',
         child: BlocBuilder<BookmarksCubit, BookmarksState>(
           builder: (context, state) {
             bool isbookmarked = false;
-
+            // cheking if the current article is saved for making the necessary changes
             if (state is BookmarksLoaded) {
               isbookmarked = state.savedArticles.any(
                 (a) => a.url == article.url,
