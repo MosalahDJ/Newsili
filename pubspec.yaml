@@ -59,10 +59,10 @@ flutter_launcher_icons:
   min_sdk_android: 21
 
 flutter_native_splash:
-  color: "#7A24BD"
-  color_dark: "#441C96"
-  image: "lib/assets/images/newsily_logo/newsily_logo_png.png"
-  image_dark: "lib/assets/images/newsily_logo/newsily_logo_png.png"
+  color: "#FFFFFF"
+  color_dark: "#000000"
+  image: lib/assets/images/splash_view_image/light_mode_logo.png
+  image_dark: lib/assets/images/splash_view_image/dark_mode_logo.png
   branding: lib/assets/images/splash_view_image/branding_text_gold.png
   branding_dark: lib/assets/images/splash_view_image/branding_text_gold.png
   branding_bottom_padding: 75
@@ -70,10 +70,11 @@ flutter_native_splash:
   android: true
   ios: true
   android_12:
-    image: "lib/assets/images/newsily_logo/newsily_logo_png.png"
-    color: "#E7D37F"
+    image: lib/assets/images/splash_view_image/light_mode_logo.png
+    image_dark: lib/assets/images/splash_view_image/dark_mode_logo.png
+    color: "#FFFFFF"
     icon_background_color: "#7A24BD"
-    icon_background_color_dark: "#441C96"
+    icon_background_color_dark: "#000000"
     branding: lib/assets/images/splash_view_image/branding_text_gold.png
     branding_dark: lib/assets/images/splash_view_image/branding_text_gold.png
     branding_bottom_padding: 75
