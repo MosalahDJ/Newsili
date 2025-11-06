@@ -63,7 +63,7 @@ flutter_native_splash:
   color_dark: "#000000"
   image: lib/assets/images/splash_view_image/light_mode_logo.png
   image_dark: lib/assets/images/splash_view_image/dark_mode_logo.png
-  branding: lib/assets/images/splash_view_image/branding_text_gold.png
+  branding: lib/assets/images/splash_view_image/branding_text_brune.png
   branding_dark: lib/assets/images/splash_view_image/branding_text_gold.png
   branding_bottom_padding: 75
   android_gravity: center
@@ -75,7 +75,7 @@ flutter_native_splash:
     color: "#FFFFFF"
     icon_background_color: "#7A24BD"
     icon_background_color_dark: "#000000"
-    branding: lib/assets/images/splash_view_image/branding_text_gold.png
+    branding: lib/assets/images/splash_view_image/branding_text_brune.png
     branding_dark: lib/assets/images/splash_view_image/branding_text_gold.png
     branding_bottom_padding: 75
 
