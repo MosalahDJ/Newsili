@@ -62,8 +62,8 @@ flutter_native_splash:
   color_dark: "#005B41"
   image: "lib/assets/images/newsily_logo/newsily_logo_png.png"
   image_dark: "lib/assets/images/newsily_logo/newsily_logo_png.png"
-  branding: lib/core/assets/images/splash_view_image/branding_text_brune.png
-  branding_dark: lib/core/assets/images/splash_view_image/branding_text_gold.png
+  branding: lib/assets/images/splash_view_image/branding_text_brune.png
+  branding_dark: lib/assets/images/splash_view_image/branding_text_gold.png
   branding_bottom_padding: 75
   android_gravity: center
   android: true
@@ -73,8 +73,8 @@ flutter_native_splash:
     color: "#E7D37F"
     icon_background_color: "#E7D37F"
     icon_background_color_dark: "#005B41"
-    branding: lib/core/assets/images/splash_view_image/branding_text_brune.png
-    branding_dark: lib/core/assets/images/splash_view_image/branding_text_gold.png
+    branding: lib/assets/images/splash_view_image/branding_text_brune.png
+    branding_dark: lib/assets/images/splash_view_image/branding_text_gold.png
     branding_bottom_padding: 75
 
 # For information on the generic Dart part of this file, see the
