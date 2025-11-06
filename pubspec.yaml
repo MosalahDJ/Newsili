@@ -35,7 +35,6 @@ dependencies:
   flutter_bloc: ^9.0.1
   flutter_dotenv: ^6.0.0
   flutter_offline: ^5.0.0
-  flutter_native_splash: ^2.4.7
   http: ^1.4.0
   intl: ^0.20.2
   path: ^1.9.1
@@ -50,6 +49,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.7
+
 
 flutter_launcher_icons:
   android: "launcher_icon"
