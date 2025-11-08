@@ -15,13 +15,30 @@ class FetchCubit extends Cubit<FetchState> {
     List<Articles> entertainmentNews = await newsDataRepository.handleCases(
       Category.entertainment,
     );
-    List<Articles> generalNews = await newsDataRepository.handleCases(Category.general);
-    List<Articles> healthNews = await newsDataRepository.handleCases(Category.health);
-    List<Articles> scienceNews = await newsDataRepository.handleCases(Category.science);
+    List<Articles> generalNews = await newsDataRepository.handleCases(
+      Category.general,
+    );
+    List<Articles> healthNews = await newsDataRepository.handleCases(
+      Category.health,
+    );
+    List<Articles> scienceNews = await newsDataRepository.handleCases(
+      Category.science,
+    );
     List<Articles> technologyNews = await newsDataRepository.handleCases(
       Category.technology,
     );
-    List<Articles> sportsNews = await newsDataRepository.handleCases(Category.sports);
+    List<Articles> sportsNews = await newsDataRepository.handleCases(
+      Category.sports,
+    );
+    final List<Articles> allArticles = [
+      ...businessNews,
+      ...entertainmentNews,
+      ...generalNews,
+      ...healthNews,
+      ...scienceNews,
+      ...sportsNews,
+      ...technologyNews,
+    ];
     emit(
       DataLoaded(
         businessNews: businessNews,
@@ -31,6 +48,7 @@ class FetchCubit extends Cubit<FetchState> {
         scienceNews: scienceNews,
         sportsNews: sportsNews,
         technologyNews: technologyNews,
+        allArticles: allArticles,
       ),
     );
   }

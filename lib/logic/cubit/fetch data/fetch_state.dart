@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:newsily/data/models/news_data_model.dart';
 
@@ -23,7 +22,17 @@ final class DataLoaded extends FetchState {
   final List<Articles>? scienceNews;
   final List<Articles>? sportsNews;
   final List<Articles>? technologyNews;
-  const DataLoaded({ this.businessNews, this.entertainmentNews, this.generalNews, this.healthNews, this.scienceNews, this.sportsNews, this.technologyNews});
+  final List<Articles>? allArticles;
+  const DataLoaded({
+    this.businessNews,
+    this.entertainmentNews,
+    this.generalNews,
+    this.healthNews,
+    this.scienceNews,
+    this.sportsNews,
+    this.technologyNews,
+    this.allArticles,
+  });
 }
 
 final class DataError extends FetchState {
