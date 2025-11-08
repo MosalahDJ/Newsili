@@ -22,7 +22,6 @@ final class DataLoaded extends FetchState {
   final List<Articles>? scienceNews;
   final List<Articles>? sportsNews;
   final List<Articles>? technologyNews;
-  final List<Articles>? allArticles;
   const DataLoaded({
     this.businessNews,
     this.entertainmentNews,
@@ -31,8 +30,17 @@ final class DataLoaded extends FetchState {
     this.scienceNews,
     this.sportsNews,
     this.technologyNews,
-    this.allArticles,
   });
+
+  List<Articles> get allArticles => [
+        ...?businessNews,
+        ...?entertainmentNews,
+        ...?generalNews,
+        ...?healthNews,
+        ...?scienceNews,
+        ...?sportsNews,
+        ...?technologyNews,
+      ];
 }
 
 final class DataError extends FetchState {
