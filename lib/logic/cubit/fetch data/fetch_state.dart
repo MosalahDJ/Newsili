@@ -22,7 +22,9 @@ final class DataLoaded extends FetchState {
   final List<Articles>? scienceNews;
   final List<Articles>? sportsNews;
   final List<Articles>? technologyNews;
-  const DataLoaded({
+  final String? searchQuery;
+  final List<Articles>? searchResults;
+  const DataLoaded( {
     this.businessNews,
     this.entertainmentNews,
     this.generalNews,
@@ -30,6 +32,8 @@ final class DataLoaded extends FetchState {
     this.scienceNews,
     this.sportsNews,
     this.technologyNews,
+    this.searchResults = const <Articles>[],
+    this.searchQuery = "",
   });
 
   List<Articles> get allArticles => [
