@@ -46,4 +46,25 @@ class FetchCubit extends Cubit<FetchState> {
       emit(DataError("$e"));
     }
   }
+
+  // In FetchCubit.dart
+  void performSearch(String query) {
+    if (state is! DataLoaded) return;
+
+    final dataState = state as DataLoaded;
+    final normalized = query.trim().toLowerCase();
+
+    final results = normalized.isEmpty
+        ? const <Articles>[]
+        : dataState.allArticles.where((article) {
+            final title = article.title?.toLowerCase() ?? '';
+            final desc = article.description?.toLowerCase() ?? '';
+            final content = article.content?.toLowerCase() ?? '';
+            return title.contains(normalized) ||
+                desc.contains(normalized) ||
+                content.contains(normalized);
+          }).toList();
+
+    emit(dataState.copyWith(searchQuery: query, searchResults: results));
+  }
 }

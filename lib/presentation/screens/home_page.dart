@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,8 +21,61 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Timer? _debounce;
   final TextEditingController _searchController = TextEditingController();
   List<Articles> _cachedLatestNews = [];
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildSearchResults(BuildContext context, List<Articles> results) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Search Results"),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            _searchController.clear();
+            context.read<FetchCubit>().performSearch('');
+          },
+        ),
+      ),
+      body: results.isEmpty
+          ? const Center(child: Text("No results found"))
+          : ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: results.length,
+              itemBuilder: (context, index) {
+                final article = results[index];
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(
+                      article.title ?? 'No title',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      article.description ?? '',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    onTap: () {
+                      // TODO: Navigate to detail page
+                      // Navigator.push(...);
+                    },
+                  ),
+                );
+              },
+            ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +107,11 @@ class _HomePageState extends State<HomePage> {
           } else if (state is DataError) {
             return Center(child: Text(state.errortext));
           } else if (state is DataLoaded) {
-            return _buildContent(context, state);
+            // 🔍 NEW: Check if user is searching
+            if (state.searchQuery.isNotEmpty) {
+              return _buildSearchResults(context, state.searchResults);
+            }
+            return _buildContent(context, state); // ← original homepage
           }
           return const HomePageSkeleton();
         },
@@ -83,6 +142,15 @@ class _HomePageState extends State<HomePage> {
                 decoration: InputDecoration(
                   hintText: 'Search news...',
                   prefixIcon: const Icon(Icons.search),
+                  suffixIcon: _searchController.text.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.clear, size: 18),
+                          onPressed: () {
+                            _searchController.clear();
+                            context.read<FetchCubit>().performSearch('');
+                          },
+                        )
+                      : null,
                   filled: true,
                   fillColor: Theme.of(
                     context,
@@ -92,10 +160,15 @@ class _HomePageState extends State<HomePage> {
                     borderSide: BorderSide.none,
                   ),
                 ),
+                onChanged: (query) {
+                  _debounce?.cancel();
+                  _debounce = Timer(const Duration(milliseconds: 300), () {
+                    context.read<FetchCubit>().performSearch(query);
+                  });
+                },
+                // Optional: submit = search too
                 onSubmitted: (query) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Searching for: $query')),
-                  );
+                  context.read<FetchCubit>().performSearch(query);
                 },
               ),
               const SizedBox(height: 24),

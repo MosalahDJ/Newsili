@@ -71,8 +71,8 @@ final class DataLoaded extends FetchState {
         scienceNews,
         sportsNews,
         technologyNews,
-        searchQuery,        // 🔥 MUST include these two
-        searchResults,      // 🔥
+        searchQuery,        
+        searchResults,      
       ];
 
   // Keep your getter — perfect as-is
