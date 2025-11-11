@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
             if (state.searchQuery.isNotEmpty) {
               return _buildSearchResults(context, state.searchResults);
             }
-            return _buildContent(context, state); // ← original homepage
+            return _buildContent(context, state); 
           }
           return const HomePageSkeleton();
         },
@@ -162,11 +162,10 @@ class _HomePageState extends State<HomePage> {
                 ),
                 onChanged: (query) {
                   _debounce?.cancel();
-                  _debounce = Timer(const Duration(milliseconds: 300), () {
+                  _debounce = Timer(const Duration(milliseconds: 0), () {
                     context.read<FetchCubit>().performSearch(query);
                   });
                 },
-                // Optional: submit = search too
                 onSubmitted: (query) {
                   context.read<FetchCubit>().performSearch(query);
                 },
@@ -236,3 +235,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+
+// we need to make the search ba take us to thr search page and schould I change the search bar with a search icon in the appbar
