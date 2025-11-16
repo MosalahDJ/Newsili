@@ -237,3 +237,4 @@ class _HomePageState extends State<HomePage> {
 }
 
 
+// we need to make the search ba take us to thr search page and schould I change the search bar with a search icon in the appbar
