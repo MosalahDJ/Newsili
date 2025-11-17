@@ -90,3 +90,7 @@ final class DataError extends FetchState {
   final String errortext;
   const DataError(this.errortext);
 }
+
+//Isee the code after sevral 7 days of no working and now I have some idea
+//about the code I don't have  a large time for working but tomorrow inchallah 
+//I will make the necessar changes for fix these problems
