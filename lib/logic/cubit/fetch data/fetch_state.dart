@@ -90,3 +90,4 @@ final class DataError extends FetchState {
   final String errortext;
   const DataError(this.errortext);
 }
+
