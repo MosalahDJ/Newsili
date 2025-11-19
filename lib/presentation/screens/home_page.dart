@@ -89,18 +89,6 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
       ),
       body: BlocBuilder<FetchCubit, FetchState>(
-        buildWhen: (previous, current) {
-          // Only rebuild when data actually changes
-          if (current is DataLoaded) {
-            final newNews = current.generalNews ?? [];
-            if (listEquals(_cachedLatestNews, newNews)) {
-              return false;
-            }
-            _cachedLatestNews = newNews;
-            return true;
-          }
-          return true;
-        },
         builder: (context, state) {
           if (state is DataLoading) {
             return const Center(child: CircularProgressIndicator());
