@@ -6,7 +6,7 @@ class NewsDataRepository {
   final NewsWebServices newsWebServices;
   NewsDataRepository({required this.newsWebServices});
 
-  // tommorow schould I make some changes inside thise file for stor data inside
+  //tommorow schould I make some changes inside thise file for stor data inside
   //databse after getting it from the server and you waht else schould you do ma
   //fuck you
 
