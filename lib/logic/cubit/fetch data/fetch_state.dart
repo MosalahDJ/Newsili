@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:newsily/data/models/news_data_model.dart';
 
@@ -13,7 +14,7 @@ final class Initialdata extends FetchState {
 final class DataLoading extends FetchState {
   const DataLoading();
 }
-final class DataLoaded extends FetchState {
+final class DataLoaded extends FetchState with EquatableMixin{
   final List<Articles>? businessNews;
   final List<Articles>? entertainmentNews;
   final List<Articles>? generalNews;
