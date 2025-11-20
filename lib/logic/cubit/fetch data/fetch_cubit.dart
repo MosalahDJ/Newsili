@@ -69,4 +69,3 @@ class FetchCubit extends Cubit<FetchState> {
   }
 }
 
-//was machen wir heute 
