@@ -68,3 +68,5 @@ class FetchCubit extends Cubit<FetchState> {
     emit(dataState.copyWith(searchQuery: query, searchResults: results));
   }
 }
+
+//was machen wir heute 
