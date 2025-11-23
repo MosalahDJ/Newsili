@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildSearchResults(BuildContext context, List<Articles> results) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar( 
         title: const Text("Search Results"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
