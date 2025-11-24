@@ -148,14 +148,17 @@ class _HomePageState extends State<HomePage> {
                     borderSide: BorderSide.none,
                   ),
                 ),
-                onChanged: (query) {
+                // onChanged: (query) {
+                //   _debounce?.cancel();
+                //   _debounce = Timer(const Duration(milliseconds: 0), () {
+                //     context.read<FetchCubit>().performSearch(query);
+                //   });
+                // },
+                onSubmitted: (query) {
                   _debounce?.cancel();
                   _debounce = Timer(const Duration(milliseconds: 0), () {
                     context.read<FetchCubit>().performSearch(query);
                   });
-                },
-                onSubmitted: (query) {
-                  context.read<FetchCubit>().performSearch(query);
                 },
               ),
               const SizedBox(height: 24),
