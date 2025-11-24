@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildSearchResults(BuildContext context, List<Articles> results) {
     return Scaffold(
-      appBar: AppBar( 
+      appBar: AppBar(
         title: const Text("Search Results"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
             if (state.searchQuery.isNotEmpty) {
               return _buildSearchResults(context, state.searchResults);
             }
-            return _buildContent(context, state); 
+            return _buildContent(context, state);
           }
           return const HomePageSkeleton();
         },
@@ -223,5 +223,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-
