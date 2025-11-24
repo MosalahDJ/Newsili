@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_state.dart';
+import 'package:newsily/presentation/screens/search_page.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/carousel_widget.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/featured_card.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/home_page_skeleton.dart';
@@ -125,42 +126,81 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // ==== SEARCH BAR ====
-              TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: 'Search news...',
-                  prefixIcon: const Icon(Icons.search),
-                  suffixIcon: _searchController.text.isNotEmpty
-                      ? IconButton(
-                          icon: const Icon(Icons.clear, size: 18),
-                          onPressed: () {
-                            _searchController.clear();
-                            context.read<FetchCubit>().performSearch('');
-                          },
-                        )
-                      : null,
-                  filled: true,
-                  fillColor: Theme.of(
+              // ==== SEARCH BAR (NAVIGATIONAL) ====
+              InkWell(
+                onTap: () {
+                  Navigator.push(
                     context,
-                  ).colorScheme.surfaceContainerHighest,
-                  border: OutlineInputBorder(
+                    MaterialPageRoute(builder: (context) => const SearchPage()),
+                  );
+                },
+                borderRadius: BorderRadius.circular(30),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide.none,
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.search, size: 20),
+                      const SizedBox(width: 12),
+                      const Expanded(
+                        child: Text(
+                          'Search news...',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                      // Optional: add mic or filter icon
+                    ],
                   ),
                 ),
-                // onChanged: (query) {
-                //   _debounce?.cancel();
-                //   _debounce = Timer(const Duration(milliseconds: 0), () {
-                //     context.read<FetchCubit>().performSearch(query);
-                //   });
-                // },
-                onSubmitted: (query) {
-                  _debounce?.cancel();
-                  _debounce = Timer(const Duration(milliseconds: 0), () {
-                    context.read<FetchCubit>().performSearch(query);
-                  });
-                },
               ),
+              const SizedBox(height: 24),
+              // TextField(
+              //   controller: _searchController,
+              //   decoration: InputDecoration(
+              //     hintText: 'Search news...',
+              //     prefixIcon: const Icon(Icons.search),
+              //     suffixIcon: _searchController.text.isNotEmpty
+              //         ? IconButton(
+              //             icon: const Icon(Icons.clear, size: 18),
+              //             onPressed: () {
+              //               _searchController.clear();
+              //               context.read<FetchCubit>().performSearch('');
+              //             },
+              //           )
+              //         : null,
+              //     filled: true,
+              //     fillColor: Theme.of(
+              //       context,
+              //     ).colorScheme.surfaceContainerHighest,
+              //     border: OutlineInputBorder(
+              //       borderRadius: BorderRadius.circular(30),
+              //       borderSide: BorderSide.none,
+              //     ),
+              //   ),
+              //   onTap: (){
+
+              //   },
+              //   // onChanged: (query) {
+              //   //   _debounce?.cancel();
+              //   //   _debounce = Timer(const Duration(milliseconds: 0), () {
+              //   //     context.read<FetchCubit>().performSearch(query);
+              //   //   });
+              //   // },
+              //   onSubmitted: (query) {
+              //     _debounce?.cancel();
+              //     _debounce = Timer(const Duration(milliseconds: 250), () {
+              //       context.read<FetchCubit>().performSearch(query);
+              //     });
+              //   },
+              // ),
               const SizedBox(height: 24),
 
               // ==== BREAKING NEWS ====
