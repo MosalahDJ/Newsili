@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
@@ -12,7 +9,6 @@ import 'package:newsily/presentation/widgets/homepage%20widgets/home_page_skelet
 import 'package:newsily/presentation/widgets/homepage%20widgets/suggesion_banner.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/top_stories_section.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/trending_card.dart';
-import '../../data/models/news_data_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,62 +18,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Timer? _debounce;
-  final TextEditingController _searchController = TextEditingController();
-  List<Articles> _cachedLatestNews = [];
-
-  @override
-  void dispose() {
-    _debounce?.cancel();
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  Widget _buildSearchResults(BuildContext context, List<Articles> results) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Search Results"),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            _searchController.clear();
-            context.read<FetchCubit>().performSearch('');
-          },
-        ),
-      ),
-      body: results.isEmpty
-          ? const Center(child: Text("No results found"))
-          : ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: results.length,
-              itemBuilder: (context, index) {
-                final article = results[index];
-                return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  child: ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(
-                      article.title ?? 'No title',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text(
-                      article.description ?? '',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    onTap: () {
-                      // TODO: Navigate to detail page
-                      // Navigator.push(...);
-                    },
-                  ),
-                );
-              },
-            ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,10 +36,6 @@ class _HomePageState extends State<HomePage> {
           } else if (state is DataError) {
             return Center(child: Text(state.errortext));
           } else if (state is DataLoaded) {
-            // 🔍 NEW: Check if user is searching
-            if (state.searchQuery.isNotEmpty) {
-              return _buildSearchResults(context, state.searchResults);
-            }
             return _buildContent(context, state);
           }
           return const HomePageSkeleton();
@@ -125,7 +61,6 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ==== SEARCH BAR ====
               // ==== SEARCH BAR (NAVIGATIONAL) ====
               InkWell(
                 onTap: () {
@@ -146,61 +81,27 @@ class _HomePageState extends State<HomePage> {
                     ).colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  child: Row(
+                  child: Column(
                     children: [
-                      const Icon(Icons.search, size: 20),
-                      const SizedBox(width: 12),
-                      const Expanded(
-                        child: Text(
-                          'Search news...',
-                          style: TextStyle(color: Colors.grey),
-                        ),
+                      SizedBox(height: 12),
+                      Row(
+                        children: [
+                          const Icon(Icons.search, size: 20),
+                          const SizedBox(width: 12),
+                          const Expanded(
+                            child: Text(
+                              'Search news...',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                          // Optional: add mic or filter icon
+                        ],
                       ),
-                      // Optional: add mic or filter icon
+                      SizedBox(height: 12),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
-              // TextField(
-              //   controller: _searchController,
-              //   decoration: InputDecoration(
-              //     hintText: 'Search news...',
-              //     prefixIcon: const Icon(Icons.search),
-              //     suffixIcon: _searchController.text.isNotEmpty
-              //         ? IconButton(
-              //             icon: const Icon(Icons.clear, size: 18),
-              //             onPressed: () {
-              //               _searchController.clear();
-              //               context.read<FetchCubit>().performSearch('');
-              //             },
-              //           )
-              //         : null,
-              //     filled: true,
-              //     fillColor: Theme.of(
-              //       context,
-              //     ).colorScheme.surfaceContainerHighest,
-              //     border: OutlineInputBorder(
-              //       borderRadius: BorderRadius.circular(30),
-              //       borderSide: BorderSide.none,
-              //     ),
-              //   ),
-              //   onTap: (){
-
-              //   },
-              //   // onChanged: (query) {
-              //   //   _debounce?.cancel();
-              //   //   _debounce = Timer(const Duration(milliseconds: 0), () {
-              //   //     context.read<FetchCubit>().performSearch(query);
-              //   //   });
-              //   // },
-              //   onSubmitted: (query) {
-              //     _debounce?.cancel();
-              //     _debounce = Timer(const Duration(milliseconds: 250), () {
-              //       context.read<FetchCubit>().performSearch(query);
-              //     });
-              //   },
-              // ),
               const SizedBox(height: 24),
 
               // ==== BREAKING NEWS ====

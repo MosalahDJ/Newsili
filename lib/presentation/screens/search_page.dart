@@ -35,6 +35,7 @@ class _SearchPageState extends State<SearchPage> {
             TextField(
               controller: _searchController,
               decoration: InputDecoration(
+                filled: true,
                 hintText: 'Type to search...',
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
@@ -69,9 +70,7 @@ class _SearchPageState extends State<SearchPage> {
                   if (state is DataLoaded) {
                     final results = state.searchResults;
                     if (results.isEmpty && _searchController.text.isNotEmpty) {
-                      return const Center(
-                        child: Text('No results found'),
-                      );
+                      return const Center(child: Text('No results found'));
                     }
                     if (_searchController.text.isEmpty) {
                       return const Center(
@@ -89,7 +88,9 @@ class _SearchPageState extends State<SearchPage> {
                             contentPadding: EdgeInsets.zero,
                             title: Text(
                               article.title ?? 'No title',
-                              style: const TextStyle(fontWeight: FontWeight.w500),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                              ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -106,7 +107,8 @@ class _SearchPageState extends State<SearchPage> {
                                       width: 60,
                                       height: 60,
                                       fit: BoxFit.cover,
-                                      errorBuilder: (c, e, s) => const Icon(Icons.image),
+                                      errorBuilder: (c, e, s) =>
+                                          const Icon(Icons.image),
                                     ),
                                   )
                                 : const Icon(Icons.article_outlined),
@@ -130,12 +132,11 @@ class _SearchPageState extends State<SearchPage> {
       ),
     );
   }
-@override
-void dispose() {
-  // reset search when leaving
-  context.read<FetchCubit>().performSearch('');
-  _debounce?.cancel();
-  _searchController.dispose();
-  super.dispose();
-}
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _searchController.dispose();
+    super.dispose();
+  }
 }
