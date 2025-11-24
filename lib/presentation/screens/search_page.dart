@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_state.dart';
+import 'package:newsily/presentation/widgets/homepage%20widgets/trending_card.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -80,42 +81,7 @@ class _SearchPageState extends State<SearchPage> {
                       itemCount: results.length,
                       itemBuilder: (context, index) {
                         final article = results[index];
-                        return Card(
-                          margin: const EdgeInsets.symmetric(vertical: 6),
-                          child: ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            title: Text(
-                              article.title ?? 'No title',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            subtitle: Text(
-                              article.description ?? '',
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            leading: article.urlToImage != null
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(4),
-                                    child: Image.network(
-                                      article.urlToImage!,
-                                      width: 60,
-                                      height: 60,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (c, e, s) =>
-                                          const Icon(Icons.image),
-                                    ),
-                                  )
-                                : const Icon(Icons.article_outlined),
-                            onTap: () {
-                              // TODO: Navigate to Article Detail Page
-                              // Navigator.push(context, MaterialPageRoute(...));
-                            },
-                          ),
-                        );
+                        return buildTrendingCard(context, article);
                       },
                     );
                   }
