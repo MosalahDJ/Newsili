@@ -104,3 +104,6 @@ class _SearchPageState extends State<SearchPage> {
     super.dispose();
   }
 }
+
+// the search page is good now but then I will change the the to a dynamic theme 
+// with dark and light modes
