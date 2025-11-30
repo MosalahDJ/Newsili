@@ -1,4 +1,5 @@
 // 📚 Featured Card — Larger, with excerpt
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:newsily/data/models/news_data_model.dart';
 import 'package:newsily/presentation/screens/article_description.dart';
@@ -23,12 +24,12 @@ Widget buildFeaturedCard(BuildContext context, Articles article) {
         children: [
           AspectRatio(
             aspectRatio: 16 / 9,
-            child: Image.network(
-              article.urlToImage ?? "",
+            child: CachedNetworkImage(
+              imageUrl: article.urlToImage ?? "",
               height: 150,
               width: double.infinity,
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
+              errorWidget: (context, error, stackTrace) {
                 return Container(
                   height: 150,
                   color: Colors.grey[300],

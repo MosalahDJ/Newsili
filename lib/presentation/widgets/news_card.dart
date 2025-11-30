@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:newsily/data/models/news_data_model.dart';
 
@@ -20,12 +21,12 @@ class NewsCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.network(
-              article.urlToImage ?? "",
+            CachedNetworkImage(
+              imageUrl: article.urlToImage ?? "",
               height: 150,
               width: double.infinity,
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
+              errorWidget: (context, error, stackTrace) {
                 return Container(
                   height: 150,
                   color: Colors.grey[300],

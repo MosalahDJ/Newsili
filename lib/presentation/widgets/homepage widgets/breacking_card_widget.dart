@@ -29,13 +29,6 @@ Widget buildBreakingCard(BuildContext context, Articles article, int index) {
             Positioned.fill(
               child: CachedNetworkImage(
                 imageUrl: article.urlToImage ?? "",
-                placeholder: (context, url) => Center(
-                  child: SizedBox(
-                    height: 30,
-                    width: 30,
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
                 height: 150,
                 width: double.infinity,
                 fit: BoxFit.cover,

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:newsily/data/models/news_data_model.dart';
 import 'package:newsily/presentation/screens/article_description.dart';
@@ -30,12 +31,12 @@ Widget buildTopStoriesSection(BuildContext context, List<Articles> topStories) {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(14),
                     ),
-                    child: Image.network(
-                      article.urlToImage ?? "",
+                    child: CachedNetworkImage(
+                      imageUrl: article.urlToImage ?? "",
                       height: 150,
                       width: double.infinity,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
+                      errorWidget: (context, error, stackTrace) {
                         return Container(
                           decoration: BoxDecoration(
                             color: Colors.grey[300],

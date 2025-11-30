@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:newsily/data/models/news_data_model.dart';
 import 'package:newsily/helper/save_function.dart';
@@ -24,12 +25,12 @@ Widget buildTrendingCard(BuildContext context, Articles article) {
             child: SizedBox(
               width: 100,
               height: 70,
-              child: Image.network(
-                article.urlToImage ?? "",
+              child: CachedNetworkImage(
+                imageUrl: article.urlToImage ?? "",
                 height: 150,
                 width: double.infinity,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
+                errorWidget: (context, error, stackTrace) {
                   return Container(
                     height: 150,
                     color: Colors.grey[300],
