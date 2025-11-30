@@ -47,7 +47,6 @@ class FetchCubit extends Cubit<FetchState> {
     }
   }
 
-  // In FetchCubit.dart
   void performSearch(String query) {
     if (state is! DataLoaded) return;
 
@@ -68,4 +67,3 @@ class FetchCubit extends Cubit<FetchState> {
     emit(dataState.copyWith(searchQuery: query, searchResults: results));
   }
 }
-
