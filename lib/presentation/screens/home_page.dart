@@ -48,9 +48,9 @@ class _HomePageState extends State<HomePage> {
     final latestNews = state.generalNews ?? [];
     final topStories = state.businessNews ?? [];
 
-    if (latestNews.isEmpty) {
-      return const Center(child: Text("No news available"));
-    }
+    // if (latestNews.isEmpty) {
+    //   return const Center(child: Text("No news available"));
+    // }
 
     return RefreshIndicator(
       onRefresh: () async => context.read<FetchCubit>().getArticles(),
