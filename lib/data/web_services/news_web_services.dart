@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:newsily/constants/constant_enum.dart';
@@ -50,6 +51,24 @@ class NewsWebServices {
         database = generalData;
         tableName = 'general_news';
     }
+
+    Future<List<Articles>> loadOfflineData(dynamic database) async {
+      final rows = await database.getLastSavedResponse(tableName);
+
+      if (rows.isEmpty) return [];
+
+      final rawJson = rows.first['response_data'];
+
+      final Map<String, dynamic> body = jsonDecode(rawJson);
+      print("========================================================");
+      log("${body['articles'] as List}");
+      print("========================================================");
+
+      return (body['articles'] as List)
+          .map((e) => Articles.fromJson(e))
+          .toList();
+    }
+
     try {
       http.Response response = await http.get(
         Uri.parse("$baseUrl$modelUrl$_apiKey"),
@@ -78,12 +97,20 @@ class NewsWebServices {
         }
         return [];
       } else {
-        // print('Error: ${response.statusCode}');
-        return [];
+        // fallback to cached data on any error
+        print("beffor loadOfflineData1");
+        Future<List<Articles>> offlineData = loadOfflineData(database);
+        print("affter loadOfflineData1");
+      return await offlineData;
+
       }
     } catch (e) {
-      // print('Error: ${e.toString()}');
-      return [];
+      // fallback to cached data on any error
+
+        print("beffor loadOfflineData2");
+        Future<List<Articles>> offlineData = loadOfflineData(database);
+        print("affter loadOfflineData2");
+      return await offlineData;
     }
   }
 }
