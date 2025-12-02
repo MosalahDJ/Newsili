@@ -33,19 +33,23 @@ class ArticleDescriptionPage extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
 
-                child: article.urlToImage != null
-                    ? CachedNetworkImage(
-                        imageUrl: article.urlToImage!,
-                        width: double.infinity,
-                        height: 220,
-                        fit: BoxFit.cover,
-                      )
-                    : Container(
-                        height: 220,
+                child: CachedNetworkImage(
+                  imageUrl: article.urlToImage!,
+                  width: double.infinity,
+                  height: 220,
+                  fit: BoxFit.cover,
+                  errorWidget: (context, error, stackTrace) {
+                    return Container(
+                      decoration: BoxDecoration(
                         color: Colors.grey[300],
-                        alignment: Alignment.center,
-                        child: const Icon(Icons.broken_image, size: 60),
+                        borderRadius: BorderRadius.circular(14),
                       ),
+                      height: 150,
+                      alignment: Alignment.center,
+                      child: const Icon(Icons.broken_image, size: 60),
+                    );
+                  },
+                ),
               ),
             ),
             const SizedBox(height: 16),
