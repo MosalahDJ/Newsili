@@ -52,31 +52,11 @@ class NewsWebServices {
         tableName = 'general_news';
     }
 
-    Future<List<Articles>> loadOfflineData(dynamic database) async {
-      final rows = await database.getLastSavedResponse(tableName);
-
-      if (rows.isEmpty) {
-        // print("rows is empty");
-        return [];
-      }
-
-      final rawJson = rows.first['response_data'];
-
-      final Map<String, dynamic> body = jsonDecode(rawJson);
-      // print("========================================================");
-      // log("${body['articles'] as List}");
-      // print("========================================================");
-
-      return (body['articles'] as List)
-          .map((e) => Articles.fromJson(e))
-          .toList();
-    }
-
     try {
+      // try getting  data from api
       http.Response response = await http.get(
         Uri.parse("$baseUrl$modelUrl$_apiKey"),
       );
-
       if (response.statusCode == 200) {
         Map<String, dynamic> body = jsonDecode(response.body);
 
@@ -101,23 +81,41 @@ class NewsWebServices {
         return [];
       } else {
         // fallback to cached data on any error
-        // print("beffor loadOfflineData1");
-        List<Articles> offlineData = await loadOfflineData(database);
-        // print(offlineData);
-        // print("affter loadOfflineData1");
+        print("beffor loadOfflineData1");
+        List<Articles> offlineData = await loadOfflineData(tableName, database);
+        print(offlineData);
+        print("affter loadOfflineData1");
         return offlineData;
       }
     } catch (e) {
       // fallback to cached data on any error
-      // print("beffor loadOfflineData2");
-      List<Articles> offlineData = await loadOfflineData(database);
-      // print(offlineData);
-      // print("affter loadOfflineData2");
+      print("beffor loadOfflineData2");
+      List<Articles> offlineData = await loadOfflineData(tableName, database);
+      print(offlineData);
+      print("affter loadOfflineData2");
       return offlineData;
     }
   }
 }
 
+// function to load offline data
+Future<List<Articles>> loadOfflineData(
+  String? tableName,
+  dynamic database,
+) async {
+  final rows = await database.getLastSavedResponse(tableName);
 
-// I scould modify the code here
-// I make all modification for now in comment
+  if (rows.isEmpty) {
+    // print("rows is empty");
+    return [];
+  }
+
+  final rawJson = rows.first['response_data'];
+
+  final Map<String, dynamic> body = jsonDecode(rawJson);
+  // print("========================================================");
+  // log("${body['articles'] as List}");
+  // print("========================================================");
+
+  return (body['articles'] as List).map((e) => Articles.fromJson(e)).toList();
+}
