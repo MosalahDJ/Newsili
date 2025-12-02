@@ -1,9 +1,9 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
 import 'package:newsily/logic/cubit/fetch%20data/fetch_state.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/trending_card.dart';
+import 'package:newsily/presentation/widgets/search_bar.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -14,7 +14,6 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
-  Timer? _debounce;
 
   @override
   Widget build(BuildContext context) {
@@ -31,37 +30,7 @@ class _SearchPageState extends State<SearchPage> {
         child: Column(
           children: [
             // 🔍 Search Input
-            TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                filled: true,
-                hintText: 'Type to search...',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                suffixIcon: _searchController.text.isNotEmpty
-                    ? IconButton(
-                        icon: const Icon(Icons.clear, size: 18),
-                        onPressed: () {
-                          _searchController.clear();
-                          context.read<FetchCubit>().performSearch('');
-                        },
-                      )
-                    : null,
-              ),
-              onChanged: (query) {
-                _debounce?.cancel();
-                _debounce = Timer(const Duration(milliseconds: 300), () {
-                  context.read<FetchCubit>().performSearch(query);
-                });
-              },
-              onSubmitted: (query) {
-                context.read<FetchCubit>().performSearch(query);
-              },
-            ),
-            const SizedBox(height: 16),
-
+            MySearchBar(searchController: _searchController),
             // 🔎 Results
             Expanded(
               child: BlocBuilder<FetchCubit, FetchState>(
@@ -99,7 +68,6 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void dispose() {
-    _debounce?.cancel();
     _searchController.dispose();
     super.dispose();
   }
