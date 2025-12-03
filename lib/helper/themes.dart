@@ -11,7 +11,10 @@ final ThemeData lightTheme = ThemeData(
 
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-  colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal, brightness: Brightness.dark),
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: Colors.teal,
+    brightness: Brightness.dark,
+  ),
   scaffoldBackgroundColor: Colors.black,
   useMaterial3: true,
   appBarTheme: const AppBarTheme(centerTitle: true),
@@ -19,6 +22,8 @@ final ThemeData darkTheme = ThemeData(
 
 // Optional: custom colors accessor
 extension AppColors on ThemeData {
-  Color get cardBg => brightness == Brightness.dark ? Colors.grey[900]! : Colors.white;
-  Color get subtleText => brightness == Brightness.dark ? Colors.grey[400]! : Colors.grey[700]!;
+  Color get cardBg =>
+      brightness == Brightness.dark ? Colors.grey[900]! : Colors.white;
+  Color get subtleText =>
+      brightness == Brightness.dark ? Colors.grey[400]! : Colors.grey[700]!;
 }
