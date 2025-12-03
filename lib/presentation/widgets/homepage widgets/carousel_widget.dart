@@ -56,7 +56,7 @@ class _CarouselWidgetState extends State<CarouselWidget> {
         Center(
           child: AnimatedSmoothIndicator(
             activeIndex: currentPage,
-            count: widget.itemCount == 0 ? 1 : widget.itemCount,
+            count: widget.itemCount == 0 ? 3 : widget.itemCount,
             effect: ExpandingDotsEffect(
               dotHeight: 8,
               dotWidth: 8,
