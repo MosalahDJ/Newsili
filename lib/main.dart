@@ -5,7 +5,7 @@ import 'package:newsily/helper/app_router.dart';
 import 'package:newsily/logic/cubit/save_articles/bookmarks_cubit.dart';
 import 'package:newsily/data/repositories/news_data_repository.dart';
 import 'package:newsily/data/web_services/news_web_services.dart';
-import 'package:newsily/logic/cubit/fetch data/fetch_cubit.dart';
+import 'package:newsily/logic/cubit/fetch_data/fetch_cubit.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");

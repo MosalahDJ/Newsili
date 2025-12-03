@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
-import 'package:newsily/logic/cubit/fetch%20data/fetch_state.dart';
+import 'package:newsily/logic/cubit/fetch_data/fetch_cubit.dart';
+import 'package:newsily/logic/cubit/fetch_data/fetch_state.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/trending_card.dart';
 import 'package:newsily/presentation/widgets/search_bar.dart';
 

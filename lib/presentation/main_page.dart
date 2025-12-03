@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
+import 'package:newsily/logic/cubit/fetch_data/fetch_cubit.dart';
 import 'package:newsily/presentation/screens/bookmarks_page.dart';
 import 'package:newsily/presentation/screens/categorypage.dart';
 import 'package:newsily/presentation/screens/home_page.dart';

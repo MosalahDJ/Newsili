@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
-import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
+import 'package:newsily/logic/cubit/fetch_data/fetch_cubit.dart';
 
 // ignore: must_be_immutable
 class MySearchBar extends StatefulWidget {
