@@ -9,6 +9,7 @@ import 'package:newsily/presentation/widgets/homepage%20widgets/home_page_skelet
 import 'package:newsily/presentation/widgets/homepage%20widgets/suggesion_banner.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/top_stories_section.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/trending_card.dart';
+import 'package:newsily/presentation/widgets/search_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -66,7 +67,10 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
                 borderRadius: BorderRadius.circular(30),
-                child: Container(
+                child: const MySearchBar(isButton: true,),
+
+                /*
+                Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 8,
@@ -97,6 +101,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
+                 */
               ),
               const SizedBox(height: 24),
 

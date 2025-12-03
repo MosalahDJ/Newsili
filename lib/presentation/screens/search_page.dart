@@ -30,7 +30,7 @@ class _SearchPageState extends State<SearchPage> {
         child: Column(
           children: [
             // 🔍 Search Input
-            MySearchBar(searchController: _searchController),
+            MySearchBar(isButton: false, searchController: _searchController),
             // 🔎 Results
             Expanded(
               child: BlocBuilder<FetchCubit, FetchState>(

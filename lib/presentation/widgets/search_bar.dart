@@ -5,16 +5,15 @@ import 'package:newsily/logic/cubit/fetch%20data/fetch_cubit.dart';
 
 // ignore: must_be_immutable
 class MySearchBar extends StatefulWidget {
-  const MySearchBar({super.key, required this.searchController});
-  final TextEditingController searchController;
+  const MySearchBar({super.key, this.searchController, required this.isButton});
+  final TextEditingController? searchController;
+  final bool isButton;
 
   @override
   State<MySearchBar> createState() => _MySearchBarState();
 }
 
 class _MySearchBarState extends State<MySearchBar> {
-  // final Articles article;
-
   Timer? debounce;
 
   @override
@@ -47,12 +46,12 @@ class _MySearchBarState extends State<MySearchBar> {
               duration: const Duration(milliseconds: 200),
               transitionBuilder: (child, anim) =>
                   FadeTransition(opacity: anim, child: child),
-              child: widget.searchController.text.isNotEmpty
+              child: widget.searchController!.text.isNotEmpty
                   ? IconButton(
                       key: const ValueKey('clearBtn'),
                       icon: const Icon(Icons.close, size: 18),
                       onPressed: () {
-                        widget.searchController.clear();
+                        widget.searchController!.clear();
                         context.read<FetchCubit>().performSearch('');
                       },
                     )
@@ -61,15 +60,19 @@ class _MySearchBarState extends State<MySearchBar> {
             border: InputBorder.none,
             contentPadding: const EdgeInsets.symmetric(vertical: 14),
           ),
-          onChanged: (query) {
-            debounce?.cancel();
-            debounce = Timer(const Duration(milliseconds: 300), () {
-              context.read<FetchCubit>().performSearch(query);
-            });
-          },
-          onSubmitted: (query) {
-            context.read<FetchCubit>().performSearch(query);
-          },
+          onChanged: widget.isButton
+              ? null
+              : (query) {
+                  debounce?.cancel();
+                  debounce = Timer(const Duration(milliseconds: 300), () {
+                    context.read<FetchCubit>().performSearch(query);
+                  });
+                },
+          onSubmitted: widget.isButton
+              ? null
+              : (query) {
+                  context.read<FetchCubit>().performSearch(query);
+                },
         ),
       ),
     );
@@ -77,7 +80,7 @@ class _MySearchBarState extends State<MySearchBar> {
 
   @override
   void dispose() {
-    debounce?.cancel();
+    widget.isButton ? null : debounce?.cancel();
     super.dispose();
   }
 }
