@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/logic/cubit/fetch_data/fetch_cubit.dart';
 import 'package:newsily/logic/cubit/fetch_data/fetch_state.dart';
+import 'package:newsily/logic/cubit/them/them_cubit.dart';
 import 'package:newsily/presentation/screens/search_page.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/carousel_widget.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/featured_card.dart';
@@ -24,6 +25,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.brightness_6),
+            onPressed: () {
+              context.read<ThemeCubit>().toggle();
+            },
+          ),
+        ],
         title: const Text(
           "Newsily",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
