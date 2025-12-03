@@ -33,6 +33,8 @@ class _MySearchBarState extends State<MySearchBar> {
           ],
         ),
         child: TextField(
+          enabled: widget.isButton ? false : true,
+          readOnly: widget.isButton ? true : false,
           controller: widget.searchController,
           style: const TextStyle(fontSize: 15),
           decoration: InputDecoration(
@@ -46,7 +48,9 @@ class _MySearchBarState extends State<MySearchBar> {
               duration: const Duration(milliseconds: 200),
               transitionBuilder: (child, anim) =>
                   FadeTransition(opacity: anim, child: child),
-              child: widget.searchController!.text.isNotEmpty
+              child: widget.isButton
+                  ? null
+                  : widget.searchController!.text.isNotEmpty
                   ? IconButton(
                       key: const ValueKey('clearBtn'),
                       icon: const Icon(Icons.close, size: 18),
