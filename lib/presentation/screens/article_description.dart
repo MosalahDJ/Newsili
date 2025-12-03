@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:newsily/helper/url_luncher_function.dart';
 import 'package:newsily/logic/cubit/save_articles/bookmarks_cubit.dart';
 import 'package:newsily/logic/cubit/save_articles/bookmarks_state.dart';
+import 'package:newsily/presentation/widgets/homepage%20widgets/handlebookmarkpress.dart';
 import '../../data/models/news_data_model.dart';
 
 class ArticleDescriptionPage extends StatelessWidget {
@@ -153,7 +154,7 @@ class ArticleDescriptionPage extends StatelessWidget {
                         final isBookmarked = snapshot.data ?? false;
                         return ElevatedButton.icon(
                           onPressed: () =>
-                              _handleBookmarkPress(context, article),
+                              handleBookmarkPress(context, article),
                           icon: Icon(
                             isBookmarked
                                 ? Icons.bookmark
@@ -176,20 +177,5 @@ class ArticleDescriptionPage extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-void _handleBookmarkPress(BuildContext context, Articles article) async {
-  if (!context.mounted) return;
-
-  final bookmarksCubit = context.read<BookmarksCubit>();
-  final isBookmarked = await bookmarksCubit.isBookmarked(article);
-
-  if (!context.mounted) return;
-
-  if (isBookmarked) {
-    bookmarksCubit.removeBookmark(article);
-  } else {
-    bookmarksCubit.addBookmark(article);
   }
 }
