@@ -67,41 +67,16 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
                 borderRadius: BorderRadius.circular(30),
-                child: const MySearchBar(isButton: true,),
-
-                /*
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 12),
-                      Row(
-                        children: [
-                          const Icon(Icons.search, size: 20),
-                          const SizedBox(width: 12),
-                          const Expanded(
-                            child: Text(
-                              'Search news...',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ),
-                          // Optional: add mic or filter icon
-                        ],
-                      ),
-                      SizedBox(height: 12),
-                    ],
+                child: Hero(
+                  tag: "search-bar-hero",
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(30),
+                      child: const MySearchBar(isButton: true),
+                    ),
                   ),
                 ),
-                 */
               ),
               const SizedBox(height: 24),
 

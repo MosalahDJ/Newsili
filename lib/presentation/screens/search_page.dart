@@ -30,7 +30,19 @@ class _SearchPageState extends State<SearchPage> {
         child: Column(
           children: [
             // 🔍 Search Input
-            MySearchBar(isButton: false, searchController: _searchController),
+            Hero(
+              tag: "search-bar-hero",
+              child: Material(
+                type: MaterialType.transparency,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: MySearchBar(
+                    isButton: false,
+                    searchController: _searchController,
+                  ),
+                ),
+              ),
+            ),
             // 🔎 Results
             Expanded(
               child: BlocBuilder<FetchCubit, FetchState>(
