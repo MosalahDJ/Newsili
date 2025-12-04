@@ -12,7 +12,7 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('About'), centerTitle: true),
+      appBar: AppBar(title: const Text('About'), centerTitle: false),
       body: FutureBuilder<PackageInfo>(
         future: _getPackageInfo(),
         builder: (context, snapshot) {
