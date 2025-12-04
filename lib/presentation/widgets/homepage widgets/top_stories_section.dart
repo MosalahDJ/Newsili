@@ -4,6 +4,8 @@ import 'package:newsily/data/models/news_data_model.dart';
 import 'package:newsily/presentation/screens/article_description.dart';
 
 Widget buildTopStoriesSection(BuildContext context, List<Articles> topStories) {
+  final theme = Theme.of(context);
+  
   return SizedBox(
     height: 140,
     child: ListView.separated(
@@ -39,12 +41,16 @@ Widget buildTopStoriesSection(BuildContext context, List<Articles> topStories) {
                       errorWidget: (context, error, stackTrace) {
                         return Container(
                           decoration: BoxDecoration(
-                            color: Colors.grey[300],
+                            color: theme.colorScheme.surfaceVariant,
                             borderRadius: BorderRadius.circular(14),
                           ),
                           height: 150,
                           alignment: Alignment.center,
-                          child: const Icon(Icons.broken_image, size: 60),
+                          child: Icon(
+                            Icons.broken_image,
+                            size: 60,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
                         );
                       },
                     ),
@@ -62,8 +68,8 @@ Widget buildTopStoriesSection(BuildContext context, List<Articles> topStories) {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          Colors.black.withValues(alpha: 0.1),
-                          Colors.black.withValues(alpha: 0.7),
+                          Colors.transparent,
+                          theme.colorScheme.scrim.withOpacity(0.9),
                         ],
                       ),
                     ),
@@ -73,8 +79,8 @@ Widget buildTopStoriesSection(BuildContext context, List<Articles> topStories) {
                       article.title ?? "",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: theme.colorScheme.onPrimary,
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
                       ),

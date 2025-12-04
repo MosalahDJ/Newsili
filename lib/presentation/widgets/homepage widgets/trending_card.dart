@@ -7,6 +7,8 @@ import 'package:newsily/presentation/widgets/homepage%20widgets/handlebookmarkpr
 import 'package:newsily/presentation/widgets/homepage%20widgets/schowartiklemoremenufunc.dart';
 
 Widget buildTrendingCard(BuildContext context, Articles article) {
+  final theme = Theme.of(context);
+  
   return GestureDetector(
     onTap: () {
       Navigator.push(
@@ -33,9 +35,16 @@ Widget buildTrendingCard(BuildContext context, Articles article) {
                 errorWidget: (context, error, stackTrace) {
                   return Container(
                     height: 150,
-                    color: Colors.grey[300],
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surfaceVariant,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     alignment: Alignment.center,
-                    child: const Icon(Icons.broken_image, size: 60),
+                    child: Icon(
+                      Icons.broken_image,
+                      size: 60,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                   );
                 },
               ),
@@ -48,19 +57,31 @@ Widget buildTrendingCard(BuildContext context, Articles article) {
               children: [
                 Text(
                   article.title ?? 'Untitled',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  style: theme.textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                     height: 1.3,
+                    color: theme.colorScheme.onSurface,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  article.source?.name ?? '',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.labelSmall?.copyWith(color: Colors.grey),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceVariant,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    article.source?.name ?? 'Unknown',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -79,7 +100,11 @@ Widget buildTrendingCard(BuildContext context, Articles article) {
                 },
                 onSave: () => handleBookmarkPress(context, article),
               ),
-              icon: const Icon(Icons.more_vert, size: 18),
+              icon: Icon(
+                Icons.more_vert,
+                size: 18,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
         ],

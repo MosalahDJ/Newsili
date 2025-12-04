@@ -1,35 +1,52 @@
 import 'package:flutter/material.dart';
 
 Widget buildSuggestionBanner(BuildContext context) {
+  final theme = Theme.of(context);
+  final isDark = theme.brightness == Brightness.dark;
+  
   return Container(
     width: double.infinity,
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
       gradient: LinearGradient(
-        colors: [
-          Theme.of(context).colorScheme.primary,
-          Colors.deepPurpleAccent,
-        ],
+        colors: isDark
+            ? [
+                theme.colorScheme.primary.withOpacity(0.8),
+                theme.colorScheme.tertiary.withOpacity(0.6),
+              ]
+            : [
+                theme.colorScheme.primary,
+                Color(0xFF3730A3), // Deep indigo
+              ],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       ),
       borderRadius: BorderRadius.circular(20),
+      boxShadow: [
+        BoxShadow(
+          color: theme.colorScheme.shadow.withOpacity(0.1),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+        ),
+      ],
     ),
-    child: const Column(
+    child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           "Stay Informed",
           style: TextStyle(
-            color: Colors.white,
+            color: theme.colorScheme.onPrimary,
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
           "Get the latest updates on world events, business, and more.",
-          style: TextStyle(color: Colors.white70),
+          style: TextStyle(
+            color: theme.colorScheme.onPrimary.withOpacity(0.9),
+          ),
         ),
       ],
     ),

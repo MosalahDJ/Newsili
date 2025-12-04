@@ -24,6 +24,8 @@ class _CarouselWidgetState extends State<CarouselWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Column(
       children: [
         SizedBox(
@@ -60,8 +62,10 @@ class _CarouselWidgetState extends State<CarouselWidget> {
             effect: ExpandingDotsEffect(
               dotHeight: 8,
               dotWidth: 8,
-              activeDotColor: Theme.of(context).colorScheme.primary,
-              dotColor: Colors.grey.withValues(alpha: .3),
+              activeDotColor: theme.colorScheme.primary,
+              dotColor: theme.colorScheme.outlineVariant,
+              spacing: 6,
+              expansionFactor: 2.5,
             ),
           ),
         ),

@@ -18,17 +18,19 @@ class _MySearchBarState extends State<MySearchBar> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(28),
           boxShadow: [
             BoxShadow(
               blurRadius: 12,
               offset: const Offset(0, 4),
-              color: Colors.black.withValues(alpha: 0.06),
+              color: theme.colorScheme.shadow.withOpacity(0.1),
             ),
           ],
         ),
@@ -36,14 +38,21 @@ class _MySearchBarState extends State<MySearchBar> {
           enabled: widget.isButton ? false : true,
           readOnly: widget.isButton ? true : false,
           controller: widget.searchController,
-          style: const TextStyle(fontSize: 15),
+          style: TextStyle(
+            fontSize: 15,
+            color: theme.colorScheme.onSurface,
+          ),
           decoration: InputDecoration(
             hintText: 'Search articles…',
             hintStyle: TextStyle(
-              color: Colors.grey.shade500,
+              color: theme.colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.w400,
             ),
-            prefixIcon: const Icon(Icons.search, size: 22),
+            prefixIcon: Icon(
+              Icons.search,
+              size: 22,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
             suffixIcon: AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
               transitionBuilder: (child, anim) =>
@@ -53,7 +62,11 @@ class _MySearchBarState extends State<MySearchBar> {
                   : widget.searchController!.text.isNotEmpty
                   ? IconButton(
                       key: const ValueKey('clearBtn'),
-                      icon: const Icon(Icons.close, size: 18),
+                      icon: Icon(
+                        Icons.close,
+                        size: 18,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
                       onPressed: () {
                         widget.searchController!.clear();
                         context.read<FetchCubit>().performSearch('');
@@ -63,7 +76,9 @@ class _MySearchBarState extends State<MySearchBar> {
             ),
             border: InputBorder.none,
             contentPadding: const EdgeInsets.symmetric(vertical: 14),
+            filled: false,
           ),
+          cursorColor: theme.colorScheme.primary,
           onChanged: widget.isButton
               ? null
               : (query) {

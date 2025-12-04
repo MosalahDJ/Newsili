@@ -22,12 +22,17 @@ class _BookmarksPageState extends State<BookmarksPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
         title: const Text('Bookmarks'),
         centerTitle: true,
         elevation: 0,
+        backgroundColor: theme.colorScheme.surface,
+        foregroundColor: theme.colorScheme.onSurface,
+        surfaceTintColor: theme.colorScheme.surface,
       ),
       body: BlocBuilder<BookmarksCubit, BookmarksState>(
         builder: (context, state) {
@@ -40,24 +45,32 @@ class _BookmarksPageState extends State<BookmarksPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.error_outline,
                       size: 64,
-                      color: Colors.grey,
+                      color: theme.colorScheme.error,
                     ),
                     const SizedBox(height: 16),
                     Text(
                       state.message,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyLarge,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: theme.colorScheme.onSurface,
+                      ),
                     ),
                     const SizedBox(height: 24),
                     ElevatedButton.icon(
                       onPressed: () {
                         context.read<BookmarksCubit>().loadBookmarks();
                       },
-                      icon: const Icon(Icons.refresh),
-                      label: const Text('Retry'),
+                      icon: Icon(Icons.refresh, color: theme.colorScheme.onPrimary),
+                      label: Text(
+                        'Retry',
+                        style: TextStyle(color: theme.colorScheme.onPrimary),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: theme.colorScheme.primary,
+                      ),
                     ),
                   ],
                 ),
@@ -100,6 +113,8 @@ class _EmptyBookmarksView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32.0),
@@ -110,27 +125,28 @@ class _EmptyBookmarksView extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                color: theme.colorScheme.surfaceVariant,
               ),
               child: Icon(
                 Icons.bookmark_border,
                 size: 64,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
             const SizedBox(height: 24),
             Text(
               'No bookmarks yet',
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: theme.colorScheme.onSurface,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
               'Articles you save will appear here.',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
               ),
               textAlign: TextAlign.center,
             ),
@@ -147,12 +163,16 @@ class _BookmarksSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       itemCount: 5,
       itemBuilder: (context, index) {
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 6),
+          color: theme.colorScheme.surface,
+          surfaceTintColor: theme.colorScheme.surface,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -161,16 +181,29 @@ class _BookmarksSkeleton extends StatelessWidget {
                 Container(
                   height: 20,
                   width: double.infinity,
-                  color: Colors.grey[300],
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceVariant,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
                 ),
                 const SizedBox(height: 12),
                 Container(
                   height: 16,
                   width: double.infinity,
-                  color: Colors.grey[300],
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceVariant,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
                 ),
                 const SizedBox(height: 8),
-                Container(height: 16, width: 120, color: Colors.grey[300]),
+                Container(
+                  height: 16,
+                  width: 120,
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceVariant,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
               ],
             ),
           ),
@@ -188,31 +221,48 @@ class _BookmarkCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final publishedAt = article.publishedAt != null
         ? DateTime.tryParse(article.publishedAt!) ?? DateTime.now()
         : DateTime.now();
 
     return Dismissible(
-      key: ValueKey(article.url), // unique key for each item
-      direction: DismissDirection.endToStart, // swipe from right to left
+      key: ValueKey(article.url),
+      direction: DismissDirection.endToStart,
       background: Container(
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        color: Colors.red,
-        child: const Icon(Icons.delete, color: Colors.white),
+        color: theme.colorScheme.error,
+        child: Icon(
+          Icons.delete,
+          color: theme.colorScheme.onError,
+        ),
       ),
       onDismissed: (direction) {
-        // remove item from list
         handleBookmarkPress(context, article);
-        // optional: show snackbar
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('${article.title} deleted')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${article.title} removed'),
+            backgroundColor: theme.colorScheme.surface,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        );
       },
       child: Card(
         margin: const EdgeInsets.symmetric(vertical: 6),
-        elevation: 1,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        elevation: 0,
+        color: theme.colorScheme.surface,
+        surfaceTintColor: theme.colorScheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(
+            color: theme.colorScheme.outline.withOpacity(0.5),
+            width: 1,
+          ),
+        ),
         clipBehavior: Clip.hardEdge,
         child: InkWell(
           onTap: () {
@@ -225,9 +275,10 @@ class _BookmarkCard extends StatelessWidget {
               children: [
                 Text(
                   article.title ?? 'Untitled Article',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     height: 1.3,
+                    color: theme.colorScheme.onSurface,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -236,8 +287,8 @@ class _BookmarkCard extends StatelessWidget {
                   const SizedBox(height: 10),
                   Text(
                     article.description!,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
                       height: 1.4,
                     ),
                     maxLines: 2,
@@ -249,8 +300,8 @@ class _BookmarkCard extends StatelessWidget {
                   alignment: Alignment.bottomRight,
                   child: Text(
                     _formatDate(publishedAt),
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ),

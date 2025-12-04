@@ -10,6 +10,8 @@ class NewsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, "/article", arguments: article);
@@ -18,6 +20,9 @@ class NewsCard extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         clipBehavior: Clip.hardEdge,
+        elevation: 0,
+        color: theme.colorScheme.surface,
+        surfaceTintColor: theme.colorScheme.surface,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -29,29 +34,54 @@ class NewsCard extends StatelessWidget {
               errorWidget: (context, error, stackTrace) {
                 return Container(
                   height: 150,
-                  color: Colors.grey[300],
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceVariant,
+                  ),
                   alignment: Alignment.center,
-                  child: const Icon(Icons.broken_image, size: 60),
+                  child: Icon(
+                    Icons.broken_image,
+                    size: 60,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                 );
               },
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                article.title ?? "",
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Text(
-                article.source?.name ?? "",
-                style: const TextStyle(color: Colors.grey, fontSize: 12),
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    article.title ?? "",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: theme.colorScheme.onSurface,
+                      height: 1.3,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surfaceVariant,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      article.source?.name ?? "Unknown",
+                      style: TextStyle(
+                        color: theme.colorScheme.onSurfaceVariant,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

@@ -6,8 +6,10 @@ class CategoriesPageSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: theme.colorScheme.background,
       body: SafeArea(
         child: Skeletonizer(
           enabled: true,
@@ -18,12 +20,13 @@ class CategoriesPageSkeleton extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Title
-                  const Text(
-                    "Categories",
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
+                  // Title skeleton
+                  Container(
+                    height: 32,
+                    width: 140,
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surfaceVariant,
+                      borderRadius: BorderRadius.circular(4),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -38,9 +41,11 @@ class CategoriesPageSkeleton extends StatelessWidget {
                       itemBuilder: (_, __) => Container(
                         width: 100,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: theme.colorScheme.surface,
                           borderRadius: BorderRadius.circular(30),
-                          border: Border.all(color: Colors.grey.shade300),
+                          border: Border.all(
+                            color: theme.colorScheme.outline.withOpacity(0.3),
+                          ),
                         ),
                       ),
                     ),
@@ -48,11 +53,12 @@ class CategoriesPageSkeleton extends StatelessWidget {
                   const SizedBox(height: 24),
 
                   // Section title placeholder
-                  const Text(
-                    "Top from Category",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
+                  Container(
+                    height: 24,
+                    width: 180,
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surfaceVariant,
+                      borderRadius: BorderRadius.circular(4),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -66,30 +72,44 @@ class CategoriesPageSkeleton extends StatelessWidget {
                     itemBuilder: (_, __) => ClipRRect(
                       borderRadius: BorderRadius.circular(18),
                       child: Container(
-                        color: Colors.white,
+                        color: theme.colorScheme.surface,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
                               height: 180,
-                              color: Colors.grey[300],
+                              color: theme.colorScheme.surfaceVariant,
                             ),
-                            const Padding(
-                              padding: EdgeInsets.all(12),
+                            Padding(
+                              padding: const EdgeInsets.all(12),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "Category News Title Placeholder",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                  Container(
+                                    height: 20,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: theme.colorScheme.surfaceVariant,
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
                                   ),
-                                  SizedBox(height: 6),
-                                  Text(
-                                    "Short description placeholder text goes here.",
-                                    style: TextStyle(fontSize: 13),
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    height: 16,
+                                    width: 200,
+                                    decoration: BoxDecoration(
+                                      color: theme.colorScheme.surfaceVariant,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    height: 16,
+                                    width: 160,
+                                    decoration: BoxDecoration(
+                                      color: theme.colorScheme.surfaceVariant,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
                                   ),
                                 ],
                               ),

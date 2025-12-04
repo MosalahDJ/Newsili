@@ -1,10 +1,11 @@
-// 📚 Featured Card — Larger, with excerpt
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:newsily/data/models/news_data_model.dart';
 import 'package:newsily/presentation/screens/article_description.dart';
 
 Widget buildFeaturedCard(BuildContext context, Articles article) {
+  final theme = Theme.of(context);
+  
   return GestureDetector(
     onTap: () {
       Navigator.push(
@@ -18,7 +19,9 @@ Widget buildFeaturedCard(BuildContext context, Articles article) {
       margin: const EdgeInsets.only(bottom: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       clipBehavior: Clip.hardEdge,
-      elevation: 2,
+      elevation: 0,
+      color: theme.colorScheme.surface,
+      surfaceTintColor: theme.colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -32,9 +35,15 @@ Widget buildFeaturedCard(BuildContext context, Articles article) {
               errorWidget: (context, error, stackTrace) {
                 return Container(
                   height: 150,
-                  color: Colors.grey[300],
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceVariant,
+                  ),
                   alignment: Alignment.center,
-                  child: const Icon(Icons.broken_image, size: 60),
+                  child: Icon(
+                    Icons.broken_image,
+                    size: 60,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                 );
               },
             ),
@@ -46,9 +55,10 @@ Widget buildFeaturedCard(BuildContext context, Articles article) {
               children: [
                 Text(
                   article.title ?? 'Untitled',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     height: 1.3,
+                    color: theme.colorScheme.onSurface,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -57,8 +67,8 @@ Widget buildFeaturedCard(BuildContext context, Articles article) {
                 if (article.description != null)
                   Text(
                     article.description!,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
                       height: 1.4,
                     ),
                     maxLines: 3,
@@ -67,11 +77,22 @@ Widget buildFeaturedCard(BuildContext context, Articles article) {
                 const SizedBox(height: 12),
                 Row(
                   children: [
-                    Text(
-                      article.source?.name ?? '',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.labelSmall?.copyWith(color: Colors.grey),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surfaceVariant,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        article.source?.name ?? 'Unknown',
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
                     const Spacer(),
                   ],

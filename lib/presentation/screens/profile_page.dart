@@ -5,11 +5,16 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
         centerTitle: true,
         elevation: 0,
+        backgroundColor: theme.colorScheme.surface,
+        foregroundColor: theme.colorScheme.onSurface,
+        surfaceTintColor: theme.colorScheme.surface,
       ),
       body: CustomScrollView(
         slivers: [
@@ -25,39 +30,39 @@ class ProfilePage extends StatelessWidget {
 class _ProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return SliverToBoxAdapter(
       child: Container(
-        color: Theme.of(context).colorScheme.primaryContainer,
+        color: theme.colorScheme.surfaceVariant,
         padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
         child: Column(
           children: [
             // Avatar placeholder
             CircleAvatar(
               radius: 60,
-              backgroundColor: Theme.of(context).colorScheme.surface,
+              backgroundColor: theme.colorScheme.surface,
               child: Icon(
                 Icons.person,
                 size: 60,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
             const SizedBox(height: 16),
             // Display name placeholder
             Text(
               'Your Name',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                color: theme.colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 4),
             // Email placeholder
             Text(
               'your.email@example.com',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Theme.of(
-                  context,
-                ).colorScheme.onPrimaryContainer.withValues(alpha:0.85),
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
           ],
@@ -70,10 +75,22 @@ class _ProfileHeader extends StatelessWidget {
 class _ProfileInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return SliverList(
       delegate: SliverChildListDelegate([
         Card(
           margin: const EdgeInsets.all(16),
+          color: theme.colorScheme.surface,
+          surfaceTintColor: theme.colorScheme.surface,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(
+              color: theme.colorScheme.outline.withOpacity(0.3),
+              width: 1,
+            ),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -100,13 +117,24 @@ class _ProfileInfoSection extends StatelessWidget {
   }
 
   Widget _buildInfoRow(BuildContext context, IconData icon, String text) {
+    final theme = Theme.of(context);
+    
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: [
-          Icon(icon, color: Theme.of(context).colorScheme.primary, size: 20),
+          Icon(
+            icon,
+            color: theme.colorScheme.primary,
+            size: 20,
+          ),
           const SizedBox(width: 12),
-          Text(text, style: Theme.of(context).textTheme.bodyLarge),
+          Text(
+            text,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: theme.colorScheme.onSurface,
+            ),
+          ),
         ],
       ),
     );
@@ -116,6 +144,8 @@ class _ProfileInfoSection extends StatelessWidget {
 class _ActionButtonsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       sliver: SliverGrid(
@@ -132,10 +162,41 @@ class _ActionButtonsSection extends StatelessWidget {
             'Help & Support',
             'Log Out',
           ];
-          return FilledButton.tonal(
+          
+          Color? buttonColor;
+          Color? textColor;
+          
+          // Different colors for different buttons
+          if (index == 0) { // Edit Profile
+            buttonColor = theme.colorScheme.primary;
+            textColor = theme.colorScheme.onPrimary;
+          } else if (index == 3) { // Log Out
+            buttonColor = theme.colorScheme.errorContainer;
+            textColor = theme.colorScheme.onErrorContainer;
+          } else { // Other buttons
+            buttonColor = theme.colorScheme.surfaceVariant;
+            textColor = theme.colorScheme.onSurfaceVariant;
+          }
+          
+          return ElevatedButton(
             onPressed: () {
+              // Handle button press
             },
-            child: Text(actions[index]),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: buttonColor,
+              foregroundColor: textColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              elevation: 0,
+            ),
+            child: Text(
+              actions[index],
+              style: TextStyle(
+                color: textColor,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           );
         }, childCount: 4),
       ),

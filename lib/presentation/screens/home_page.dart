@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:newsily/helper/themes.dart';
 import 'package:newsily/logic/cubit/fetch_data/fetch_cubit.dart';
 import 'package:newsily/logic/cubit/fetch_data/fetch_state.dart';
 import 'package:newsily/logic/cubit/them/them_cubit.dart';
@@ -22,29 +23,52 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.brightness_6),
+            icon: Icon(
+              Icons.brightness_6,
+              color: theme.colorScheme.onSurface,
+            ),
             onPressed: () {
               context.read<ThemeCubit>().toggle();
             },
           ),
         ],
-        title: const Text(
+        title: Text(
           "Newsily",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+            color: theme.colorScheme.onSurface,
+          ),
         ),
         centerTitle: true,
+        backgroundColor: theme.colorScheme.surface,
+        foregroundColor: theme.colorScheme.onSurface,
+        surfaceTintColor: theme.colorScheme.surface,
       ),
       body: BlocBuilder<FetchCubit, FetchState>(
         builder: (context, state) {
           if (state is DataLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+              child: CircularProgressIndicator(
+                color: theme.colorScheme.primary,
+              ),
+            );
           } else if (state is DataError) {
-            return Center(child: Text(state.errortext));
+            return Center(
+              child: Text(
+                state.errortext,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.error,
+                ),
+              ),
+            );
           } else if (state is DataLoaded) {
             return _buildContent(context, state);
           }
@@ -55,11 +79,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildContent(BuildContext context, DataLoaded state) {
+    final theme = Theme.of(context);
     final latestNews = state.generalNews ?? [];
     final topStories = state.businessNews ?? [];
 
     return RefreshIndicator(
       onRefresh: () async => context.read<FetchCubit>().getArticles(),
+      color: theme.colorScheme.primary,
+      backgroundColor: theme.colorScheme.surface,
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Padding(
@@ -90,9 +117,13 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 24),
 
               // ==== BREAKING NEWS ====
-              const Text(
+              Text(
                 "Breaking News",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.onBackground,
+                ),
               ),
               const SizedBox(height: 16),
 
@@ -104,9 +135,13 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 30),
 
               // ==== TOP STORIES ====
-              const Text(
+              Text(
                 "Top Stories",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.onBackground,
+                ),
               ),
               const SizedBox(height: 12),
 
@@ -116,12 +151,12 @@ class _HomePageState extends State<HomePage> {
 
               //  TRENDING NOW (Vertical List)
               if (state.technologyNews != null) ...[
-                const Text(
+                Text(
                   "Trending Now",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
-                    color: Colors.redAccent,
+                    color: theme.technologyColor, // Using category color
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -130,11 +165,16 @@ class _HomePageState extends State<HomePage> {
                     .map((article) => buildTrendingCard(context, article)),
                 const SizedBox(height: 32),
               ],
+              
               //  FEATURED REPORTS / EDITOR'S PICKS
               if (state.healthNews!.isNotEmpty) ...[
-                const Text(
+                Text(
                   "Editor's Picks",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onBackground,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 ...state.sportsNews!

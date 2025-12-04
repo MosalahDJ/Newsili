@@ -2,12 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/data/models/news_data_model.dart';
+import 'package:newsily/helper/themes.dart';
 import 'package:newsily/logic/cubit/save_articles/bookmarks_cubit.dart';
 import 'package:newsily/logic/cubit/save_articles/bookmarks_state.dart';
 import 'package:newsily/presentation/screens/article_description.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/handlebookmarkpress.dart';
 
 Widget buildBreakingCard(BuildContext context, Articles article, int index) {
+  final theme = Theme.of(context);
+  
   return GestureDetector(
     onTap: () {
       Navigator.push(
@@ -22,7 +25,10 @@ Widget buildBreakingCard(BuildContext context, Articles article, int index) {
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         clipBehavior: Clip.antiAlias,
-        elevation: 4,
+        elevation: 2,
+        color: theme.colorScheme.surface,
+        surfaceTintColor: theme.colorScheme.surface,
+        shadowColor: theme.colorScheme.shadow,
         child: Stack(
           children: [
             // Background Image
@@ -35,9 +41,16 @@ Widget buildBreakingCard(BuildContext context, Articles article, int index) {
                 errorWidget: (context, error, stackTrace) {
                   return Container(
                     height: 150,
-                    color: Colors.grey[300],
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surfaceVariant,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                     alignment: Alignment.center,
-                    child: const Icon(Icons.broken_image, size: 60),
+                    child: Icon(
+                      Icons.broken_image,
+                      size: 60,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                   );
                 },
               ),
@@ -50,13 +63,36 @@ Widget buildBreakingCard(BuildContext context, Articles article, int index) {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Colors.black.withValues(alpha: 0.1),
-                      Colors.black.withValues(alpha: 0.7),
+                      Colors.transparent,
+                      theme.colorScheme.scrim.withOpacity(0.9),
                     ],
                   ),
+                  borderRadius: BorderRadius.circular(20),
                 ),
               ),
             ),
+            // Breaking news badge
+            if (index == 0) // First card is breaking news
+              Positioned(
+                top: 12,
+                left: 12,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: theme.breakingNewsColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    'BREAKING',
+                    style: TextStyle(
+                      color: theme.colorScheme.onTertiary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+              ),
             // Text
             Positioned(
               bottom: 16,
@@ -67,8 +103,8 @@ Widget buildBreakingCard(BuildContext context, Articles article, int index) {
                 children: [
                   Text(
                     article.title ?? "No title available",
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: theme.colorScheme.onPrimary,
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                       height: 1.3,
@@ -79,10 +115,20 @@ Widget buildBreakingCard(BuildContext context, Articles article, int index) {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Text(
-                        article.source?.name ?? "",
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.9),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.surfaceVariant.withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          article.source?.name ?? "Unknown",
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurfaceVariant,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                       const Spacer(),
@@ -99,7 +145,9 @@ Widget buildBreakingCard(BuildContext context, Articles article, int index) {
                                   isBookmarked
                                       ? Icons.bookmark
                                       : Icons.bookmark_border,
-                                  color: Colors.white,
+                                  color: isBookmarked
+                                      ? theme.colorScheme.primary
+                                      : theme.colorScheme.onPrimary,
                                 ),
                                 onPressed: () =>
                                     handleBookmarkPress(context, article),

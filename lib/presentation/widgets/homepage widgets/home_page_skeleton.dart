@@ -6,8 +6,10 @@ class HomePageSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: theme.colorScheme.background,
       body: SafeArea(
         child: Skeletonizer(
           enabled: true,
@@ -19,28 +21,36 @@ class HomePageSkeleton extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // ===== BREAKING NEWS SECTION =====
-                  const Text(
-                    "Breaking News",
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                  Container(
+                    height: 26,
+                    width: 150,
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surfaceVariant,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
                   ),
                   const SizedBox(height: 12),
-                  _carouselSkeleton(),
+                  _carouselSkeleton(theme),
                   const SizedBox(height: 8),
-                  _buildPageIndicator(4), // match real page indicator count
+                  _buildPageIndicator(4, theme),
                   const SizedBox(height: 30),
 
                   // ===== TOP STORIES SECTION =====
-                  const Text(
-                    "Top Stories",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                  Container(
+                    height: 22,
+                    width: 120,
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surfaceVariant,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
                   ),
                   const SizedBox(height: 12),
-                  _topStoriesSkeleton(),
+                  _topStoriesSkeleton(theme),
 
                   const SizedBox(height: 24),
 
                   // ===== SUGGESTION BANNER =====
-                  _suggestionBannerSkeleton(),
+                  _suggestionBannerSkeleton(theme),
 
                   const SizedBox(height: 24),
                 ],
@@ -52,18 +62,22 @@ class HomePageSkeleton extends StatelessWidget {
     );
   }
 
-  Widget _carouselSkeleton() {
+  Widget _carouselSkeleton(ThemeData theme) {
     return SizedBox(
       height: 280,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: Container(
-          color: Colors.white,
+          color: theme.colorScheme.surface,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Image placeholder
-              Expanded(child: Container(color: Colors.grey[300])),
+              Expanded(
+                child: Container(
+                  color: theme.colorScheme.surfaceVariant,
+                ),
+              ),
               // Content area
               Padding(
                 padding: const EdgeInsets.all(16),
@@ -74,7 +88,7 @@ class HomePageSkeleton extends StatelessWidget {
                       height: 20,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Colors.grey[300],
+                        color: theme.colorScheme.surfaceVariant,
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
@@ -85,7 +99,7 @@ class HomePageSkeleton extends StatelessWidget {
                           height: 16,
                           width: 80,
                           decoration: BoxDecoration(
-                            color: Colors.grey[300],
+                            color: theme.colorScheme.surfaceVariant,
                             borderRadius: BorderRadius.circular(4),
                           ),
                         ),
@@ -94,7 +108,7 @@ class HomePageSkeleton extends StatelessWidget {
                           height: 40,
                           width: 40,
                           decoration: BoxDecoration(
-                            color: Colors.grey[300],
+                            color: theme.colorScheme.surfaceVariant,
                             shape: BoxShape.circle,
                           ),
                         ),
@@ -110,7 +124,7 @@ class HomePageSkeleton extends StatelessWidget {
     );
   }
 
-  Widget _topStoriesSkeleton() {
+  Widget _topStoriesSkeleton(ThemeData theme) {
     return SizedBox(
       height: 130,
       child: ListView.separated(
@@ -125,7 +139,11 @@ class HomePageSkeleton extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Image placeholder
-                Expanded(child: Container(color: Colors.grey[300])),
+                Expanded(
+                  child: Container(
+                    color: theme.colorScheme.surfaceVariant,
+                  ),
+                ),
                 // Text content
                 Padding(
                   padding: const EdgeInsets.all(8),
@@ -136,7 +154,7 @@ class HomePageSkeleton extends StatelessWidget {
                         height: 14,
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color: Colors.grey[300],
+                          color: theme.colorScheme.surfaceVariant,
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
@@ -145,7 +163,7 @@ class HomePageSkeleton extends StatelessWidget {
                         height: 12,
                         width: 60,
                         decoration: BoxDecoration(
-                          color: Colors.grey[300],
+                          color: theme.colorScheme.surfaceVariant,
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
@@ -160,11 +178,11 @@ class HomePageSkeleton extends StatelessWidget {
     );
   }
 
-  Widget _suggestionBannerSkeleton() {
+  Widget _suggestionBannerSkeleton(ThemeData theme) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: Container(
-        color: Colors.white,
+        color: theme.colorScheme.surface,
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,7 +191,7 @@ class HomePageSkeleton extends StatelessWidget {
               height: 18,
               width: 160,
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: theme.colorScheme.surfaceVariant,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -182,7 +200,7 @@ class HomePageSkeleton extends StatelessWidget {
               height: 12,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: theme.colorScheme.surfaceVariant,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -191,7 +209,7 @@ class HomePageSkeleton extends StatelessWidget {
               height: 12,
               width: 200,
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: theme.colorScheme.surfaceVariant,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -201,7 +219,7 @@ class HomePageSkeleton extends StatelessWidget {
     );
   }
 
-  Widget _buildPageIndicator(int count) {
+  Widget _buildPageIndicator(int count, ThemeData theme) {
     return Center(
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -211,7 +229,7 @@ class HomePageSkeleton extends StatelessWidget {
             width: 8,
             height: 8,
             decoration: BoxDecoration(
-              color: Colors.grey[300],
+              color: theme.colorScheme.surfaceVariant,
               shape: BoxShape.circle,
             ),
           );

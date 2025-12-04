@@ -22,7 +22,14 @@ class ArticleDescriptionPage extends StatelessWidget {
         : "Unknown date";
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Article Details"), centerTitle: true),
+      appBar: AppBar(
+        title: const Text("Article Details"),
+        centerTitle: true,
+        backgroundColor: theme.colorScheme.surface,
+        foregroundColor: theme.colorScheme.onSurface,
+        elevation: 0,
+        surfaceTintColor: theme.colorScheme.surface,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Column(
@@ -33,7 +40,6 @@ class ArticleDescriptionPage extends StatelessWidget {
               tag: "${article.url}-${article.publishedAt}",
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-
                 child: CachedNetworkImage(
                   imageUrl: article.urlToImage!,
                   width: double.infinity,
@@ -42,12 +48,16 @@ class ArticleDescriptionPage extends StatelessWidget {
                   errorWidget: (context, error, stackTrace) {
                     return Container(
                       decoration: BoxDecoration(
-                        color: Colors.grey[300],
+                        color: theme.colorScheme.surfaceVariant,
                         borderRadius: BorderRadius.circular(14),
                       ),
                       height: 150,
                       alignment: Alignment.center,
-                      child: const Icon(Icons.broken_image, size: 60),
+                      child: Icon(
+                        Icons.broken_image,
+                        size: 60,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
                     );
                   },
                 ),
@@ -62,15 +72,15 @@ class ArticleDescriptionPage extends StatelessWidget {
                 const SizedBox(width: 6),
                 Text(
                   article.source?.name ?? "Unknown Source",
-                  style: theme.textTheme.labelLarge,
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    color: theme.colorScheme.secondary,
+                  ),
                 ),
                 const Spacer(),
                 Text(
                   formattedDate,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.textTheme.bodySmall?.color?.withValues(
-                      alpha: 0.7,
-                    ),
+                    color: theme.colorScheme.onSurface.withOpacity(0.7),
                   ),
                 ),
               ],
@@ -84,6 +94,7 @@ class ArticleDescriptionPage extends StatelessWidget {
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 height: 1.3,
+                color: theme.colorScheme.onBackground,
               ),
             ),
 
@@ -105,7 +116,10 @@ class ArticleDescriptionPage extends StatelessWidget {
             if (article.description != null)
               Text(
                 article.description!,
-                style: theme.textTheme.bodyLarge?.copyWith(height: 1.5),
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  height: 1.5,
+                  color: theme.colorScheme.onSurface,
+                ),
               ),
 
             const SizedBox(height: 12),
@@ -114,7 +128,10 @@ class ArticleDescriptionPage extends StatelessWidget {
             if (article.content != null)
               Text(
                 article.content!,
-                style: theme.textTheme.bodyMedium?.copyWith(height: 1.6),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  height: 1.6,
+                  color: theme.colorScheme.onSurface,
+                ),
               ),
 
             const SizedBox(height: 24),
@@ -123,22 +140,33 @@ class ArticleDescriptionPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
-
               children: [
                 ElevatedButton.icon(
                   onPressed: () async {
                     final success = await tryOpenArticleUrl(article.url!);
                     if (!success && context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
+                        SnackBar(
                           content: Text("Could not open the article"),
+                          backgroundColor: theme.colorScheme.error,
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
                       );
                     }
                   },
-                  icon: const Icon(Icons.open_in_new),
-                  label: const Text("Read full article"),
+                  icon: Icon(
+                    Icons.open_in_new,
+                    color: theme.colorScheme.onPrimary,
+                  ),
+                  label: Text(
+                    "Read full article",
+                    style: TextStyle(color: theme.colorScheme.onPrimary),
+                  ),
                   style: ElevatedButton.styleFrom(
+                    backgroundColor: theme.colorScheme.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -159,11 +187,27 @@ class ArticleDescriptionPage extends StatelessWidget {
                             isBookmarked
                                 ? Icons.bookmark
                                 : Icons.bookmark_border,
+                            color: isBookmarked
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.primary,
                           ),
-                          label: isBookmarked ? Text("saved") : Text("save"),
+                          label: Text(
+                            isBookmarked ? "Saved" : "Save",
+                            style: TextStyle(
+                              color: isBookmarked
+                                  ? theme.colorScheme.primary
+                                  : theme.colorScheme.primary,
+                            ),
+                          ),
                           style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.colorScheme.surfaceVariant,
+                            foregroundColor: theme.colorScheme.primary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
+                              side: BorderSide(
+                                color: theme.colorScheme.outline,
+                                width: 1,
+                              ),
                             ),
                           ),
                         );

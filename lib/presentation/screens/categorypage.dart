@@ -48,23 +48,32 @@ class _CategoryPageState extends State<CategoryPage>
       child: Scaffold(
         backgroundColor: theme.scaffoldBackgroundColor,
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             "Categories",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 22,
+              color: theme.colorScheme.onSurface,
+            ),
           ),
           centerTitle: true,
-          elevation: 2,
+          elevation: 0,
           backgroundColor: theme.colorScheme.surface,
+          foregroundColor: theme.colorScheme.onSurface,
+          surfaceTintColor: theme.colorScheme.surface,
           bottom: TabBar(
             controller: _tabController,
             isScrollable: true,
             automaticIndicatorColorAdjustment: true,
-            labelColor: Colors.grey[700],
-            unselectedLabelColor: Colors.grey[700],
-            labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-            overlayColor: WidgetStateProperty.all(
-              Colors.transparent,
-            ), // cleaner look
+            indicatorColor: theme.colorScheme.primary,
+            indicatorWeight: 3,
+            indicatorPadding: const EdgeInsets.symmetric(horizontal: 8),
+            labelColor: theme.colorScheme.primary,
+            unselectedLabelColor: theme.colorScheme.onSurfaceVariant,
+            labelStyle: const TextStyle(fontWeight: FontWeight.w600),
+            unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
+            dividerColor: theme.colorScheme.outline,
             tabs: categories
                 .map(
                   (e) => Padding(
@@ -109,9 +118,7 @@ class _CategoryPageState extends State<CategoryPage>
               return RefreshIndicator(
                 onRefresh: () async => context.read<FetchCubit>().getArticles(),
                 color: theme.colorScheme.primary,
-                backgroundColor: isDark
-                    ? theme.colorScheme.surfaceContainerHighest
-                    : Colors.white,
+                backgroundColor: theme.colorScheme.surface,
                 child: TabBarView(
                   controller: _tabController,
                   physics: const BouncingScrollPhysics(),
@@ -122,7 +129,7 @@ class _CategoryPageState extends State<CategoryPage>
                         child: Text(
                           "No articles available for $cat",
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.hintColor,
+                            color: theme.colorScheme.onSurfaceVariant,
                           ),
                         ),
                       );
@@ -142,6 +149,7 @@ class _CategoryPageState extends State<CategoryPage>
                             "/article",
                             arguments: articles,
                           ),
+                          borderRadius: BorderRadius.circular(12),
                           child: NewsCard(article: articles[index], i: index),
                         );
                       },
