@@ -133,8 +133,9 @@ class HomePageSkeleton extends StatelessWidget {
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (_, __) => ClipRRect(
           borderRadius: BorderRadius.circular(16),
-          child: SizedBox(
+          child: Container(
             width: 110,
+            color: theme.colorScheme.surface,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
