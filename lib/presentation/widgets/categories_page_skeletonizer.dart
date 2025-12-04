@@ -7,9 +7,9 @@ class CategoriesPageSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.onSurface,
       body: SafeArea(
         child: Skeletonizer(
           enabled: true,
@@ -25,7 +25,7 @@ class CategoriesPageSkeleton extends StatelessWidget {
                     height: 32,
                     width: 140,
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceVariant,
+                      color: theme.colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -44,7 +44,9 @@ class CategoriesPageSkeleton extends StatelessWidget {
                           color: theme.colorScheme.surface,
                           borderRadius: BorderRadius.circular(30),
                           border: Border.all(
-                            color: theme.colorScheme.outline.withOpacity(0.3),
+                            color: theme.colorScheme.outline.withValues(
+                              alpha: 0.3,
+                            ),
                           ),
                         ),
                       ),
@@ -57,7 +59,7 @@ class CategoriesPageSkeleton extends StatelessWidget {
                     height: 24,
                     width: 180,
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceVariant,
+                      color: theme.colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -78,7 +80,7 @@ class CategoriesPageSkeleton extends StatelessWidget {
                           children: [
                             Container(
                               height: 180,
-                              color: theme.colorScheme.surfaceVariant,
+                              color: theme.colorScheme.surfaceContainerHighest,
                             ),
                             Padding(
                               padding: const EdgeInsets.all(12),
@@ -89,7 +91,9 @@ class CategoriesPageSkeleton extends StatelessWidget {
                                     height: 20,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
-                                      color: theme.colorScheme.surfaceVariant,
+                                      color: theme
+                                          .colorScheme
+                                          .surfaceContainerHighest,
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                   ),
@@ -98,7 +102,9 @@ class CategoriesPageSkeleton extends StatelessWidget {
                                     height: 16,
                                     width: 200,
                                     decoration: BoxDecoration(
-                                      color: theme.colorScheme.surfaceVariant,
+                                      color: theme
+                                          .colorScheme
+                                          .surfaceContainerHighest,
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                   ),
@@ -107,7 +113,9 @@ class CategoriesPageSkeleton extends StatelessWidget {
                                     height: 16,
                                     width: 160,
                                     decoration: BoxDecoration(
-                                      color: theme.colorScheme.surfaceVariant,
+                                      color: theme
+                                          .colorScheme
+                                          .surfaceContainerHighest,
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                   ),

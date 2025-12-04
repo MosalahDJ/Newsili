@@ -6,7 +6,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
@@ -31,10 +31,10 @@ class _ProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return SliverToBoxAdapter(
       child: Container(
-        color: theme.colorScheme.surfaceVariant,
+        color: theme.colorScheme.surfaceContainerHighest,
         padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
         child: Column(
           children: [
@@ -76,7 +76,7 @@ class _ProfileInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return SliverList(
       delegate: SliverChildListDelegate([
         Card(
@@ -87,7 +87,7 @@ class _ProfileInfoSection extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
             side: BorderSide(
-              color: theme.colorScheme.outline.withOpacity(0.3),
+              color: theme.colorScheme.outline.withValues(alpha: 0.3),
               width: 1,
             ),
           ),
@@ -118,16 +118,12 @@ class _ProfileInfoSection extends StatelessWidget {
 
   Widget _buildInfoRow(BuildContext context, IconData icon, String text) {
     final theme = Theme.of(context);
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: [
-          Icon(
-            icon,
-            color: theme.colorScheme.primary,
-            size: 20,
-          ),
+          Icon(icon, color: theme.colorScheme.primary, size: 20),
           const SizedBox(width: 12),
           Text(
             text,
@@ -145,7 +141,7 @@ class _ActionButtonsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       sliver: SliverGrid(
@@ -162,22 +158,25 @@ class _ActionButtonsSection extends StatelessWidget {
             'Help & Support',
             'Log Out',
           ];
-          
+
           Color? buttonColor;
           Color? textColor;
-          
+
           // Different colors for different buttons
-          if (index == 0) { // Edit Profile
+          if (index == 0) {
+            // Edit Profile
             buttonColor = theme.colorScheme.primary;
             textColor = theme.colorScheme.onPrimary;
-          } else if (index == 3) { // Log Out
+          } else if (index == 3) {
+            // Log Out
             buttonColor = theme.colorScheme.errorContainer;
             textColor = theme.colorScheme.onErrorContainer;
-          } else { // Other buttons
-            buttonColor = theme.colorScheme.surfaceVariant;
+          } else {
+            // Other buttons
+            buttonColor = theme.colorScheme.surfaceContainerHighest;
             textColor = theme.colorScheme.onSurfaceVariant;
           }
-          
+
           return ElevatedButton(
             onPressed: () {
               // Handle button press
@@ -192,10 +191,7 @@ class _ActionButtonsSection extends StatelessWidget {
             ),
             child: Text(
               actions[index],
-              style: TextStyle(
-                color: textColor,
-                fontWeight: FontWeight.w500,
-              ),
+              style: TextStyle(color: textColor, fontWeight: FontWeight.w500),
             ),
           );
         }, childCount: 4),

@@ -5,7 +5,7 @@ import 'package:newsily/presentation/screens/article_description.dart';
 
 Widget buildTopStoriesSection(BuildContext context, List<Articles> topStories) {
   final theme = Theme.of(context);
-  
+
   return SizedBox(
     height: 140,
     child: ListView.separated(
@@ -41,7 +41,7 @@ Widget buildTopStoriesSection(BuildContext context, List<Articles> topStories) {
                       errorWidget: (context, error, stackTrace) {
                         return Container(
                           decoration: BoxDecoration(
-                            color: theme.colorScheme.surfaceVariant,
+                            color: theme.colorScheme.surfaceContainerHighest,
                             borderRadius: BorderRadius.circular(14),
                           ),
                           height: 150,
@@ -69,7 +69,7 @@ Widget buildTopStoriesSection(BuildContext context, List<Articles> topStories) {
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          theme.colorScheme.scrim.withOpacity(0.9),
+                          theme.colorScheme.scrim.withValues(alpha: 0.9),
                         ],
                       ),
                     ),

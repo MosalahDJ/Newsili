@@ -48,7 +48,7 @@ class ArticleDescriptionPage extends StatelessWidget {
                   errorWidget: (context, error, stackTrace) {
                     return Container(
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.surfaceVariant,
+                        color: theme.colorScheme.surfaceContainerHighest,
                         borderRadius: BorderRadius.circular(14),
                       ),
                       height: 150,
@@ -80,7 +80,7 @@ class ArticleDescriptionPage extends StatelessWidget {
                 Text(
                   formattedDate,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.7),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                 ),
               ],
@@ -94,7 +94,7 @@ class ArticleDescriptionPage extends StatelessWidget {
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 height: 1.3,
-                color: theme.colorScheme.onBackground,
+                color: theme.colorScheme.onSurface,
               ),
             ),
 
@@ -200,7 +200,8 @@ class ArticleDescriptionPage extends StatelessWidget {
                             ),
                           ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: theme.colorScheme.surfaceVariant,
+                            backgroundColor:
+                                theme.colorScheme.surfaceContainerHighest,
                             foregroundColor: theme.colorScheme.primary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),

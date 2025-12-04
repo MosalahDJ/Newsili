@@ -5,7 +5,7 @@ import 'package:newsily/presentation/screens/article_description.dart';
 
 Widget buildFeaturedCard(BuildContext context, Articles article) {
   final theme = Theme.of(context);
-  
+
   return GestureDetector(
     onTap: () {
       Navigator.push(
@@ -36,7 +36,7 @@ Widget buildFeaturedCard(BuildContext context, Articles article) {
                 return Container(
                   height: 150,
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceVariant,
+                    color: theme.colorScheme.surfaceContainerHighest,
                   ),
                   alignment: Alignment.center,
                   child: Icon(
@@ -83,7 +83,7 @@ Widget buildFeaturedCard(BuildContext context, Articles article) {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.surfaceVariant,
+                        color: theme.colorScheme.surfaceContainerHighest,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(

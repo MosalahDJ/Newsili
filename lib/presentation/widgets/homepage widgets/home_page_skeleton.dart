@@ -7,9 +7,9 @@ class HomePageSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.onSurface,
       body: SafeArea(
         child: Skeletonizer(
           enabled: true,
@@ -25,7 +25,7 @@ class HomePageSkeleton extends StatelessWidget {
                     height: 26,
                     width: 150,
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceVariant,
+                      color: theme.colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -40,7 +40,7 @@ class HomePageSkeleton extends StatelessWidget {
                     height: 22,
                     width: 120,
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceVariant,
+                      color: theme.colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -75,7 +75,7 @@ class HomePageSkeleton extends StatelessWidget {
               // Image placeholder
               Expanded(
                 child: Container(
-                  color: theme.colorScheme.surfaceVariant,
+                  color: theme.colorScheme.surfaceContainerHighest,
                 ),
               ),
               // Content area
@@ -88,7 +88,7 @@ class HomePageSkeleton extends StatelessWidget {
                       height: 20,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.surfaceVariant,
+                        color: theme.colorScheme.surfaceContainerHighest,
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
@@ -99,7 +99,7 @@ class HomePageSkeleton extends StatelessWidget {
                           height: 16,
                           width: 80,
                           decoration: BoxDecoration(
-                            color: theme.colorScheme.surfaceVariant,
+                            color: theme.colorScheme.surfaceContainerHighest,
                             borderRadius: BorderRadius.circular(4),
                           ),
                         ),
@@ -108,7 +108,7 @@ class HomePageSkeleton extends StatelessWidget {
                           height: 40,
                           width: 40,
                           decoration: BoxDecoration(
-                            color: theme.colorScheme.surfaceVariant,
+                            color: theme.colorScheme.surfaceContainerHighest,
                             shape: BoxShape.circle,
                           ),
                         ),
@@ -141,7 +141,7 @@ class HomePageSkeleton extends StatelessWidget {
                 // Image placeholder
                 Expanded(
                   child: Container(
-                    color: theme.colorScheme.surfaceVariant,
+                    color: theme.colorScheme.surfaceContainerHighest,
                   ),
                 ),
                 // Text content
@@ -154,7 +154,7 @@ class HomePageSkeleton extends StatelessWidget {
                         height: 14,
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.surfaceVariant,
+                          color: theme.colorScheme.surfaceContainerHighest,
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
@@ -163,7 +163,7 @@ class HomePageSkeleton extends StatelessWidget {
                         height: 12,
                         width: 60,
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.surfaceVariant,
+                          color: theme.colorScheme.surfaceContainerHighest,
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
@@ -191,7 +191,7 @@ class HomePageSkeleton extends StatelessWidget {
               height: 18,
               width: 160,
               decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceVariant,
+                color: theme.colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -200,7 +200,7 @@ class HomePageSkeleton extends StatelessWidget {
               height: 12,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceVariant,
+                color: theme.colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -209,7 +209,7 @@ class HomePageSkeleton extends StatelessWidget {
               height: 12,
               width: 200,
               decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceVariant,
+                color: theme.colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -229,7 +229,7 @@ class HomePageSkeleton extends StatelessWidget {
             width: 8,
             height: 8,
             decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceVariant,
+              color: theme.colorScheme.surfaceContainerHighest,
               shape: BoxShape.circle,
             ),
           );

@@ -19,7 +19,7 @@ class _MySearchBarState extends State<MySearchBar> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Container(
@@ -30,7 +30,7 @@ class _MySearchBarState extends State<MySearchBar> {
             BoxShadow(
               blurRadius: 12,
               offset: const Offset(0, 4),
-              color: theme.colorScheme.shadow.withOpacity(0.1),
+              color: theme.colorScheme.shadow.withValues(alpha: 0.1),
             ),
           ],
         ),
@@ -38,10 +38,7 @@ class _MySearchBarState extends State<MySearchBar> {
           enabled: widget.isButton ? false : true,
           readOnly: widget.isButton ? true : false,
           controller: widget.searchController,
-          style: TextStyle(
-            fontSize: 15,
-            color: theme.colorScheme.onSurface,
-          ),
+          style: TextStyle(fontSize: 15, color: theme.colorScheme.onSurface),
           decoration: InputDecoration(
             hintText: 'Search articles…',
             hintStyle: TextStyle(

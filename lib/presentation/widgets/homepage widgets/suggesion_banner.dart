@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 Widget buildSuggestionBanner(BuildContext context) {
   final theme = Theme.of(context);
   final isDark = theme.brightness == Brightness.dark;
-  
+
   return Container(
     width: double.infinity,
     padding: const EdgeInsets.all(16),
@@ -11,8 +11,8 @@ Widget buildSuggestionBanner(BuildContext context) {
       gradient: LinearGradient(
         colors: isDark
             ? [
-                theme.colorScheme.primary.withOpacity(0.8),
-                theme.colorScheme.tertiary.withOpacity(0.6),
+                theme.colorScheme.primary.withValues(alpha: 0.8),
+                theme.colorScheme.tertiary.withValues(alpha: 0.6),
               ]
             : [
                 theme.colorScheme.primary,
@@ -24,7 +24,7 @@ Widget buildSuggestionBanner(BuildContext context) {
       borderRadius: BorderRadius.circular(20),
       boxShadow: [
         BoxShadow(
-          color: theme.colorScheme.shadow.withOpacity(0.1),
+          color: theme.colorScheme.shadow.withValues(alpha: 0.1),
           blurRadius: 8,
           offset: const Offset(0, 2),
         ),
@@ -45,7 +45,7 @@ Widget buildSuggestionBanner(BuildContext context) {
         Text(
           "Get the latest updates on world events, business, and more.",
           style: TextStyle(
-            color: theme.colorScheme.onPrimary.withOpacity(0.9),
+            color: theme.colorScheme.onPrimary.withValues(alpha: 0.9),
           ),
         ),
       ],

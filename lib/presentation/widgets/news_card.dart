@@ -11,7 +11,7 @@ class NewsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, "/article", arguments: article);
@@ -35,7 +35,7 @@ class NewsCard extends StatelessWidget {
                 return Container(
                   height: 150,
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceVariant,
+                    color: theme.colorScheme.surfaceContainerHighest,
                   ),
                   alignment: Alignment.center,
                   child: Icon(
@@ -69,7 +69,7 @@ class NewsCard extends StatelessWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceVariant,
+                      color: theme.colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(

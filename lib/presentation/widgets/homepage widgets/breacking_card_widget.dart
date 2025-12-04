@@ -10,7 +10,7 @@ import 'package:newsily/presentation/widgets/homepage%20widgets/handlebookmarkpr
 
 Widget buildBreakingCard(BuildContext context, Articles article, int index) {
   final theme = Theme.of(context);
-  
+
   return GestureDetector(
     onTap: () {
       Navigator.push(
@@ -42,7 +42,7 @@ Widget buildBreakingCard(BuildContext context, Articles article, int index) {
                   return Container(
                     height: 150,
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceVariant,
+                      color: theme.colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     alignment: Alignment.center,
@@ -64,7 +64,7 @@ Widget buildBreakingCard(BuildContext context, Articles article, int index) {
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.transparent,
-                      theme.colorScheme.scrim.withOpacity(0.9),
+                      theme.colorScheme.scrim.withValues(alpha: 0.9),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(20),
@@ -77,7 +77,10 @@ Widget buildBreakingCard(BuildContext context, Articles article, int index) {
                 top: 12,
                 left: 12,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: theme.breakingNewsColor,
                     borderRadius: BorderRadius.circular(20),
@@ -117,9 +120,12 @@ Widget buildBreakingCard(BuildContext context, Articles article, int index) {
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.surfaceVariant.withOpacity(0.8),
+                          color: theme.colorScheme.surfaceContainerHighest
+                              .withValues(alpha: 0.8),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(

@@ -23,7 +23,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
@@ -63,7 +63,10 @@ class _BookmarksPageState extends State<BookmarksPage> {
                       onPressed: () {
                         context.read<BookmarksCubit>().loadBookmarks();
                       },
-                      icon: Icon(Icons.refresh, color: theme.colorScheme.onPrimary),
+                      icon: Icon(
+                        Icons.refresh,
+                        color: theme.colorScheme.onPrimary,
+                      ),
                       label: Text(
                         'Retry',
                         style: TextStyle(color: theme.colorScheme.onPrimary),
@@ -114,7 +117,7 @@ class _EmptyBookmarksView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32.0),
@@ -125,7 +128,7 @@ class _EmptyBookmarksView extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: theme.colorScheme.surfaceVariant,
+                color: theme.colorScheme.surfaceContainerHighest,
               ),
               child: Icon(
                 Icons.bookmark_border,
@@ -164,7 +167,7 @@ class _BookmarksSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       itemCount: 5,
@@ -182,7 +185,7 @@ class _BookmarksSkeleton extends StatelessWidget {
                   height: 20,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceVariant,
+                    color: theme.colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -191,7 +194,7 @@ class _BookmarksSkeleton extends StatelessWidget {
                   height: 16,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceVariant,
+                    color: theme.colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -200,7 +203,7 @@ class _BookmarksSkeleton extends StatelessWidget {
                   height: 16,
                   width: 120,
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceVariant,
+                    color: theme.colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -233,10 +236,7 @@ class _BookmarkCard extends StatelessWidget {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         color: theme.colorScheme.error,
-        child: Icon(
-          Icons.delete,
-          color: theme.colorScheme.onError,
-        ),
+        child: Icon(Icons.delete, color: theme.colorScheme.onError),
       ),
       onDismissed: (direction) {
         handleBookmarkPress(context, article);
@@ -259,7 +259,7 @@ class _BookmarkCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
           side: BorderSide(
-            color: theme.colorScheme.outline.withOpacity(0.5),
+            color: theme.colorScheme.outline.withValues(alpha: 0.5),
             width: 1,
           ),
         ),
