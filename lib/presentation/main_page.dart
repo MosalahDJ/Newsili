@@ -4,7 +4,7 @@ import 'package:newsily/logic/cubit/fetch_data/fetch_cubit.dart';
 import 'package:newsily/presentation/screens/bookmarks_page.dart';
 import 'package:newsily/presentation/screens/categorypage.dart';
 import 'package:newsily/presentation/screens/home_page.dart';
-import 'package:newsily/presentation/screens/profile_page.dart';
+import 'package:newsily/presentation/screens/about_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -26,7 +26,7 @@ class _MainPageState extends State<MainPage> {
     HomePage(),
     const CategoryPage(),
     BookmarksPage(),
-    ProfilePage(),
+    AboutPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -89,8 +89,8 @@ class _MainPageState extends State<MainPage> {
               label: "Bookmarks",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person_rounded),
-              label: "Profile",
+              icon: Icon(Icons.info_outline_rounded),
+              label: "About",
             ),
           ],
         ),
