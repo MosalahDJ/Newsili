@@ -55,7 +55,7 @@ class _CategoryPageState extends State<CategoryPage>
               color: theme.colorScheme.onSurface,
             ),
           ),
-          centerTitle: true,
+          centerTitle: false,
           elevation: 0,
           backgroundColor: theme.colorScheme.surface,
           foregroundColor: theme.colorScheme.onSurface,
@@ -76,7 +76,7 @@ class _CategoryPageState extends State<CategoryPage>
             tabs: categories
                 .map(
                   (e) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    padding: const EdgeInsets.symmetric(horizontal: .0),
                     child: Tab(text: e),
                   ),
                 )

@@ -24,16 +24,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
         actions: [
           IconButton(
-            icon: Icon(
-              Icons.brightness_6,
-              color: theme.colorScheme.onSurface,
-            ),
+            icon: Icon(Icons.brightness_6, color: theme.colorScheme.onSurface),
             onPressed: () {
               context.read<ThemeCubit>().toggle();
             },
@@ -47,7 +44,7 @@ class _HomePageState extends State<HomePage> {
             color: theme.colorScheme.onSurface,
           ),
         ),
-        centerTitle: true,
+        centerTitle: false,
         backgroundColor: theme.colorScheme.surface,
         foregroundColor: theme.colorScheme.onSurface,
         surfaceTintColor: theme.colorScheme.surface,
@@ -165,7 +162,7 @@ class _HomePageState extends State<HomePage> {
                     .map((article) => buildTrendingCard(context, article)),
                 const SizedBox(height: 32),
               ],
-              
+
               //  FEATURED REPORTS / EDITOR'S PICKS
               if (state.healthNews!.isNotEmpty) ...[
                 Text(

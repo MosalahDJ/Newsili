@@ -28,7 +28,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
       appBar: AppBar(
         scrolledUnderElevation: 0,
         title: const Text('Bookmarks'),
-        centerTitle: true,
+        centerTitle: false,
         elevation: 0,
         backgroundColor: theme.colorScheme.surface,
         foregroundColor: theme.colorScheme.onSurface,
