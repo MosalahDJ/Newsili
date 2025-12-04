@@ -25,7 +25,7 @@ class _MySearchBarState extends State<MySearchBar> {
       child: Container(
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(28),
+          borderRadius: BorderRadius.circular(11),
           boxShadow: [
             BoxShadow(
               blurRadius: 12,

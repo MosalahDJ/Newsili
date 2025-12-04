@@ -80,7 +80,7 @@ Widget buildTopStoriesSection(BuildContext context, List<Articles> topStories) {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: theme.colorScheme.onPrimary,
+                        color: Color(0xFFE2E8F0),
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
                       ),

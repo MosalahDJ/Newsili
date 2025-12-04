@@ -107,7 +107,7 @@ Widget buildBreakingCard(BuildContext context, Articles article, int index) {
                   Text(
                     article.title ?? "No title available",
                     style: TextStyle(
-                      color: theme.colorScheme.onPrimary,
+                      color: Color(0xFFE2E8F0),
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                       height: 1.3,
@@ -153,7 +153,7 @@ Widget buildBreakingCard(BuildContext context, Articles article, int index) {
                                       : Icons.bookmark_border,
                                   color: isBookmarked
                                       ? theme.colorScheme.primary
-                                      : theme.colorScheme.onPrimary,
+                                      : Color(0xFFE2E8F0),
                                 ),
                                 onPressed: () =>
                                     handleBookmarkPress(context, article),
