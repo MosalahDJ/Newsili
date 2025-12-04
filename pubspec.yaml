@@ -61,8 +61,8 @@ flutter_launcher_icons:
   min_sdk_android: 21
 
 flutter_native_splash:
-  color: "#FFFFFF"
-  color_dark: "#000000"
+  color: "#F8F9FA"  # Light theme background color
+  color_dark: "#0F172A"  # Dark theme background color
   image: lib/assets/images/splash_view_image/light_mode_logo.png
   image_dark: lib/assets/images/splash_view_image/dark_mode_logo.png
   branding: lib/assets/images/splash_view_image/branding_text_brune.png
@@ -74,9 +74,9 @@ flutter_native_splash:
   android_12:
     image: lib/assets/images/splash_view_image/light_mode_logo.png
     image_dark: lib/assets/images/splash_view_image/dark_mode_logo.png
-    color: "#FFFFFF"
-    icon_background_color: "#7A24BD"
-    icon_background_color_dark: "#000000"
+    color: "#F8F9FA"  # Light theme background color
+    icon_background_color: "#0052CC"  # Primary color from your theme
+    icon_background_color_dark: "#1E293B"  # Dark mode surface color
     branding: lib/assets/images/splash_view_image/branding_text_brune.png
     branding_dark: lib/assets/images/splash_view_image/branding_text_gold.png
     branding_bottom_padding: 75
