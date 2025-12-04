@@ -187,11 +187,17 @@ class ArticleDescriptionPage extends StatelessWidget {
                             isBookmarked
                                 ? Icons.bookmark
                                 : Icons.bookmark_border,
-                            color: Color(0xFFE2E8F0),
+                            color: isBookmarked
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.primary,
                           ),
                           label: Text(
                             isBookmarked ? "Saved" : "Save",
-                            style: TextStyle(color: Color(0xFFE2E8F0)),
+                            style: TextStyle(
+                              color: isBookmarked
+                                  ? theme.colorScheme.primary
+                                  : theme.colorScheme.primary,
+                            ),
                           ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
