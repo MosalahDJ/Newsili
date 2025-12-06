@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:newsily/data/models/news_data_model.dart';
-import 'package:newsily/presentation/screens/article_description.dart';
+import 'package:newsily/presentation/screens/article_story_screen.dart';
 
 Widget buildTopStoriesSection(BuildContext context, List<Articles> topStories) {
   final theme = Theme.of(context);
@@ -19,7 +19,10 @@ Widget buildTopStoriesSection(BuildContext context, List<Articles> topStories) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => ArticleDescriptionPage(article: article),
+                builder: (context) => ArticleStoryScreen(
+                  articles: topStories,
+                  initialArticleIndex: index, // The tapped article index
+                ),
               ),
             );
           },
