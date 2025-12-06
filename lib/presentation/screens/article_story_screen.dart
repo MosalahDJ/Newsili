@@ -33,6 +33,8 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
   int _currentStoryIndex = 0;
   int _currentItemIndex = 0;
   bool _isPaused = false;
+  bool _issaved = false;
+
   bool _showFullDescription = false;
   bool _isDisposed = false;
 
@@ -229,6 +231,16 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
       _animationController.reset();
       _startAnimation();
     }
+  }
+
+  //TODO: I schould modify this schit here and meke it respnsive withe save
+  //TODO: articles bloc
+  void _toggleSave() {
+    if (_isDisposed) return;
+
+    setState(() {
+      _issaved = !_issaved;
+    });
   }
 
   void _togglePause() {
@@ -732,11 +744,14 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
                 onTap: _togglePause,
               ),
 
+              //TODO: I schould modify this schit here and meke it respnsive withe save
+              //TODO: articles bloc
               // Bookmark/Save
               _buildControlButton(
-                icon: Icons.bookmark_border,
-                label: 'Save',
+                icon: _issaved ? Icons.bookmark : Icons.bookmark_border,
+                label: _issaved ? 'Saved' : 'Save',
                 onTap: () {
+                  _toggleSave();
                   _saveArticle(article);
                 },
               ),
