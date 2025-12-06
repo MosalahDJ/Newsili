@@ -1,3 +1,5 @@
+// screens/article_story_screen.dart
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
@@ -20,7 +22,7 @@ class ArticleStoryScreen extends StatefulWidget {
   ArticleStoryScreenState createState() => ArticleStoryScreenState();
 }
 
-class ArticleStoryScreenState extends State<ArticleStoryScreen> 
+class ArticleStoryScreenState extends State<ArticleStoryScreen>
     with SingleTickerProviderStateMixin {
   late PageController _pageController;
   late PageController _storyPageController;
@@ -30,38 +32,64 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
   int _currentItemIndex = 0;
   bool _isPaused = false;
   bool _showFullDescription = false;
+  bool _isDisposed = false;
 
   @override
   void initState() {
     super.initState();
     _stories = convertArticlesToStories(widget.articles);
-    _currentStoryIndex = widget.initialArticleIndex;
-    _currentItemIndex = widget.initialItemIndex;
-    
+    _currentStoryIndex = widget.initialArticleIndex.clamp(
+      0,
+      _stories.length - 1,
+    );
+    _currentItemIndex = widget.initialItemIndex.clamp(
+      0,
+      _stories[_currentStoryIndex].items.length - 1,
+    );
+
     _pageController = PageController(initialPage: _currentItemIndex);
     _storyPageController = PageController(initialPage: _currentStoryIndex);
-    
-    _animationController = AnimationController(
-      vsync: this,
-      duration: _getCurrentItem().duration,
-    )..addListener(() {
-        if (_animationController.isCompleted) {
-          _nextItem();
-        }
-      });
+
+    _animationController =
+        AnimationController(vsync: this, duration: _getCurrentItem().duration)
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              _nextItem();
+            }
+          });
 
     _startAnimation();
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
-    _storyPageController.dispose();
+    _isDisposed = true;
+    _animationController.removeStatusListener((status) {});
     _animationController.dispose();
+
+    // Check if controllers are still attached before disposing
+    try {
+      if (_pageController.hasClients) {
+        _pageController.dispose();
+      }
+    } catch (_) {}
+
+    try {
+      if (_storyPageController.hasClients) {
+        _storyPageController.dispose();
+      }
+    } catch (_) {}
+
     super.dispose();
   }
 
   StoryItem _getCurrentItem() {
+    if (_currentStoryIndex >= _stories.length) {
+      _currentStoryIndex = _stories.length - 1;
+    }
+    if (_currentItemIndex >= _stories[_currentStoryIndex].items.length) {
+      _currentItemIndex = _stories[_currentStoryIndex].items.length - 1;
+    }
     return _stories[_currentStoryIndex].items[_currentItemIndex];
   }
 
@@ -70,45 +98,65 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
   }
 
   void _startAnimation() {
-    _animationController.duration = _getCurrentItem().duration;
-    if (!_isPaused) {
+    if (_isDisposed) return;
+
+    final currentItem = _getCurrentItem();
+    _animationController.duration = currentItem.duration;
+
+    if (!_isPaused && _animationController.status != AnimationStatus.forward) {
       _animationController.forward();
     }
   }
 
-  void _nextItem() {
+  void _nextItem() async {
+    if (_isDisposed) return;
+
     final currentStory = _stories[_currentStoryIndex];
-    
+
+    // Check if we can go to next item in current story
     if (_currentItemIndex + 1 < currentStory.items.length) {
       setState(() {
         _currentItemIndex++;
         _showFullDescription = false;
       });
-      _pageController.animateToPage(
-        _currentItemIndex,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
+
+      try {
+        if (_pageController.hasClients) {
+          await _pageController.animateToPage(
+            _currentItemIndex,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      } catch (_) {}
+
       _animationController.reset();
       _startAnimation();
-    } else if (_currentStoryIndex + 1 < _stories.length) {
-      _nextStory();
     } else {
-      Navigator.pop(context);
+      // Go to next story
+      _nextStory();
     }
   }
 
-  void _previousItem() {
+  void _previousItem() async {
+    if (_isDisposed) return;
+
     if (_currentItemIndex - 1 >= 0) {
       setState(() {
         _currentItemIndex--;
         _showFullDescription = false;
       });
-      _pageController.animateToPage(
-        _currentItemIndex,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
+
+      try {
+        if (_pageController.hasClients) {
+          await _pageController.animateToPage(
+            _currentItemIndex,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      } catch (_) {}
+
       _animationController.reset();
       _startAnimation();
     } else if (_currentStoryIndex - 1 >= 0) {
@@ -116,49 +164,78 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
     }
   }
 
-  void _nextStory() {
+  void _nextStory() async {
+    if (_isDisposed) return;
+
     if (_currentStoryIndex + 1 < _stories.length) {
       setState(() {
         _currentStoryIndex++;
         _currentItemIndex = 0;
         _showFullDescription = false;
       });
-      _storyPageController.animateToPage(
-        _currentStoryIndex,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-      _pageController.jumpToPage(0);
+
+      try {
+        if (_storyPageController.hasClients) {
+          await _storyPageController.animateToPage(
+            _currentStoryIndex,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      } catch (_) {}
+
+      try {
+        if (_pageController.hasClients) {
+          _pageController.jumpToPage(0);
+        }
+      } catch (_) {}
+
       _animationController.reset();
       _startAnimation();
     } else {
-      Navigator.pop(context);
+      // Last story completed, exit
+      _exitStoryViewer();
     }
   }
 
-  void _previousStory() {
+  void _previousStory() async {
+    if (_isDisposed) return;
+
     if (_currentStoryIndex - 1 >= 0) {
       setState(() {
         _currentStoryIndex--;
         _currentItemIndex = _stories[_currentStoryIndex].items.length - 1;
         _showFullDescription = false;
       });
-      _storyPageController.animateToPage(
-        _currentStoryIndex,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-      _pageController.jumpToPage(_currentItemIndex);
+
+      try {
+        if (_storyPageController.hasClients) {
+          await _storyPageController.animateToPage(
+            _currentStoryIndex,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      } catch (_) {}
+
+      try {
+        if (_pageController.hasClients) {
+          _pageController.jumpToPage(_currentItemIndex);
+        }
+      } catch (_) {}
+
       _animationController.reset();
       _startAnimation();
     }
   }
 
   void _togglePause() {
+    if (_isDisposed) return;
+
     setState(() {
       _isPaused = !_isPaused;
     });
-    
+
     if (_isPaused) {
       _animationController.stop();
     } else {
@@ -167,39 +244,111 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
   }
 
   void _toggleDescription() {
+    if (_isDisposed) return;
     setState(() {
       _showFullDescription = !_showFullDescription;
     });
   }
 
+  void _exitStoryViewer() {
+    if (_isDisposed) return;
+
+    // Stop animation first
+    _animationController.stop();
+
+    // Delay to ensure UI is stable before popping
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_stories.isEmpty) {
+      return Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(
+          child: Text(
+            'No stories available',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      );
+    }
+
     final currentStory = _stories[_currentStoryIndex];
     final currentItem = _getCurrentItem();
     final article = _getCurrentArticle();
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          // Story Content
-          _buildContent(currentItem),
-          
-          // Progress Indicators
-          _buildProgressIndicators(currentStory),
-          
-          // Top Bar with Article Info
-          _buildTopBar(article),
-          
-          // Bottom Controls
-          _buildBottomControls(article),
-          
-          // Gesture Detectors for Navigation
-          _buildGestureDetectors(),
-          
-          // Close Button
-          _buildCloseButton(),
-        ],
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // Main content area with PageView
+            Positioned.fill(
+              child: PageView.builder(
+                controller: _pageController,
+                physics:
+                    const NeverScrollableScrollPhysics(), // Disable manual swipe
+                itemCount: currentStory.items.length,
+                itemBuilder: (context, index) {
+                  final item = currentStory.items[index];
+                  return _buildContent(item);
+                },
+                onPageChanged: (index) {
+                  if (_isDisposed) return;
+                  setState(() {
+                    _currentItemIndex = index;
+                    _showFullDescription = false;
+                  });
+                  _animationController.reset();
+                  _startAnimation();
+                },
+              ),
+            ),
+
+            // Stories PageView (for horizontal story navigation)
+            Positioned.fill(
+              child: PageView.builder(
+                controller: _storyPageController,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: _stories.length,
+                itemBuilder: (context, index) {
+                  return Container(); // Empty container, just for navigation
+                },
+                onPageChanged: (index) {
+                  if (_isDisposed) return;
+                  setState(() {
+                    _currentStoryIndex = index;
+                    _currentItemIndex = 0;
+                    _showFullDescription = false;
+                  });
+                  _pageController.jumpToPage(0);
+                  _animationController.reset();
+                  _startAnimation();
+                },
+              ),
+            ),
+
+            // Progress Indicators
+            _buildProgressIndicators(currentStory),
+
+            // Top Bar with Article Info
+            _buildTopBar(article),
+
+            // Bottom Controls
+            _buildBottomControls(article),
+
+            // Gesture Detectors for Navigation
+            _buildGestureDetectors(),
+
+            // Close Button
+            _buildCloseButton(),
+          ],
+        ),
       ),
     );
   }
@@ -225,17 +374,15 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
             child: CachedNetworkImage(
               imageUrl: item.imageUrl!,
               fit: BoxFit.cover,
-              placeholder: (context, url) => Container(
-                color: Colors.grey[900],
-              ),
+              placeholder: (context, url) => Container(color: Colors.grey[900]),
               errorWidget: (context, url, error) => Container(
                 color: Colors.grey[900],
                 child: const Icon(Icons.broken_image, color: Colors.white54),
               ),
             ),
           ),
-        
-        // Gradient overlay for better text visibility
+
+        // Gradient overlay
         Positioned.fill(
           child: Container(
             decoration: BoxDecoration(
@@ -243,15 +390,15 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,
                 colors: [
-                  Colors.black.withValues(alpha: 0.8),
+                  Colors.black.withValues(alpha: .8),
                   Colors.transparent,
-                  Colors.black.withValues(alpha:0.3),
+                  Colors.black.withValues(alpha: 0.3),
                 ],
               ),
             ),
           ),
         ),
-        
+
         // Article title overlay
         Positioned(
           bottom: 120,
@@ -277,7 +424,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
                 Text(
                   'By ${item.author}',
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha:0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                     fontSize: 14,
                   ),
                 ),
@@ -323,13 +470,13 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
                 ),
               ),
             const SizedBox(height: 20),
-            if (!_showFullDescription && 
-                item.description != null && 
+            if (!_showFullDescription &&
+                item.description != null &&
                 item.description!.length > 150)
               Text(
                 'Tap to read more...',
                 style: TextStyle(
-                  color: Colors.white.withValues(alpha:0.6),
+                  color: Colors.white.withValues(alpha: 0.6),
                   fontSize: 14,
                   fontStyle: FontStyle.italic,
                 ),
@@ -377,12 +524,10 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
   }
 
   String _cleanContent(String content) {
-    // Remove source references like [...]
     return content.replaceAll(RegExp(r'\[.*?\]'), '');
   }
 
   Color _getBackgroundColor() {
-    // Use different background colors for different story items
     final colors = [
       const Color(0xFF1a1a2e),
       const Color(0xFF16213e),
@@ -394,66 +539,92 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
 
   Widget _buildProgressIndicators(ArticleStory story) {
     return Positioned(
-      top: MediaQuery.of(context).padding.top + 50,
+      top: MediaQuery.of(context).padding.top + 8,
       left: 16,
       right: 16,
-      child: Row(
-        children: story.items.asMap().entries.map((entry) {
-          int index = entry.key;
-          
-          return Expanded(
-            child: Container(
-              height: 3,
-              margin: const EdgeInsets.symmetric(horizontal: 2),
-              decoration: BoxDecoration(
-                color: Colors.grey[800],
-                borderRadius: BorderRadius.circular(2),
-              ),
-              child: Stack(
-                children: [
-                  // Background
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[800],
-                      borderRadius: BorderRadius.circular(2),
-                    ),
+      child: Column(
+        children: [
+          // Story progress (between stories)
+          Row(
+            children: _stories.asMap().entries.map((entry) {
+              int index = entry.key;
+              return Expanded(
+                child: Container(
+                  height: 2,
+                  margin: const EdgeInsets.symmetric(horizontal: 1),
+                  decoration: BoxDecoration(
+                    color: index < _currentStoryIndex
+                        ? Colors.white
+                        : Colors.white.withValues(alpha: 0.3),
+                    borderRadius: BorderRadius.circular(1),
                   ),
-                  
-                  // Progress
-                  if (index < _currentItemIndex)
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(2),
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 8),
+
+          // Page progress (within current story)
+          Row(
+            children: story.items.asMap().entries.map((entry) {
+              int index = entry.key;
+
+              return Expanded(
+                child: Container(
+                  height: 3,
+                  margin: const EdgeInsets.symmetric(horizontal: 2),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[800],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                  child: Stack(
+                    children: [
+                      // Background
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[800],
+                          borderRadius: BorderRadius.circular(2),
+                        ),
                       ),
-                    )
-                  else if (index == _currentItemIndex)
-                    AnimatedBuilder(
-                      animation: _animationController,
-                      builder: (context, child) {
-                        return Container(
+
+                      // Progress
+                      if (index < _currentItemIndex)
+                        Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(2),
                           ),
-                          width: MediaQuery.of(context).size.width *
-                              _animationController.value /
-                              story.items.length,
-                        );
-                      },
-                    ),
-                ],
-              ),
-            ),
-          );
-        }).toList(),
+                        )
+                      else if (index == _currentItemIndex)
+                        AnimatedBuilder(
+                          animation: _animationController,
+                          builder: (context, child) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                              width:
+                                  MediaQuery.of(context).size.width *
+                                  _animationController.value /
+                                  story.items.length,
+                            );
+                          },
+                        ),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildTopBar(Articles article) {
     return Positioned(
-      top: MediaQuery.of(context).padding.top + 16,
+      top: MediaQuery.of(context).padding.top + 60,
       left: 16,
       right: 16,
       child: Row(
@@ -467,11 +638,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
             ),
             child: Row(
               children: [
-                Icon(
-                  Icons.article_outlined,
-                  color: Colors.white,
-                  size: 16,
-                ),
+                Icon(Icons.article_outlined, color: Colors.white, size: 16),
                 const SizedBox(width: 6),
                 Text(
                   article.source?.name ?? 'News Source',
@@ -480,13 +647,30 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
           ),
-          
+
           const Spacer(),
-          
+
+          // Story counter
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: Colors.black54,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              '${_currentStoryIndex + 1}/${_stories.length}',
+              style: const TextStyle(color: Colors.white, fontSize: 14),
+            ),
+          ),
+
+          const SizedBox(width: 8),
+
           // Time info
           if (article.publishedAt != null)
             Container(
@@ -497,10 +681,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
               ),
               child: Text(
                 _formatTime(article.publishedAt!),
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 12,
-                ),
+                style: const TextStyle(color: Colors.white70, fontSize: 12),
               ),
             ),
         ],
@@ -518,13 +699,10 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
           // Page indicator
           Text(
             '${_currentItemIndex + 1}/${_stories[_currentStoryIndex].items.length}',
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 14,
-            ),
+            style: const TextStyle(color: Colors.white70, fontSize: 14),
           ),
           const SizedBox(height: 15),
-          
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -536,7 +714,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
                   _openFullArticle(article);
                 },
               ),
-              
+
               // Share
               _buildControlButton(
                 icon: Icons.share,
@@ -545,14 +723,14 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
                   _shareArticle(article);
                 },
               ),
-              
+
               // Pause/Play
               _buildControlButton(
                 icon: _isPaused ? Icons.play_arrow : Icons.pause,
                 label: _isPaused ? 'Play' : 'Pause',
                 onTap: _togglePause,
               ),
-              
+
               // Bookmark/Save
               _buildControlButton(
                 icon: Icons.bookmark_border,
@@ -561,7 +739,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
                   _saveArticle(article);
                 },
               ),
-              
+
               // More options
               _buildControlButton(
                 icon: Icons.more_vert,
@@ -597,13 +775,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
           ),
         ),
         const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.white70,
-            fontSize: 10,
-          ),
-        ),
+        Text(label, style: TextStyle(color: Colors.white70, fontSize: 10)),
       ],
     );
   }
@@ -612,7 +784,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha:0.3),
+        color: Colors.black.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -623,35 +795,45 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
               children: [
                 Icon(Icons.person_outline, color: Colors.white70, size: 16),
                 const SizedBox(width: 8),
-                Text(
-                  'Author: ${item.author}',
-                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                Expanded(
+                  child: Text(
+                    'Author: ${item.author}',
+                    style: const TextStyle(color: Colors.white70, fontSize: 14),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),
-          if (item.sourceName != null)
-            const SizedBox(height: 8),
+          if (item.sourceName != null) const SizedBox(height: 8),
           if (item.sourceName != null)
             Row(
               children: [
                 Icon(Icons.source_outlined, color: Colors.white70, size: 16),
                 const SizedBox(width: 8),
-                Text(
-                  'Source: ${item.sourceName}',
-                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                Expanded(
+                  child: Text(
+                    'Source: ${item.sourceName}',
+                    style: const TextStyle(color: Colors.white70, fontSize: 14),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),
-          if (item.publishedAt != null)
-            const SizedBox(height: 8),
+          if (item.publishedAt != null) const SizedBox(height: 8),
           if (item.publishedAt != null)
             Row(
               children: [
                 Icon(Icons.access_time, color: Colors.white70, size: 16),
                 const SizedBox(width: 8),
-                Text(
-                  _formatDetailedTime(item.publishedAt!),
-                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                Expanded(
+                  child: Text(
+                    _formatDetailedTime(item.publishedAt!),
+                    style: const TextStyle(color: Colors.white70, fontSize: 14),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),
@@ -668,12 +850,14 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
           child: GestureDetector(
             onTap: _previousItem,
             onLongPress: () {
+              if (_isDisposed) return;
               setState(() {
                 _isPaused = true;
               });
               _animationController.stop();
             },
             onLongPressEnd: (details) {
+              if (_isDisposed) return;
               setState(() {
                 _isPaused = false;
               });
@@ -681,18 +865,28 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
             },
           ),
         ),
-        
+
+        // Center area for pause/play
+        Expanded(
+          child: GestureDetector(
+            onTap: _togglePause,
+            child: Container(color: Colors.transparent),
+          ),
+        ),
+
         // Right side tap for next
         Expanded(
           child: GestureDetector(
             onTap: _nextItem,
             onLongPress: () {
+              if (_isDisposed) return;
               setState(() {
                 _isPaused = true;
               });
               _animationController.stop();
             },
             onLongPressEnd: (details) {
+              if (_isDisposed) return;
               setState(() {
                 _isPaused = false;
               });
@@ -707,7 +901,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
   Widget _buildCloseButton() {
     return Positioned(
       top: MediaQuery.of(context).padding.top + 8,
-      right: 8,
+      left: 8,
       child: IconButton(
         icon: Container(
           width: 36,
@@ -716,9 +910,9 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
             color: Colors.black54,
             shape: BoxShape.circle,
           ),
-          child: const Icon(Icons.close, color: Colors.white, size: 20),
+          child: const Icon(Icons.arrow_back, color: Colors.white, size: 20),
         ),
-        onPressed: () => Navigator.pop(context),
+        onPressed: _exitStoryViewer,
       ),
     );
   }
@@ -728,7 +922,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
       final date = DateTime.parse(dateString);
       final now = DateTime.now();
       final difference = now.difference(date);
-      
+
       if (difference.inMinutes < 60) {
         return '${difference.inMinutes}m ago';
       } else if (difference.inHours < 24) {
@@ -736,7 +930,11 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
       } else if (difference.inDays < 30) {
         return '${difference.inDays}d ago';
       } else {
-        return DateFormat('MMM d').format(date);
+        final formatter = DateFormat(
+          'MMM d',
+          Localizations.localeOf(context).toString(),
+        );
+        return formatter.format(date);
       }
     } catch (e) {
       return '';
@@ -744,24 +942,23 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
   }
 
   String _formatDetailedTime(DateTime date) {
-    return DateFormat('MMMM d, yyyy • h:mm a').format(date);
+    final formatter = DateFormat(
+      'MMMM d, yyyy • h:mm a',
+      Localizations.localeOf(context).toString(),
+    );
+    return formatter.format(date);
   }
 
   void _openFullArticle(Articles article) {
-    // Implement opening full article in browser or WebView
-    if (article.url != null) {
-      // You can use url_launcher package here
-      // launchUrl(Uri.parse(article.url!));
-    }
+    // Implement opening full article
   }
 
   void _shareArticle(Articles article) {
-    // Implement sharing functionality
-    // Use share_plus package
+    // Implement sharing
   }
 
   void _saveArticle(Articles article) {
-    // Implement saving article to favorites/bookmarks
+    // Implement saving
   }
 
   void _showArticleOptions(Articles article) {
@@ -788,7 +985,6 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
                 ),
                 onTap: () {
                   Navigator.pop(context);
-                  // Implement translation
                 },
               ),
               ListTile(
@@ -799,18 +995,6 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
                 ),
                 onTap: () {
                   Navigator.pop(context);
-                  // Implement text size adjustment
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.nightlight_round, color: Colors.white),
-                title: const Text(
-                  'Dark/Light Mode',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  // Implement theme toggle
                 },
               ),
               ListTile(
@@ -821,9 +1005,9 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
                 ),
                 onTap: () {
                   Navigator.pop(context);
-                  // Implement reporting
                 },
               ),
+              const SizedBox(height: 20),
             ],
           ),
         );
