@@ -24,19 +24,13 @@ class AboutPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // App Logo/Icon
-                Container(
+                SizedBox(
                   width: 100,
                   height: 100,
-                  decoration: BoxDecoration(
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Icon(
-                    Icons.article_rounded,
-                    size: 60,
-                    color: Theme.of(context).colorScheme.primary,
+
+                  child: Image.asset(
+                    'lib/assets/images/newsily_logo/newsily_logo_png.png',
+                    fit: BoxFit.contain,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -83,8 +77,8 @@ class AboutPage extends StatelessWidget {
                   context,
                   title: 'Developer',
                   children: [
-                    _buildInfoRow(context, 'Developed by', 'Your Name/Team'),
-                    _buildInfoRow(context, 'Contact', 'your.email@example.com'),
+                    _buildInfoRow(context, 'Developed by', 'Djehel Mohamed Salah'),
+                    _buildInfoRow(context, 'Contact', 'djehelmohamedsalah@example.com'),
                   ],
                 ),
 
