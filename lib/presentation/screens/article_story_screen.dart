@@ -4,6 +4,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 import 'package:newsily/data/models/news_data_model.dart';
 import 'package:newsily/data/models/story_converter.dart';
+import 'package:newsily/helper/handle_bookmark_press.dart';
+import 'package:newsily/helper/share_function.dart';
+import 'package:newsily/helper/url_luncher_function.dart';
 
 class ArticleStoryScreen extends StatefulWidget {
   final List<Articles> articles;
@@ -337,14 +340,14 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
             // Top Bar with Article Info
             _buildTopBar(article),
 
-            // Bottom Controls
-            _buildBottomControls(article),
-
             // Gesture Detectors for Navigation
             _buildGestureDetectors(),
 
             // Close Button
             _buildCloseButton(),
+
+            // Bottom Controls
+            _buildBottomControls(article),
           ],
         ),
       ),
@@ -947,16 +950,32 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
     return formatter.format(date);
   }
 
-  void _openFullArticle(Articles article) {
-    // Implement opening full article
+  void _openFullArticle(Articles article) async {
+    final theme = Theme.of(context);
+
+    final success = await tryOpenArticleUrl(article.url!);
+    if (!success && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Could not open the article"),
+          backgroundColor: theme.colorScheme.error,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      );
+    }
   }
 
   void _shareArticle(Articles article) {
-    // Implement sharing
+    shareArticle(
+      context,
+      title: article.title ?? 'Check out this article',
+      url: article.url ?? '',
+    );
   }
 
   void _saveArticle(Articles article) {
-    // Implement saving
+    handleBookmarkPress(context, article);
   }
 
   void _showArticleOptions(Articles article) {
