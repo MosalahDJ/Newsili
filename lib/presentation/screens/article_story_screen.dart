@@ -951,19 +951,22 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
   }
 
   void _openFullArticle(Articles article) async {
-    final theme = Theme.of(context);
-
     final success = await tryOpenArticleUrl(article.url!);
     if (!success && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Could not open the article"),
-          backgroundColor: theme.colorScheme.error,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        ),
-      );
+      _articleNotOpned();
     }
+  }
+
+  _articleNotOpned() {
+    final theme = Theme.of(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Could not open the article"),
+        backgroundColor: theme.colorScheme.error,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+    );
   }
 
   void _shareArticle(Articles article) {
