@@ -36,13 +36,26 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ],
-        title: Text(
-          "Newsily",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-            color: theme.colorScheme.onSurface,
-          ),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 35,
+              height: 35,
+              child: Image.asset(
+                'lib/assets/images/newsily_logo/newsily_logo_png.png',
+                fit: BoxFit.contain,
+              ),
+            ),
+            Text(
+              "Newsily",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+                color: theme.colorScheme.onSurface,
+              ),
+            ),
+          ],
         ),
         centerTitle: false,
         backgroundColor: theme.colorScheme.surface,

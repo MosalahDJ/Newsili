@@ -278,7 +278,6 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
     }
 
     final currentStory = _stories[_currentStoryIndex];
-    final currentItem = _getCurrentItem();
     final article = _getCurrentArticle();
 
     return Scaffold(
@@ -297,6 +296,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
                   final item = currentStory.items[index];
                   return _buildContent(item);
                 },
+
                 onPageChanged: (index) {
                   if (_isDisposed) return;
                   setState(() {
@@ -313,7 +313,6 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
             Positioned.fill(
               child: PageView.builder(
                 controller: _storyPageController,
-                physics: const NeverScrollableScrollPhysics(),
                 itemCount: _stories.length,
                 itemBuilder: (context, index) {
                   return Container(); // Empty container, just for navigation
@@ -489,21 +488,21 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
   Widget _buildContentPage(StoryItem item) {
     return Container(
       color: _getBackgroundColor(),
-      child: SingleChildScrollView(
+      child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (item.title != null)
-              Text(
-                item.title!,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  height: 1.2,
-                ),
+            Text(
+              item.title!,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                height: 1.2,
               ),
+            ),
             const SizedBox(height: 20),
             if (item.content != null)
               Text(
@@ -538,7 +537,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
 
   Widget _buildProgressIndicators(ArticleStory story) {
     return Positioned(
-      top: MediaQuery.of(context).padding.top + 8,
+      top: MediaQuery.of(context).padding.top,
       left: 16,
       right: 16,
       child: Column(

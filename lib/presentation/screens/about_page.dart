@@ -23,7 +23,7 @@ class AboutPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // App Logo/Icon
+                // App Logo
                 SizedBox(
                   width: 100,
                   height: 100,
@@ -33,7 +33,6 @@ class AboutPage extends StatelessWidget {
                     fit: BoxFit.contain,
                   ),
                 ),
-                const SizedBox(height: 20),
 
                 // App Name
                 Text(
@@ -77,8 +76,18 @@ class AboutPage extends StatelessWidget {
                   context,
                   title: 'Developer',
                   children: [
-                    _buildInfoRow(context, 'Developed by', 'Djehel Mohamed Salah'),
-                    _buildInfoRow(context, 'Contact', 'djehelmohamedsalah@example.com'),
+                    _buildInfoRow(
+                      context,
+                      'Developed by',
+                      'Djehel Mohamed Salah',
+                    ),
+                    _buildInfoRow(
+                      context,
+                      'Email',
+                      'djehelmohamedsalah@gmail.com',
+                    ),
+                    _buildInfoRow(context, 'Instagram', 'moh.medsalah'),
+                    _buildInfoRow(context, 'Facebook', 'Mohamed Salah Djehel'),
                   ],
                 ),
 
