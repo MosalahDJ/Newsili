@@ -1,12 +1,15 @@
-import 'dart:async';
+// article_story_screen.dart
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/data/models/news_data_model.dart';
 import 'package:newsily/data/models/story_converter.dart';
 import 'package:newsily/helper/handle_bookmark_press.dart';
 import 'package:newsily/helper/share_function.dart';
 import 'package:newsily/helper/url_luncher_function.dart';
+import 'package:newsily/logic/cubit/story/story_cubit.dart';
+import 'package:newsily/logic/cubit/story/story_state.dart';
 
 class ArticleStoryScreen extends StatefulWidget {
   final List<Articles> articles;
@@ -24,54 +27,24 @@ class ArticleStoryScreen extends StatefulWidget {
   ArticleStoryScreenState createState() => ArticleStoryScreenState();
 }
 
-class ArticleStoryScreenState extends State<ArticleStoryScreen>
-    with SingleTickerProviderStateMixin {
+class ArticleStoryScreenState extends State<ArticleStoryScreen> {
   late PageController _pageController;
   late PageController _storyPageController;
-  late AnimationController _animationController;
-  late List<ArticleStory> _stories;
-  int _currentStoryIndex = 0;
-  int _currentItemIndex = 0;
-  bool _isPaused = false;
-  bool _issaved = false;
-
-  bool _showFullDescription = false;
   bool _isDisposed = false;
 
   @override
   void initState() {
     super.initState();
-    _stories = convertArticlesToStories(widget.articles);
-    _currentStoryIndex = widget.initialArticleIndex.clamp(
-      0,
-      _stories.length - 1,
+    _pageController = PageController(initialPage: widget.initialItemIndex);
+    _storyPageController = PageController(
+      initialPage: widget.initialArticleIndex,
     );
-    _currentItemIndex = widget.initialItemIndex.clamp(
-      0,
-      _stories[_currentStoryIndex].items.length - 1,
-    );
-
-    _pageController = PageController(initialPage: _currentItemIndex);
-    _storyPageController = PageController(initialPage: _currentStoryIndex);
-
-    _animationController =
-        AnimationController(vsync: this, duration: _getCurrentItem().duration)
-          ..addStatusListener((status) {
-            if (status == AnimationStatus.completed) {
-              _nextItem();
-            }
-          });
-
-    _startAnimation();
   }
 
   @override
   void dispose() {
     _isDisposed = true;
-    _animationController.removeStatusListener((status) {});
-    _animationController.dispose();
 
-    // Check if controllers are still attached before disposing
     try {
       if (_pageController.hasClients) {
         _pageController.dispose();
@@ -87,293 +60,106 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
     super.dispose();
   }
 
-  StoryItem _getCurrentItem() {
-    if (_currentStoryIndex >= _stories.length) {
-      _currentStoryIndex = _stories.length - 1;
-    }
-    if (_currentItemIndex >= _stories[_currentStoryIndex].items.length) {
-      _currentItemIndex = _stories[_currentStoryIndex].items.length - 1;
-    }
-    return _stories[_currentStoryIndex].items[_currentItemIndex];
-  }
-
-  Articles _getCurrentArticle() {
-    return _stories[_currentStoryIndex].article;
-  }
-
-  void _startAnimation() {
-    if (_isDisposed) return;
-
-    final currentItem = _getCurrentItem();
-    _animationController.duration = currentItem.duration;
-
-    if (!_isPaused && _animationController.status != AnimationStatus.forward) {
-      _animationController.forward();
-    }
-  }
-
-  void _nextItem() async {
-    if (_isDisposed) return;
-
-    final currentStory = _stories[_currentStoryIndex];
-
-    // Check if we can go to next item in current story
-    if (_currentItemIndex + 1 < currentStory.items.length) {
-      setState(() {
-        _currentItemIndex++;
-        _showFullDescription = false;
-      });
-
-      try {
-        if (_pageController.hasClients) {
-          await _pageController.animateToPage(
-            _currentItemIndex,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        }
-      } catch (_) {}
-
-      _animationController.reset();
-      _startAnimation();
-    } else {
-      // Go to next story
-      _nextStory();
-    }
-  }
-
-  void _previousItem() async {
-    if (_isDisposed) return;
-
-    if (_currentItemIndex - 1 >= 0) {
-      setState(() {
-        _currentItemIndex--;
-        _showFullDescription = false;
-      });
-
-      try {
-        if (_pageController.hasClients) {
-          await _pageController.animateToPage(
-            _currentItemIndex,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        }
-      } catch (_) {}
-
-      _animationController.reset();
-      _startAnimation();
-    } else if (_currentStoryIndex - 1 >= 0) {
-      _previousStory();
-    }
-  }
-
-  void _nextStory() async {
-    if (_isDisposed) return;
-
-    if (_currentStoryIndex + 1 < _stories.length) {
-      setState(() {
-        _currentStoryIndex++;
-        _currentItemIndex = 0;
-        _showFullDescription = false;
-      });
-
-      try {
-        if (_storyPageController.hasClients) {
-          await _storyPageController.animateToPage(
-            _currentStoryIndex,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        }
-      } catch (_) {}
-
-      try {
-        if (_pageController.hasClients) {
-          _pageController.jumpToPage(0);
-        }
-      } catch (_) {}
-
-      _animationController.reset();
-      _startAnimation();
-    } else {
-      // Last story completed, exit
-      _exitStoryViewer();
-    }
-  }
-
-  void _previousStory() async {
-    if (_isDisposed) return;
-
-    if (_currentStoryIndex - 1 >= 0) {
-      setState(() {
-        _currentStoryIndex--;
-        _currentItemIndex = _stories[_currentStoryIndex].items.length - 1;
-        _showFullDescription = false;
-      });
-
-      try {
-        if (_storyPageController.hasClients) {
-          await _storyPageController.animateToPage(
-            _currentStoryIndex,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        }
-      } catch (_) {}
-
-      try {
-        if (_pageController.hasClients) {
-          _pageController.jumpToPage(_currentItemIndex);
-        }
-      } catch (_) {}
-
-      _animationController.reset();
-      _startAnimation();
-    }
-  }
-
-  //TODO: I schould modify this schit here and meke it respnsive withe save
-  //TODO: articles bloc
-  void _toggleSave() {
-    if (_isDisposed) return;
-
-    setState(() {
-      _issaved = !_issaved;
-    });
-  }
-
-  void _togglePause() {
-    if (_isDisposed) return;
-
-    setState(() {
-      _isPaused = !_isPaused;
-    });
-
-    if (_isPaused) {
-      _animationController.stop();
-    } else {
-      _animationController.forward();
-    }
-  }
-
-  void _toggleDescription() {
-    if (_isDisposed) return;
-    setState(() {
-      _showFullDescription = !_showFullDescription;
-    });
-  }
-
-  void _exitStoryViewer() {
-    if (_isDisposed) return;
-
-    // Stop animation first
-    _animationController.stop();
-
-    // Delay to ensure UI is stable before popping
-    Future.delayed(const Duration(milliseconds: 100), () {
-      if (mounted) {
-        Navigator.pop(context);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (_stories.isEmpty) {
-      return Scaffold(
+    return BlocProvider(
+      create: (context) => StoryCubit(
+        articles: widget.articles,
+        initialArticleIndex: widget.initialArticleIndex,
+        initialItemIndex: widget.initialItemIndex,
+      ),
+      child: Scaffold(
         backgroundColor: Colors.black,
-        body: Center(
-          child: Text(
-            'No stories available',
-            style: TextStyle(color: Colors.white),
+        body: SafeArea(
+          child: BlocBuilder<StoryCubit, StoryState>(
+            builder: (context, state) {
+              if (state is StoryError) {
+                return Center(
+                  child: Text(
+                    state.message,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                );
+              }
+
+              if (state is! StoryLoaded) {
+                return const Center(
+                  child: CircularProgressIndicator(color: Colors.white),
+                );
+              }
+
+              return _buildStoryView(context, state);
+            },
           ),
-        ),
-      );
-    }
-
-    final currentStory = _stories[_currentStoryIndex];
-    final article = _getCurrentArticle();
-
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            // Main content area with PageView
-            Positioned.fill(
-              child: PageView.builder(
-                controller: _pageController,
-                physics:
-                    const NeverScrollableScrollPhysics(), // Disable manual swipe
-                itemCount: currentStory.items.length,
-                itemBuilder: (context, index) {
-                  final item = currentStory.items[index];
-                  return _buildContent(item);
-                },
-
-                onPageChanged: (index) {
-                  if (_isDisposed) return;
-                  setState(() {
-                    _currentItemIndex = index;
-                    _showFullDescription = false;
-                  });
-                  _animationController.reset();
-                  _startAnimation();
-                },
-              ),
-            ),
-
-            // Stories PageView (for horizontal story navigation)
-            Positioned.fill(
-              child: PageView.builder(
-                controller: _storyPageController,
-                itemCount: _stories.length,
-                itemBuilder: (context, index) {
-                  return Container(); // Empty container, just for navigation
-                },
-                onPageChanged: (index) {
-                  if (_isDisposed) return;
-                  setState(() {
-                    _currentStoryIndex = index;
-                    _currentItemIndex = 0;
-                    _showFullDescription = false;
-                  });
-                  _pageController.jumpToPage(0);
-                  _animationController.reset();
-                  _startAnimation();
-                },
-              ),
-            ),
-
-            // Progress Indicators
-            _buildProgressIndicators(currentStory),
-
-            // Top Bar with Article Info
-            _buildTopBar(article),
-
-            // Gesture Detectors for Navigation
-            _buildGestureDetectors(),
-
-            // Close Button
-            _buildCloseButton(),
-
-            // Bottom Controls
-            _buildBottomControls(article),
-          ],
         ),
       ),
     );
   }
 
-  Widget _buildContent(StoryItem item) {
+  Widget _buildStoryView(BuildContext context, StoryLoaded state) {
+    final cubit = context.read<StoryCubit>();
+    final currentStory = state.stories[state.currentStoryIndex];
+    final article = currentStory.article;
+
+    return Stack(
+      children: [
+        // Main content area with PageView
+        Positioned.fill(
+          child: PageView.builder(
+            controller: _pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: currentStory.items.length,
+            itemBuilder: (context, index) {
+              final item = currentStory.items[index];
+              return _buildContent(item, state);
+            },
+            onPageChanged: (index) {
+              if (_isDisposed) return;
+              cubit.goToStory(state.currentStoryIndex, index);
+            },
+          ),
+        ),
+
+        // Stories PageView (for horizontal story navigation)
+        Positioned.fill(
+          child: PageView.builder(
+            controller: _storyPageController,
+            itemCount: state.stories.length,
+            itemBuilder: (context, index) => Container(),
+            onPageChanged: (index) {
+              if (_isDisposed) return;
+              cubit.goToStory(index, 0);
+              _pageController.jumpToPage(0);
+            },
+          ),
+        ),
+
+        // Progress Indicators
+        _buildProgressIndicators(context, state),
+
+        // Top Bar with Article Info
+        _buildTopBar(article, state),
+
+        // Gesture Detectors for Navigation
+        _buildGestureDetectors(context, cubit),
+
+        // Close Button
+        _buildCloseButton(),
+
+        // Bottom Controls
+        _buildBottomControls(article, state, cubit),
+      ],
+    );
+  }
+
+  Widget _buildContent(StoryItem item, StoryLoaded state) {
     switch (item.type) {
       case 'image':
         return _buildImageContent(item);
       case 'text':
-        return _buildTextContent(item);
+        return _buildTextContent(item, state);
       case 'content':
-        return _buildContentPage(item);
+        return _buildContentPage(state, item);
       default:
         return Container(color: Colors.black);
     }
@@ -394,8 +180,6 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
               ),
             ),
           ),
-
-        // Gradient overlay
         Positioned.fill(
           child: Container(
             decoration: BoxDecoration(
@@ -411,8 +195,6 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
             ),
           ),
         ),
-
-        // Article title overlay
         Positioned(
           bottom: 120,
           left: 20,
@@ -448,9 +230,9 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
     );
   }
 
-  Widget _buildTextContent(StoryItem item) {
+  Widget _buildTextContent(StoryItem item, StoryLoaded state) {
     return Container(
-      color: _getBackgroundColor(),
+      color: _getBackgroundColor(state),
       child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -470,7 +252,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
             const SizedBox(height: 30),
             if (item.description != null)
               GestureDetector(
-                onTap: _toggleDescription,
+                onTap: () => context.read<StoryCubit>().toggleDescription(),
                 child: Text(
                   item.description!,
                   style: const TextStyle(
@@ -478,12 +260,12 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
                     fontSize: 20,
                     height: 1.5,
                   ),
-                  maxLines: _showFullDescription ? 20 : 4,
+                  maxLines: state.showFullDescription ? 20 : 4,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
             const SizedBox(height: 20),
-            if (!_showFullDescription &&
+            if (!state.showFullDescription &&
                 item.description != null &&
                 item.description!.length > 150)
               Text(
@@ -500,9 +282,9 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
     );
   }
 
-  Widget _buildContentPage(StoryItem item) {
+  Widget _buildContentPage(state, StoryItem item) {
     return Container(
-      color: _getBackgroundColor(),
+      color: _getBackgroundColor(state as StoryLoaded),
       child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -540,17 +322,19 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
     return content.replaceAll(RegExp(r'\[.*?\]'), '');
   }
 
-  Color _getBackgroundColor() {
+  Color _getBackgroundColor(StoryLoaded state) {
     final colors = [
       const Color(0xFF1a1a2e),
       const Color(0xFF16213e),
       const Color(0xFF0f3460),
       const Color(0xFF222831),
     ];
-    return colors[_currentItemIndex % colors.length];
+    return colors[state.currentItemIndex % colors.length];
   }
 
-  Widget _buildProgressIndicators(ArticleStory story) {
+  Widget _buildProgressIndicators(BuildContext context, StoryLoaded state) {
+    final currentStory = state.stories[state.currentStoryIndex];
+
     return Positioned(
       top: MediaQuery.of(context).padding.top,
       left: 16,
@@ -559,14 +343,14 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
         children: [
           // Story progress (between stories)
           Row(
-            children: _stories.asMap().entries.map((entry) {
+            children: state.stories.asMap().entries.map((entry) {
               int index = entry.key;
               return Expanded(
                 child: Container(
                   height: 2,
                   margin: const EdgeInsets.symmetric(horizontal: 1),
                   decoration: BoxDecoration(
-                    color: index < _currentStoryIndex
+                    color: index < state.currentStoryIndex
                         ? Colors.white
                         : Colors.white.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(1),
@@ -579,9 +363,8 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
 
           // Page progress (within current story)
           Row(
-            children: story.items.asMap().entries.map((entry) {
+            children: currentStory.items.asMap().entries.map((entry) {
               int index = entry.key;
-
               return Expanded(
                 child: Container(
                   height: 3,
@@ -592,37 +375,18 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
                   ),
                   child: Stack(
                     children: [
-                      // Background
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.grey[800],
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
-
-                      // Progress
-                      if (index < _currentItemIndex)
+                      if (index < state.currentItemIndex)
                         Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(2),
                           ),
-                        )
-                      else if (index == _currentItemIndex)
-                        AnimatedBuilder(
-                          animation: _animationController,
-                          builder: (context, child) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                              width:
-                                  MediaQuery.of(context).size.width *
-                                  _animationController.value /
-                                  story.items.length,
-                            );
-                          },
                         ),
                     ],
                   ),
@@ -635,14 +399,13 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
     );
   }
 
-  Widget _buildTopBar(Articles article) {
+  Widget _buildTopBar(Articles article, StoryLoaded state) {
     return Positioned(
       top: MediaQuery.of(context).padding.top + 60,
       left: 16,
       right: 16,
       child: Row(
         children: [
-          // Source/Publisher info
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
@@ -666,10 +429,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
               ],
             ),
           ),
-
           const Spacer(),
-
-          // Story counter
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
@@ -677,14 +437,11 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              '${_currentStoryIndex + 1}/${_stories.length}',
+              '${state.currentStoryIndex + 1}/${state.stories.length}',
               style: const TextStyle(color: Colors.white, fontSize: 14),
             ),
           ),
-
           const SizedBox(width: 8),
-
-          // Time info
           if (article.publishedAt != null)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -702,67 +459,52 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
     );
   }
 
-  Widget _buildBottomControls(Articles article) {
+  Widget _buildBottomControls(
+    Articles article,
+    StoryLoaded state,
+    StoryCubit cubit,
+  ) {
     return Positioned(
       bottom: MediaQuery.of(context).padding.bottom + 20,
       left: 0,
       right: 0,
       child: Column(
         children: [
-          // Page indicator
           Text(
-            '${_currentItemIndex + 1}/${_stories[_currentStoryIndex].items.length}',
+            '${state.currentItemIndex + 1}/${state.stories[state.currentStoryIndex].items.length}',
             style: const TextStyle(color: Colors.white70, fontSize: 14),
           ),
           const SizedBox(height: 15),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              // Open Full Article
               _buildControlButton(
                 icon: Icons.launch,
                 label: 'Read Full',
-                onTap: () {
-                  _openFullArticle(article);
-                },
+                onTap: () => _openFullArticle(article),
               ),
-
-              // Share
               _buildControlButton(
                 icon: Icons.share,
                 label: 'Share',
-                onTap: () {
-                  _shareArticle(article);
-                },
+                onTap: () => _shareArticle(article),
               ),
-
-              // Pause/Play
               _buildControlButton(
-                icon: _isPaused ? Icons.play_arrow : Icons.pause,
-                label: _isPaused ? 'Play' : 'Pause',
-                onTap: _togglePause,
+                icon: state.isPaused ? Icons.play_arrow : Icons.pause,
+                label: state.isPaused ? 'Play' : 'Pause',
+                onTap: () => cubit.togglePause(),
               ),
-
-              //TODO: I schould modify this schit here and meke it respnsive withe save
-              //TODO: articles bloc
-              // Bookmark/Save
               _buildControlButton(
-                icon: _issaved ? Icons.bookmark : Icons.bookmark_border,
-                label: _issaved ? 'Saved' : 'Save',
+                icon: state.isSaved ? Icons.bookmark : Icons.bookmark_border,
+                label: state.isSaved ? 'Saved' : 'Save',
                 onTap: () {
-                  _toggleSave();
+                  cubit.toggleSave();
                   _saveArticle(article);
                 },
               ),
-
-              // More options
               _buildControlButton(
                 icon: Icons.more_vert,
                 label: 'More',
-                onTap: () {
-                  _showArticleOptions(article);
-                },
+                onTap: () => _showArticleOptions(article),
               ),
             ],
           ),
@@ -858,58 +600,17 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
     );
   }
 
-  Widget _buildGestureDetectors() {
+  Widget _buildGestureDetectors(BuildContext context, StoryCubit cubit) {
     return Row(
       children: [
-        // Left side tap for previous
+        Expanded(child: GestureDetector(onTap: () => cubit.previousItem())),
         Expanded(
           child: GestureDetector(
-            onTap: _previousItem,
-            onLongPress: () {
-              if (_isDisposed) return;
-              setState(() {
-                _isPaused = true;
-              });
-              _animationController.stop();
-            },
-            onLongPressEnd: (details) {
-              if (_isDisposed) return;
-              setState(() {
-                _isPaused = false;
-              });
-              _animationController.forward();
-            },
-          ),
-        ),
-
-        // Center area for pause/play
-        Expanded(
-          child: GestureDetector(
-            onTap: _togglePause,
+            onTap: () => cubit.togglePause(),
             child: Container(color: Colors.transparent),
           ),
         ),
-
-        // Right side tap for next
-        Expanded(
-          child: GestureDetector(
-            onTap: _nextItem,
-            onLongPress: () {
-              if (_isDisposed) return;
-              setState(() {
-                _isPaused = true;
-              });
-              _animationController.stop();
-            },
-            onLongPressEnd: (details) {
-              if (_isDisposed) return;
-              setState(() {
-                _isPaused = false;
-              });
-              _animationController.forward();
-            },
-          ),
-        ),
+        Expanded(child: GestureDetector(onTap: () => cubit.nextItem())),
       ],
     );
   }
@@ -928,7 +629,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
           ),
           child: const Icon(Icons.arrow_back, color: Colors.white, size: 20),
         ),
-        onPressed: _exitStoryViewer,
+        onPressed: () => Navigator.pop(context),
       ),
     );
   }
@@ -972,11 +673,11 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
     }
   }
 
-  _articleNotOpned() {
+  void _articleNotOpned() {
     final theme = Theme.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text("Could not open the article"),
+        content: const Text("Could not open the article"),
         backgroundColor: theme.colorScheme.error,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -1050,8 +751,3 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen>
     );
   }
 }
-
-
-
-//Todo: I schould fix the saving button UiKitView;
-//Todo: Also I schould add a coppy button in social data in the about page;
