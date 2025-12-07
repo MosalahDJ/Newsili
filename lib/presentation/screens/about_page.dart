@@ -123,20 +123,24 @@ class AboutPage extends StatelessWidget {
                       context,
                       icon: Icons.privacy_tip_outlined,
                       label: 'Privacy Policy',
-                      onTap: () => _launchUrl('https://yourdomain.com/privacy'),
+                      onTap: () => _launchUrl(
+                        'https://github.com/MosalahDJ/Newsily_Privacy_Policy/blob/main/Newsily_Privacy_Policy.md',
+                      ),
                     ),
                     _buildLinkButton(
                       context,
                       icon: Icons.description_outlined,
                       label: 'Terms of Service',
-                      onTap: () => _launchUrl('https://yourdomain.com/terms'),
+                      onTap: () => _launchUrl(
+                        'https://github.com/MosalahDJ/Newsily_Privacy_Policy/blob/main/Newsily_Privacy_Policy.md',
+                      ),
                     ),
                     _buildLinkButton(
                       context,
                       icon: Icons.code_outlined,
                       label: 'GitHub Repository',
                       onTap: () =>
-                          _launchUrl('https://github.com/yourusername/newsily'),
+                          _launchUrl('https://github.com/MosalahDJ/Newsili'),
                     ),
                   ],
                 ),
