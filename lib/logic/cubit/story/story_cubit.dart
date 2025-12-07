@@ -70,10 +70,6 @@ class StoryCubit extends Cubit<StoryState> {
     return state.stories[state.currentStoryIndex].items[state.currentItemIndex];
   }
 
-  Articles _getCurrentArticle(StoryLoaded state) {
-    return state.stories[state.currentStoryIndex].article;
-  }
-
   void togglePause() {
     if (state is! StoryLoaded) return;
     final loadedState = state as StoryLoaded;
