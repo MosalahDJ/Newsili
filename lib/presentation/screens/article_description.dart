@@ -72,10 +72,14 @@ class ArticleDescriptionPage extends StatelessWidget {
               children: [
                 Icon(Icons.language, color: theme.colorScheme.secondary),
                 const SizedBox(width: 6),
-                Text(
-                  article.source?.name ?? "Unknown Source",
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: theme.colorScheme.secondary,
+                SizedBox(
+                  width: 200,
+                  child: Text(
+                    article.source?.name ?? "Unknown Source",
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      color: theme.colorScheme.secondary,
+                      
+                    ),
                   ),
                 ),
                 const Spacer(),
