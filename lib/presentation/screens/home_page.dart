@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           } else if (state is DataLoaded) {
-            return const HomePageSkeleton();
+            return _buildContent(context, state);
           }
           return const HomePageSkeleton();
         },
