@@ -7,7 +7,7 @@ class HomePageSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final shimmerBaseColor = theme.colorScheme.surfaceContainerHighest;
+    final shimmerBaseColor = theme.colorScheme.outlineVariant;
     final shimmerHighlightColor = theme.colorScheme.surfaceContainerHighest
         .withValues(alpha: .5);
 
@@ -118,6 +118,7 @@ class HomePageSkeleton extends StatelessWidget {
                 height: 140,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: 4,
                   separatorBuilder: (_, __) => const SizedBox(width: 12),
                   itemBuilder: (context, index) {
