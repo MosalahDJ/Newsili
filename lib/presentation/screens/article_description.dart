@@ -41,7 +41,9 @@ class ArticleDescriptionPage extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: CachedNetworkImage(
-                  imageUrl: article.urlToImage!,
+                  imageUrl: article.urlToImage == null
+                      ? ""
+                      : article.urlToImage!,
                   width: double.infinity,
                   height: 220,
                   fit: BoxFit.cover,
