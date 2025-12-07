@@ -43,7 +43,7 @@ Widget buildSuggestionBanner(BuildContext context) {
         ),
         const SizedBox(height: 8),
         Text(
-          "Get the latest updates on world events, business, and more.",
+          "Get the latest updates on world events, business, and more, every day.",
           style: TextStyle(
             color: theme.colorScheme.onPrimary.withValues(alpha: 0.9),
           ),
