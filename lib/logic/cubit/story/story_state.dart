@@ -1,4 +1,3 @@
-// story_state.dart
 import 'package:newsily/data/models/story_converter.dart';
 
 abstract class StoryState {
@@ -16,6 +15,7 @@ class StoryLoaded extends StoryState {
   final bool isPaused;
   final bool isSaved;
   final bool showFullDescription;
+  final double progress; // Add progress value (0.0 to 1.0)
 
   const StoryLoaded({
     required this.stories,
@@ -24,6 +24,7 @@ class StoryLoaded extends StoryState {
     required this.isPaused,
     required this.isSaved,
     required this.showFullDescription,
+    required this.progress,
   });
 
   StoryLoaded copyWith({
@@ -33,6 +34,7 @@ class StoryLoaded extends StoryState {
     bool? isPaused,
     bool? isSaved,
     bool? showFullDescription,
+    double? progress,
   }) {
     return StoryLoaded(
       stories: stories ?? this.stories,
@@ -41,6 +43,7 @@ class StoryLoaded extends StoryState {
       isPaused: isPaused ?? this.isPaused,
       isSaved: isSaved ?? this.isSaved,
       showFullDescription: showFullDescription ?? this.showFullDescription,
+      progress: progress ?? this.progress,
     );
   }
 }

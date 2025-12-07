@@ -1,4 +1,3 @@
-// article_story_screen.dart
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
@@ -35,10 +34,21 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: widget.initialItemIndex);
-    _storyPageController = PageController(
-      initialPage: widget.initialArticleIndex,
-    );
+    _pageController = PageController();
+    _storyPageController = PageController();
+
+    // Initialize cubit with data after widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && !_isDisposed) {
+        context.read<StoryCubit>().add(
+          StoryInitialize(
+            articles: widget.articles,
+            initialArticleIndex: widget.initialArticleIndex,
+            initialItemIndex: widget.initialItemIndex,
+          ),
+        );
+      }
+    });
   }
 
   @override
@@ -60,36 +70,54 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
     super.dispose();
   }
 
+  void _syncPageControllers(StoryLoaded state) {
+    // Sync story page controller
+    if (_storyPageController.hasClients &&
+        _storyPageController.page?.round() != state.currentStoryIndex) {
+      _storyPageController.jumpToPage(state.currentStoryIndex);
+    }
+
+    // Sync item page controller
+    if (_pageController.hasClients &&
+        _pageController.page?.round() != state.currentItemIndex) {
+      _pageController.jumpToPage(state.currentItemIndex);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => StoryCubit(
-        articles: widget.articles,
-        initialArticleIndex: widget.initialArticleIndex,
-        initialItemIndex: widget.initialItemIndex,
-      ),
+      create: (context) => StoryCubit(),
       child: Scaffold(
         backgroundColor: Colors.black,
         body: SafeArea(
-          child: BlocBuilder<StoryCubit, StoryState>(
-            builder: (context, state) {
-              if (state is StoryError) {
-                return Center(
-                  child: Text(
-                    state.message,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                );
+          child: BlocListener<StoryCubit, StoryState>(
+            listener: (context, state) {
+              // Sync PageControllers when state changes
+              if (state is StoryLoaded && !_isDisposed) {
+                _syncPageControllers(state);
               }
-
-              if (state is! StoryLoaded) {
-                return const Center(
-                  child: CircularProgressIndicator(color: Colors.white),
-                );
-              }
-
-              return _buildStoryView(context, state);
             },
+            child: BlocBuilder<StoryCubit, StoryState>(
+              builder: (context, state) {
+                if (state is StoryError) {
+                  return Center(
+                    child: Text(
+                      state.message,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  );
+                }
+
+                if (state is! StoryLoaded) {
+                  return const Center(
+                    child: CircularProgressIndicator(color: Colors.white),
+                  );
+                }
+
+                return _buildStoryView(context, state);
+              },
+            ),
           ),
         ),
       ),
@@ -115,7 +143,12 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
             },
             onPageChanged: (index) {
               if (_isDisposed) return;
-              cubit.goToStory(state.currentStoryIndex, index);
+              cubit.add(
+                StoryGoTo(
+                  storyIndex: state.currentStoryIndex,
+                  itemIndex: index,
+                ),
+              );
             },
           ),
         ),
@@ -128,8 +161,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
             itemBuilder: (context, index) => Container(),
             onPageChanged: (index) {
               if (_isDisposed) return;
-              cubit.goToStory(index, 0);
-              _pageController.jumpToPage(0);
+              cubit.add(StoryGoTo(storyIndex: index, itemIndex: 0));
             },
           ),
         ),
@@ -159,7 +191,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
       case 'text':
         return _buildTextContent(item, state);
       case 'content':
-        return _buildContentPage(state, item);
+        return _buildContentPage(item, state);
       default:
         return Container(color: Colors.black);
     }
@@ -180,6 +212,8 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
               ),
             ),
           ),
+
+        // Gradient overlay
         Positioned.fill(
           child: Container(
             decoration: BoxDecoration(
@@ -195,6 +229,8 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
             ),
           ),
         ),
+
+        // Article title overlay
         Positioned(
           bottom: 120,
           left: 20,
@@ -252,7 +288,8 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
             const SizedBox(height: 30),
             if (item.description != null)
               GestureDetector(
-                onTap: () => context.read<StoryCubit>().toggleDescription(),
+                onTap: () =>
+                    context.read<StoryCubit>().add(StoryToggleDescription()),
                 child: Text(
                   item.description!,
                   style: const TextStyle(
@@ -282,9 +319,9 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
     );
   }
 
-  Widget _buildContentPage(state, StoryItem item) {
+  Widget _buildContentPage(StoryItem item, StoryLoaded state) {
     return Container(
-      color: _getBackgroundColor(state as StoryLoaded),
+      color: _getBackgroundColor(state),
       child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -336,7 +373,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
     final currentStory = state.stories[state.currentStoryIndex];
 
     return Positioned(
-      top: MediaQuery.of(context).padding.top + 20,
+      top: MediaQuery.of(context).padding.top,
       left: 16,
       right: 16,
       child: Column(
@@ -352,6 +389,8 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
                   decoration: BoxDecoration(
                     color: index < state.currentStoryIndex
                         ? Colors.white
+                        : index == state.currentStoryIndex
+                        ? Colors.white
                         : Colors.white.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(1),
                   ),
@@ -365,6 +404,9 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
           Row(
             children: currentStory.items.asMap().entries.map((entry) {
               int index = entry.key;
+              final isCurrentItem = index == state.currentItemIndex;
+              final isCompleted = index < state.currentItemIndex;
+
               return Expanded(
                 child: Container(
                   height: 3,
@@ -375,18 +417,34 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
                   ),
                   child: Stack(
                     children: [
+                      // Background
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.grey[800],
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
-                      if (index < state.currentItemIndex)
+
+                      // Progress bar
+                      if (isCompleted)
                         Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(2),
                           ),
+                        )
+                      else if (isCurrentItem)
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            return AnimatedContainer(
+                              duration: const Duration(milliseconds: 50),
+                              width: constraints.maxWidth * state.progress,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            );
+                          },
                         ),
                     ],
                   ),
@@ -406,6 +464,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
       right: 16,
       child: Row(
         children: [
+          // Source/Publisher info
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
@@ -429,7 +488,10 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
               ],
             ),
           ),
+
           const Spacer(),
+
+          // Story counter
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
@@ -441,7 +503,10 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
               style: const TextStyle(color: Colors.white, fontSize: 14),
             ),
           ),
+
           const SizedBox(width: 8),
+
+          // Time info
           if (article.publishedAt != null)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -470,37 +535,48 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
       right: 0,
       child: Column(
         children: [
+          // Page indicator
           Text(
             '${state.currentItemIndex + 1}/${state.stories[state.currentStoryIndex].items.length}',
             style: const TextStyle(color: Colors.white70, fontSize: 14),
           ),
           const SizedBox(height: 15),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              // Open Full Article
               _buildControlButton(
                 icon: Icons.launch,
                 label: 'Read Full',
                 onTap: () => _openFullArticle(article),
               ),
+
+              // Share
               _buildControlButton(
                 icon: Icons.share,
                 label: 'Share',
                 onTap: () => _shareArticle(article),
               ),
+
+              // Pause/Play
               _buildControlButton(
                 icon: state.isPaused ? Icons.play_arrow : Icons.pause,
                 label: state.isPaused ? 'Play' : 'Pause',
-                onTap: () => cubit.togglePause(),
+                onTap: () => cubit.add(StoryTogglePause()),
               ),
+
+              // Bookmark/Save
               _buildControlButton(
                 icon: state.isSaved ? Icons.bookmark : Icons.bookmark_border,
                 label: state.isSaved ? 'Saved' : 'Save',
                 onTap: () {
-                  cubit.toggleSave();
+                  cubit.add(StoryToggleSave());
                   _saveArticle(article);
                 },
               ),
+
+              // More options
               _buildControlButton(
                 icon: Icons.more_vert,
                 label: 'More',
@@ -603,14 +679,43 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
   Widget _buildGestureDetectors(BuildContext context, StoryCubit cubit) {
     return Row(
       children: [
-        Expanded(child: GestureDetector(onTap: () => cubit.previousItem())),
+        // Left side tap for previous
         Expanded(
           child: GestureDetector(
-            onTap: () => cubit.togglePause(),
+            onTap: () => cubit.add(StoryPreviousItem()),
+            onLongPress: () {
+              if (_isDisposed) return;
+              cubit.add(StoryTogglePause());
+            },
+            onLongPressEnd: (details) {
+              if (_isDisposed) return;
+              cubit.add(StoryTogglePause());
+            },
+          ),
+        ),
+
+        // Center area for pause/play
+        Expanded(
+          child: GestureDetector(
+            onTap: () => cubit.add(StoryTogglePause()),
             child: Container(color: Colors.transparent),
           ),
         ),
-        Expanded(child: GestureDetector(onTap: () => cubit.nextItem())),
+
+        // Right side tap for next
+        Expanded(
+          child: GestureDetector(
+            onTap: () => cubit.add(StoryNextItem()),
+            onLongPress: () {
+              if (_isDisposed) return;
+              cubit.add(StoryTogglePause());
+            },
+            onLongPressEnd: (details) {
+              if (_isDisposed) return;
+              cubit.add(StoryTogglePause());
+            },
+          ),
+        ),
       ],
     );
   }
