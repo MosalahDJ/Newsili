@@ -78,7 +78,6 @@ class ArticleDescriptionPage extends StatelessWidget {
                     article.source?.name ?? "Unknown Source",
                     style: theme.textTheme.labelLarge?.copyWith(
                       color: theme.colorScheme.secondary,
-                      
                     ),
                   ),
                 ),

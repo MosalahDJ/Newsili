@@ -336,7 +336,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
     final currentStory = state.stories[state.currentStoryIndex];
 
     return Positioned(
-      top: MediaQuery.of(context).padding.top,
+      top: MediaQuery.of(context).padding.top + 20,
       left: 16,
       right: 16,
       child: Column(
