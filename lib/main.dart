@@ -7,6 +7,7 @@ import 'package:newsily/logic/cubit/save_articles/bookmarks_cubit.dart';
 import 'package:newsily/data/repositories/news_data_repository.dart';
 import 'package:newsily/data/web_services/news_web_services.dart';
 import 'package:newsily/logic/cubit/fetch_data/fetch_cubit.dart';
+import 'package:newsily/logic/cubit/story/story_cubit.dart';
 import 'package:newsily/logic/cubit/them/them_cubit.dart';
 import 'package:newsily/logic/cubit/them/them_state.dart';
 
@@ -26,6 +27,7 @@ class Newsily extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
+        BlocProvider<StoryCubit>(create: (context) => StoryCubit()),
         BlocProvider<BookmarksCubit>(create: (context) => BookmarksCubit()),
         BlocProvider<FetchCubit>(
           create: (context) => FetchCubit(
