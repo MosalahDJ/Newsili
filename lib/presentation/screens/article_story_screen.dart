@@ -134,10 +134,9 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
               final item = currentStory.items[index];
               return _buildContent(item, state);
             },
+
             onPageChanged: (index) {
               if (_isDisposed) return;
-              // FIXED: Use goTo instead of initialize
-              cubit.goTo(state.currentStoryIndex, index);
             },
           ),
         ),
@@ -363,7 +362,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
     final currentStory = state.stories[state.currentStoryIndex];
 
     return Positioned(
-      top: MediaQuery.of(context).padding.top,
+      top: MediaQuery.of(context).padding.top + 12,
       left: 16,
       right: 16,
       child: Column(
