@@ -36,19 +36,6 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
     super.initState();
     _pageController = PageController();
     _storyPageController = PageController();
-
-    // Initialize cubit with data after widget is built
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && !_isDisposed) {
-        context.read<StoryCubit>().add(
-          StoryInitialize(
-            articles: widget.articles,
-            initialArticleIndex: widget.initialArticleIndex,
-            initialItemIndex: widget.initialItemIndex,
-          ),
-        );
-      }
-    });
   }
 
   @override
@@ -87,7 +74,13 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => StoryCubit(),
+      // Create the cubit once when the provider is created
+      create: (context) => StoryCubit()
+        ..initialize(
+          articles: widget.articles,
+          initialArticleIndex: widget.initialArticleIndex,
+          initialItemIndex: widget.initialItemIndex,
+        ),
       child: Scaffold(
         backgroundColor: Colors.black,
         body: SafeArea(
@@ -143,12 +136,8 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
             },
             onPageChanged: (index) {
               if (_isDisposed) return;
-              cubit.add(
-                StoryGoTo(
-                  storyIndex: state.currentStoryIndex,
-                  itemIndex: index,
-                ),
-              );
+              // FIXED: Use goTo instead of initialize
+              cubit.goTo(state.currentStoryIndex, index);
             },
           ),
         ),
@@ -161,7 +150,8 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
             itemBuilder: (context, index) => Container(),
             onPageChanged: (index) {
               if (_isDisposed) return;
-              cubit.add(StoryGoTo(storyIndex: index, itemIndex: 0));
+              // FIXED: Use jumpToStory instead of initialize
+              cubit.jumpToStory(index);
             },
           ),
         ),
@@ -173,7 +163,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
         _buildTopBar(article, state),
 
         // Gesture Detectors for Navigation
-        _buildGestureDetectors(context, cubit),
+        _buildGestureDetectors(context, cubit, state),
 
         // Close Button
         _buildCloseButton(),
@@ -221,9 +211,9 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,
                 colors: [
-                  Colors.black.withValues(alpha: .8),
+                  Colors.black.withOpacity(0.8),
                   Colors.transparent,
-                  Colors.black.withValues(alpha: 0.3),
+                  Colors.black.withOpacity(0.3),
                 ],
               ),
             ),
@@ -255,7 +245,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
                 Text(
                   'By ${item.author}',
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.8),
+                    color: Colors.white.withOpacity(0.8),
                     fontSize: 14,
                   ),
                 ),
@@ -288,8 +278,8 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
             const SizedBox(height: 30),
             if (item.description != null)
               GestureDetector(
-                onTap: () =>
-                    context.read<StoryCubit>().add(StoryToggleDescription()),
+                // FIXED: Use toggleDescription instead of initialize
+                onTap: () => context.read<StoryCubit>().toggleDescription(),
                 child: Text(
                   item.description!,
                   style: const TextStyle(
@@ -308,7 +298,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
               Text(
                 'Tap to read more...',
                 style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.6),
+                  color: Colors.white.withOpacity(0.6),
                   fontSize: 14,
                   fontStyle: FontStyle.italic,
                 ),
@@ -391,7 +381,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
                         ? Colors.white
                         : index == state.currentStoryIndex
                         ? Colors.white
-                        : Colors.white.withValues(alpha: 0.3),
+                        : Colors.white.withOpacity(0.3),
                     borderRadius: BorderRadius.circular(1),
                   ),
                 ),
@@ -559,19 +549,19 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
                 onTap: () => _shareArticle(article),
               ),
 
-              // Pause/Play
+              // Pause/Play - FIXED: Use togglePause
               _buildControlButton(
                 icon: state.isPaused ? Icons.play_arrow : Icons.pause,
                 label: state.isPaused ? 'Play' : 'Pause',
-                onTap: () => cubit.add(StoryTogglePause()),
+                onTap: () => cubit.togglePause(),
               ),
 
-              // Bookmark/Save
+              // Bookmark/Save - FIXED: Use toggleSave
               _buildControlButton(
                 icon: state.isSaved ? Icons.bookmark : Icons.bookmark_border,
                 label: state.isSaved ? 'Saved' : 'Save',
                 onTap: () {
-                  cubit.add(StoryToggleSave());
+                  cubit.toggleSave();
                   _saveArticle(article);
                 },
               ),
@@ -618,7 +608,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.3),
+        color: Colors.black.withOpacity(0.3),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -676,28 +666,26 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
     );
   }
 
-  Widget _buildGestureDetectors(BuildContext context, StoryCubit cubit) {
+  Widget _buildGestureDetectors(
+    BuildContext context,
+    StoryCubit cubit,
+    StoryLoaded state,
+  ) {
     return Row(
       children: [
         // Left side tap for previous
         Expanded(
           child: GestureDetector(
-            onTap: () => cubit.add(StoryPreviousItem()),
-            onLongPress: () {
-              if (_isDisposed) return;
-              cubit.add(StoryTogglePause());
-            },
-            onLongPressEnd: (details) {
-              if (_isDisposed) return;
-              cubit.add(StoryTogglePause());
-            },
+            onTap: () => cubit.previousItem(),
+            onLongPress: () => cubit.pause(),
+            onLongPressEnd: (details) => cubit.resume(),
           ),
         ),
 
         // Center area for pause/play
         Expanded(
           child: GestureDetector(
-            onTap: () => cubit.add(StoryTogglePause()),
+            onTap: () => cubit.togglePause(),
             child: Container(color: Colors.transparent),
           ),
         ),
@@ -705,15 +693,9 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
         // Right side tap for next
         Expanded(
           child: GestureDetector(
-            onTap: () => cubit.add(StoryNextItem()),
-            onLongPress: () {
-              if (_isDisposed) return;
-              cubit.add(StoryTogglePause());
-            },
-            onLongPressEnd: (details) {
-              if (_isDisposed) return;
-              cubit.add(StoryTogglePause());
-            },
+            onTap: () => cubit.nextItem(),
+            onLongPress: () => cubit.pause(),
+            onLongPressEnd: (details) => cubit.resume(),
           ),
         ),
       ],
