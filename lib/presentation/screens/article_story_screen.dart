@@ -555,6 +555,8 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
                 onTap: () => cubit.togglePause(),
               ),
 
+              //Todo: I schould make some changes here for make the save func
+              //work perfectly and just in the selected story not all stories
               // Bookmark/Save - FIXED: Use toggleSave
               _buildControlButton(
                 icon: state.isSaved ? Icons.bookmark : Icons.bookmark_border,

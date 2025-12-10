@@ -75,15 +75,15 @@ class StoryLoaded extends StoryState {
 
   @override
   List<Object?> get props => [
-        stories,
-        currentStoryIndex,
-        currentItemIndex,
-        isPaused,
-        isSaved,
-        showFullDescription,
-        progress,
-        errorMessage,
-      ];
+    stories,
+    currentStoryIndex,
+    currentItemIndex,
+    isPaused,
+    isSaved,
+    showFullDescription,
+    progress,
+    errorMessage,
+  ];
 }
 
 class StoryError extends StoryState {

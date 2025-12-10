@@ -62,7 +62,6 @@ class StoryCubit extends Cubit<StoryState> {
     final currentState = state;
     if (currentState is! StoryLoaded) return;
 
-
     if (currentState.hasNextItem) {
       // Go to next item in current story
       final newState = currentState.copyWith(
