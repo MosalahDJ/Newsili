@@ -8,8 +8,8 @@ import 'package:newsily/data/repositories/news_data_repository.dart';
 import 'package:newsily/data/web_services/news_web_services.dart';
 import 'package:newsily/logic/cubit/fetch_data/fetch_cubit.dart';
 import 'package:newsily/logic/cubit/story/story_cubit.dart';
-import 'package:newsily/logic/cubit/them/them_cubit.dart';
-import 'package:newsily/logic/cubit/them/them_state.dart';
+import 'package:newsily/logic/cubit/theme/theme_cubit.dart';
+import 'package:newsily/logic/cubit/theme/theme_state.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
