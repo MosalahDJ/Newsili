@@ -34,19 +34,6 @@ Future<bool> showExitConfirmationDialog(BuildContext context) async {
                     size: 36,
                   ),
                 ),
-
-                const SizedBox(height: 24),
-
-                // Title
-                Text(
-                  'Exit Newsily?',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: theme.colorScheme.onSurface,
-                  ),
-                ),
-
                 const SizedBox(height: 12),
 
                 // Description
@@ -54,7 +41,7 @@ Future<bool> showExitConfirmationDialog(BuildContext context) async {
                   'Are you sure you want to exit the app?',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 20,
                     color: theme.colorScheme.onSurfaceVariant,
                     height: 1.5,
                   ),
@@ -70,12 +57,14 @@ Future<bool> showExitConfirmationDialog(BuildContext context) async {
                       child: OutlinedButton(
                         onPressed: () => Navigator.of(context).pop(false),
                         style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
                           side: BorderSide(
-                            color: theme.colorScheme.outline.withValues(alpha: 0.2),
+                            color: theme.colorScheme.outline.withValues(
+                              alpha: 0.0,
+                            ),
                             width: 1.5,
                           ),
                         ),
@@ -90,7 +79,7 @@ Future<bool> showExitConfirmationDialog(BuildContext context) async {
                       ),
                     ),
 
-                    const SizedBox(width: 16),
+                    SizedBox(width: 16),
 
                     // Exit Button
                     Expanded(
@@ -103,7 +92,7 @@ Future<bool> showExitConfirmationDialog(BuildContext context) async {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: theme.colorScheme.errorContainer,
                           foregroundColor: theme.colorScheme.onErrorContainer,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
@@ -113,7 +102,7 @@ Future<bool> showExitConfirmationDialog(BuildContext context) async {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(Icons.exit_to_app_rounded, size: 20),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 4),
                             Text(
                               'Exit',
                               style: TextStyle(
