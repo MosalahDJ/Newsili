@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:newsily/presentation/widgets/schow_exit_confirmation_dialogue.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -96,13 +97,17 @@ class AboutPage extends StatelessWidget {
                         'Developed by',
                         'Djehel Mohamed Salah',
                       ),
-                      _buildInfoRow(
+                      _buildPersonalInfoRow(
                         context,
                         'Email',
                         'djehelmohamedsalah@gmail.com',
                       ),
-                      _buildInfoRow(context, 'Instagram', 'moh.medsalah'),
-                      _buildInfoRow(
+                      _buildPersonalInfoRow(
+                        context,
+                        'Instagram',
+                        'moh.medsalah',
+                      ),
+                      _buildPersonalInfoRow(
                         context,
                         'Facebook',
                         'Mohamed Salah Djehel',
@@ -239,6 +244,55 @@ class AboutPage extends StatelessWidget {
             child: Text(
               value,
               style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPersonalInfoRow(
+    BuildContext context,
+    String label,
+    String value,
+  ) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 120,
+            child: Text(
+              label,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: value));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('$label copied to clipboard'),
+                  duration: const Duration(seconds: 2),
+                ),
+              );
+            },
+            icon: Icon(
+              Icons.copy,
+              size: 18,
+              color: theme.colorScheme.onSurface,
             ),
           ),
         ],
