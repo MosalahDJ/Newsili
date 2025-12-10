@@ -224,16 +224,18 @@ class StoryCubit extends Cubit<StoryState> {
 
   void showFullDescription() {
     final currentState = state;
-    if (currentState is! StoryLoaded || currentState.showFullDescription)
+    if (currentState is! StoryLoaded || currentState.showFullDescription) {
       return;
+    }
 
     emit(currentState.copyWith(showFullDescription: true));
   }
 
   void hideFullDescription() {
     final currentState = state;
-    if (currentState is! StoryLoaded || !currentState.showFullDescription)
+    if (currentState is! StoryLoaded || !currentState.showFullDescription) {
       return;
+    }
 
     emit(currentState.copyWith(showFullDescription: false));
   }

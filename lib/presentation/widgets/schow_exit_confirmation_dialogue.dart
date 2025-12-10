@@ -25,7 +25,7 @@ Future<bool> showExitConfirmationDialog(BuildContext context) async {
                   width: 72,
                   height: 72,
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withOpacity(0.1),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -75,7 +75,7 @@ Future<bool> showExitConfirmationDialog(BuildContext context) async {
                             borderRadius: BorderRadius.circular(14),
                           ),
                           side: BorderSide(
-                            color: theme.colorScheme.outline.withOpacity(0.2),
+                            color: theme.colorScheme.outline.withValues(alpha: 0.2),
                             width: 1.5,
                           ),
                         ),

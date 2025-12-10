@@ -210,9 +210,9 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,
                 colors: [
-                  Colors.black.withOpacity(0.8),
+                  Colors.black.withValues(alpha: 0.8),
                   Colors.transparent,
-                  Colors.black.withOpacity(0.3),
+                  Colors.black.withValues(alpha: 0.3),
                 ],
               ),
             ),
@@ -244,7 +244,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
                 Text(
                   'By ${item.author}',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                     fontSize: 14,
                   ),
                 ),
@@ -297,7 +297,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
               Text(
                 'Tap to read more...',
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.6),
+                  color: Colors.white.withValues(alpha: 0.6),
                   fontSize: 14,
                   fontStyle: FontStyle.italic,
                 ),
@@ -380,7 +380,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
                         ? Colors.white
                         : index == state.currentStoryIndex
                         ? Colors.white
-                        : Colors.white.withOpacity(0.3),
+                        : Colors.white.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(1),
                   ),
                 ),
@@ -607,7 +607,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.3),
+        color: Colors.black.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
