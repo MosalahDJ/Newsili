@@ -11,6 +11,7 @@ import 'package:newsily/presentation/widgets/homepage%20widgets/home_page_skelet
 import 'package:newsily/presentation/widgets/homepage%20widgets/suggesion_banner.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/top_stories_section.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/trending_card.dart';
+import 'package:newsily/presentation/widgets/schow_exit_confirmation_dialogue.dart';
 import 'package:newsily/presentation/widgets/search_bar.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,65 +26,76 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.brightness_6, color: theme.colorScheme.onSurface),
-            onPressed: () {
-              context.read<ThemeCubit>().toggle();
-            },
-          ),
-        ],
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              width: 35,
-              height: 35,
-              child: Image.asset(
-                'lib/assets/images/newsily_logo/newsily_logo_png.png',
-                fit: BoxFit.contain,
-              ),
-            ),
-            Text(
-              "Newsily",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 22,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) async {
+        if (!didPop) {
+          await showExitConfirmationDialog(context);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          scrolledUnderElevation: 0,
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.brightness_6,
                 color: theme.colorScheme.onSurface,
               ),
+              onPressed: () {
+                context.read<ThemeCubit>().toggle();
+              },
             ),
           ],
-        ),
-        centerTitle: false,
-        backgroundColor: theme.colorScheme.surface,
-        foregroundColor: theme.colorScheme.onSurface,
-        surfaceTintColor: theme.colorScheme.surface,
-      ),
-      body: BlocBuilder<FetchCubit, FetchState>(
-        builder: (context, state) {
-          if (state is DataLoading) {
-            return Center(
-              child: CircularProgressIndicator(
-                color: theme.colorScheme.primary,
-              ),
-            );
-          } else if (state is DataError) {
-            return Center(
-              child: Text(
-                state.errortext,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.error,
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: 35,
+                height: 35,
+                child: Image.asset(
+                  'lib/assets/images/newsily_logo/newsily_logo_png.png',
+                  fit: BoxFit.contain,
                 ),
               ),
-            );
-          } else if (state is DataLoaded) {
-            return _buildContent(context, state);
-          }
-          return const HomePageSkeleton();
-        },
+              Text(
+                "Newsily",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                  color: theme.colorScheme.onSurface,
+                ),
+              ),
+            ],
+          ),
+          centerTitle: false,
+          backgroundColor: theme.colorScheme.surface,
+          foregroundColor: theme.colorScheme.onSurface,
+          surfaceTintColor: theme.colorScheme.surface,
+        ),
+        body: BlocBuilder<FetchCubit, FetchState>(
+          builder: (context, state) {
+            if (state is DataLoading) {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: theme.colorScheme.primary,
+                ),
+              );
+            } else if (state is DataError) {
+              return Center(
+                child: Text(
+                  state.errortext,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.error,
+                  ),
+                ),
+              );
+            } else if (state is DataLoaded) {
+              return _buildContent(context, state);
+            }
+            return const HomePageSkeleton();
+          },
+        ),
       ),
     );
   }

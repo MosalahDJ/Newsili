@@ -5,6 +5,7 @@ import 'package:newsily/data/models/news_data_model.dart';
 import 'package:newsily/logic/cubit/save_articles/bookmarks_cubit.dart';
 import 'package:newsily/logic/cubit/save_articles/bookmarks_state.dart';
 import 'package:newsily/presentation/widgets/homepage%20widgets/handlebookmarkpress.dart';
+import 'package:newsily/presentation/widgets/schow_exit_confirmation_dialogue.dart';
 
 class BookmarksPage extends StatefulWidget {
   const BookmarksPage({super.key});
@@ -24,87 +25,95 @@ class _BookmarksPageState extends State<BookmarksPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        title: const Text('Bookmarks'),
-        centerTitle: false,
-        elevation: 0,
-        backgroundColor: theme.colorScheme.surface,
-        foregroundColor: theme.colorScheme.onSurface,
-        surfaceTintColor: theme.colorScheme.surface,
-      ),
-      body: BlocBuilder<BookmarksCubit, BookmarksState>(
-        builder: (context, state) {
-          if (state is BookmarksLoading) {
-            return const _BookmarksSkeleton();
-          } else if (state is BookmarksError) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.error_outline,
-                      size: 64,
-                      color: theme.colorScheme.error,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      state.message,
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                        color: theme.colorScheme.onSurface,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) async {
+        if (!didPop) {
+          await showExitConfirmationDialog(context);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          scrolledUnderElevation: 0,
+          title: const Text('Bookmarks'),
+          centerTitle: false,
+          elevation: 0,
+          backgroundColor: theme.colorScheme.surface,
+          foregroundColor: theme.colorScheme.onSurface,
+          surfaceTintColor: theme.colorScheme.surface,
+        ),
+        body: BlocBuilder<BookmarksCubit, BookmarksState>(
+          builder: (context, state) {
+            if (state is BookmarksLoading) {
+              return const _BookmarksSkeleton();
+            } else if (state is BookmarksError) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        size: 64,
+                        color: theme.colorScheme.error,
                       ),
-                    ),
-                    const SizedBox(height: 24),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        context.read<BookmarksCubit>().loadBookmarks();
-                      },
-                      icon: Icon(
-                        Icons.refresh,
-                        color: theme.colorScheme.onPrimary,
+                      const SizedBox(height: 16),
+                      Text(
+                        state.message,
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          color: theme.colorScheme.onSurface,
+                        ),
                       ),
-                      label: Text(
-                        'Retry',
-                        style: TextStyle(color: theme.colorScheme.onPrimary),
+                      const SizedBox(height: 24),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          context.read<BookmarksCubit>().loadBookmarks();
+                        },
+                        icon: Icon(
+                          Icons.refresh,
+                          color: theme.colorScheme.onPrimary,
+                        ),
+                        label: Text(
+                          'Retry',
+                          style: TextStyle(color: theme.colorScheme.onPrimary),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.colorScheme.primary,
+                        ),
                       ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: theme.colorScheme.primary,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            );
-          } else if (state is BookmarksLoaded) {
-            final articles = state.savedArticles;
-            if (articles.isEmpty) {
-              return const _EmptyBookmarksView();
+              );
+            } else if (state is BookmarksLoaded) {
+              final articles = state.savedArticles;
+              if (articles.isEmpty) {
+                return const _EmptyBookmarksView();
+              }
+
+              return RefreshIndicator(
+                onRefresh: () async {
+                  context.read<BookmarksCubit>().loadBookmarks();
+                },
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  itemCount: articles.length,
+                  itemBuilder: (context, index) {
+                    final article = articles[index];
+                    return _BookmarkCard(article: article);
+                  },
+                ),
+              );
             }
 
-            return RefreshIndicator(
-              onRefresh: () async {
-                context.read<BookmarksCubit>().loadBookmarks();
-              },
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                itemCount: articles.length,
-                itemBuilder: (context, index) {
-                  final article = articles[index];
-                  return _BookmarkCard(article: article);
-                },
-              ),
-            );
-          }
-
-          return const _BookmarksSkeleton();
-        },
+            return const _BookmarksSkeleton();
+          },
+        ),
       ),
     );
   }
