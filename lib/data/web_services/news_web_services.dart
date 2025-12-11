@@ -27,6 +27,11 @@ class NewsWebServices {
     // ignore: prefer_typing_uninitialized_variables
     var database;
     String? tableName;
+    final prefs = await SharedPreferences.getInstance();
+    final timeString = prefs.getString('fetch_time');
+    final parsedTime = DateTime.parse(
+      timeString ?? DateTime.now().toIso8601String(),
+    );
 
     switch (category) {
       case Category.technology:
@@ -53,6 +58,16 @@ class NewsWebServices {
     }
 
     try {
+      if (DateTime.now().difference(parsedTime) < Duration(hours: 12)) {
+        // load offline data if within fetch duration
+        List<Articles> offlineData = await _loadOfflineData(
+          tableName,
+          database,
+        );
+        if (offlineData.isNotEmpty) {
+          return offlineData;
+        }
+      }
       // try getting  data from api
       http.Response response = await http.get(
         Uri.parse("$baseUrl$modelUrl$_apiKey"),
@@ -111,6 +126,10 @@ Future<List<Articles>> _loadOfflineData(
   }
 
   final rawJson = rows.first['response_data'];
+
+  //store the fetching time
+  final String fetchTime = DateTime.now().toIso8601String();
+  await _set(fetchTime);
 
   final Map<String, dynamic> body = jsonDecode(rawJson);
 
