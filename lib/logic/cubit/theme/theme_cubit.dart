@@ -8,7 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ThemeCubit extends Cubit<ThemeState> {
   static const _prefKey = 'app_theme_mode';
 
-  ThemeCubit() : super(ThemeState(mode: ThemeMode.light, themeData: lightTheme)) {
+  ThemeCubit()
+    : super(ThemeState(mode: ThemeMode.light, themeData: lightTheme)) {
     _loadFromPrefs();
   }
 
@@ -26,7 +27,8 @@ class ThemeCubit extends Cubit<ThemeState> {
 
   Future<void> setLight() async => _set(ThemeMode.light, lightTheme, 'light');
   Future<void> setDark() async => _set(ThemeMode.dark, darkTheme, 'dark');
-  Future<void> setSystem() async => _set(ThemeMode.system, ThemeData.fallback(), 'system');
+  Future<void> setSystem() async =>
+      _set(ThemeMode.system, ThemeData.fallback(), 'system');
 
   Future<void> toggle() async {
     if (state.mode == ThemeMode.dark) {

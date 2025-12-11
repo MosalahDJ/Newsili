@@ -11,6 +11,7 @@ import 'package:newsily/data/database/science_data.dart';
 import 'package:newsily/data/database/sports_data.dart';
 import 'package:newsily/data/database/technology_data.dart';
 import 'package:newsily/data/models/news_data_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NewsWebServices {
   static final String _apiKey = dotenv.env['API_KEY']!;
@@ -80,20 +81,23 @@ class NewsWebServices {
         return [];
       } else {
         // fallback to cached data on any error
-        List<Articles> offlineData = await loadOfflineData(tableName, database);
+        List<Articles> offlineData = await _loadOfflineData(
+          tableName,
+          database,
+        );
 
         return offlineData;
       }
     } catch (e) {
       // fallback to cached data on any error
-      List<Articles> offlineData = await loadOfflineData(tableName, database);
+      List<Articles> offlineData = await _loadOfflineData(tableName, database);
       return offlineData;
     }
   }
 }
 
 // function to load offline data
-Future<List<Articles>> loadOfflineData(
+Future<List<Articles>> _loadOfflineData(
   String? tableName,
   dynamic database,
 ) async {
@@ -111,4 +115,10 @@ Future<List<Articles>> loadOfflineData(
   final Map<String, dynamic> body = jsonDecode(rawJson);
 
   return (body['articles'] as List).map((e) => Articles.fromJson(e)).toList();
+}
+
+Future<void> _set(String prefValue) async {
+  const prefKey = 'fetch_time';
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString(prefKey, prefValue);
 }
