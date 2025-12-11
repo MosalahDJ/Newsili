@@ -7,6 +7,8 @@ import 'package:newsily/data/models/story_converter.dart';
 import 'package:newsily/helper/handle_bookmark_press.dart';
 import 'package:newsily/helper/share_function.dart';
 import 'package:newsily/helper/url_luncher_function.dart';
+import 'package:newsily/logic/cubit/save_articles/bookmarks_cubit.dart';
+import 'package:newsily/logic/cubit/save_articles/bookmarks_state.dart';
 import 'package:newsily/logic/cubit/story/story_cubit.dart';
 import 'package:newsily/logic/cubit/story/story_state.dart';
 
@@ -558,13 +560,12 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
               //Todo: I schould make some changes here for make the save func
               //work perfectly and just in the selected story not all stories
               // Bookmark/Save - FIXED: Use toggleSave
-              _buildControlButton(
-                icon: state.isSaved ? Icons.bookmark : Icons.bookmark_border,
-                label: state.isSaved ? 'Saved' : 'Save',
+              _buildSaveButton(
                 onTap: () {
                   cubit.toggleSave();
                   _saveArticle(article);
                 },
+                article: article,
               ),
 
               // More options
@@ -602,6 +603,47 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
         const SizedBox(height: 4),
         Text(label, style: TextStyle(color: Colors.white70, fontSize: 10)),
       ],
+    );
+  }
+
+  Widget _buildSaveButton({
+    required Articles article,
+    required VoidCallback onTap,
+  }) {
+    return BlocBuilder<BookmarksCubit, BookmarksState>(
+      builder: (context, state) {
+        return FutureBuilder<bool>(
+          future: context.read<BookmarksCubit>().isBookmarked(article),
+          builder: (context, snapshot) {
+            final isBookmarked = snapshot.data ?? false;
+            return Column(
+              children: [
+                GestureDetector(
+                  onTap: onTap,
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.black54,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Icon(
+                      isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                      color: Colors.white,
+                      size: 22,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  isBookmarked ? "Saved" : "Save",
+                  style: TextStyle(color: Colors.white70, fontSize: 10),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 
