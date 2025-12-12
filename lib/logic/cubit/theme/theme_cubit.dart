@@ -20,10 +20,10 @@ class ThemeCubit extends Cubit<ThemeState> {
     final stored = prefs.getString(_prefKey);
     if (stored == 'dark') {
       emit(ThemeState(mode: ThemeMode.dark, themeData: darkTheme));
-    } else if (stored == 'system') {
-      emit(ThemeState(mode: ThemeMode.system, themeData: ThemeData.fallback()));
-    } else {
+    } else if (stored == 'light') {
       emit(ThemeState(mode: ThemeMode.light, themeData: lightTheme));
+    } else {
+      emit(ThemeState(mode: ThemeMode.system, themeData: ThemeData.fallback()));
     }
   }
 
