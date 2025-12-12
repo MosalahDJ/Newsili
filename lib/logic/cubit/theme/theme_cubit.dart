@@ -9,7 +9,9 @@ class ThemeCubit extends Cubit<ThemeState> {
   static const _prefKey = 'app_theme_mode';
 
   ThemeCubit()
-    : super(ThemeState(mode: ThemeMode.light, themeData: lightTheme)) {
+    : super(
+        ThemeState(mode: ThemeMode.system, themeData: ThemeData.fallback()),
+      ) {
     _loadFromPrefs();
   }
 

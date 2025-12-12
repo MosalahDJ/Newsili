@@ -77,8 +77,9 @@ flutter_native_splash:
     image: lib/assets/images/newsily_logo/newsily_logo_l_i.png
     image_dark: lib/assets/images/newsily_logo/newsily_logo_l_i.png
     color: "#F8F9FA" # Light theme background color
-    icon_background_color: "#0052CC" # Primary color from your theme
-    icon_background_color_dark: "#1E293B" # Dark mode surface color
+    color_dark: "#0F172A" # Dark theme background color
+    icon_background_color: "#F8F9FA" # Primary color from your theme
+    icon_background_color_dark: "#0F172A" # Dark mode surface color
     branding: lib/assets/images/splash_view_image/branding_text_brune.png
     branding_dark: lib/assets/images/splash_view_image/branding_text_gold.png
     branding_bottom_padding: 75
