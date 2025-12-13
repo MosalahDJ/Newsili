@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/logic/cubit/fetch_data/fetch_cubit.dart';
@@ -15,7 +16,29 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   @override
-  void initState() {
+  void initState() async {
+    final theme = Theme.of(context);
+
+    // Check internet connectivity
+    final connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult.contains(ConnectivityResult.none)) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Connectivity Issue: Cannot refresh feed. Check your internet connection.',
+            style: theme.textTheme.titleSmall?.copyWith(
+              height: 1.3,
+              color: theme.colorScheme.onSurface,
+            ),
+          ),
+          backgroundColor: theme.colorScheme.surface,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      );
+    }
+    // ignore: use_build_context_synchronously
     context.read<FetchCubit>().getArticles();
     super.initState();
   }
