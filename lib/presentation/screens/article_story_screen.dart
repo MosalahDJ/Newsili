@@ -557,7 +557,7 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
                 onTap: () => cubit.togglePause(),
               ),
 
-              // Bookmark/Save 
+              // Bookmark/Save
               _buildSaveButton(
                 onTap: () {
                   cubit.toggleSave();
@@ -848,6 +848,24 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
                   style: TextStyle(color: Colors.white),
                 ),
                 onTap: () {
+                  final theme = Theme.of(context);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'This feature is under development and will be available soon 🚀.',
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          height: 1.3,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                      backgroundColor: theme.colorScheme.surface,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  );
                   Navigator.pop(context);
                 },
               ),
@@ -858,6 +876,24 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
                   style: TextStyle(color: Colors.white),
                 ),
                 onTap: () {
+                  final theme = Theme.of(context);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'This feature is under development and will be available soon 🚀.',
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          height: 1.3,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                      backgroundColor: theme.colorScheme.surface,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  );
                   Navigator.pop(context);
                 },
               ),
@@ -868,6 +904,26 @@ class ArticleStoryScreenState extends State<ArticleStoryScreen> {
                   style: TextStyle(color: Colors.white),
                 ),
                 onTap: () {
+                  final theme = Theme.of(context);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'This feature is under development and will be available soon 🚀.',
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          height: 1.3,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                      backgroundColor: theme.colorScheme.surface,
+
+                      behavior: SnackBarBehavior.floating,
+
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  );
                   Navigator.pop(context);
                 },
               ),
