@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -10,12 +11,11 @@ import 'package:newsily/logic/cubit/fetch_data/fetch_cubit.dart';
 import 'package:newsily/logic/cubit/story/story_cubit.dart';
 import 'package:newsily/logic/cubit/theme/theme_cubit.dart';
 import 'package:newsily/logic/cubit/theme/theme_state.dart';
-import 'package:device_preview/device_preview.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
-  runApp(DevicePreview(enabled: true, builder: (context) => Newsily(appRoutter: AppRoutter())));
+  runApp(Newsily(appRoutter: AppRoutter()));
 }
 
 class Newsily extends StatelessWidget {
@@ -39,13 +39,13 @@ class Newsily extends StatelessWidget {
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, themeMode) {
           return MaterialApp(
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        themeMode: themeMode.mode,
-        initialRoute: "home",
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: appRoutter.generateRoute,
-      );
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: themeMode.mode,
+            initialRoute: "home",
+            debugShowCheckedModeBanner: false,
+            onGenerateRoute: appRoutter.generateRoute,
+          );
         },
       ),
     );
