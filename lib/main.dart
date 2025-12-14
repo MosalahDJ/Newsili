@@ -10,11 +10,12 @@ import 'package:newsily/logic/cubit/fetch_data/fetch_cubit.dart';
 import 'package:newsily/logic/cubit/story/story_cubit.dart';
 import 'package:newsily/logic/cubit/theme/theme_cubit.dart';
 import 'package:newsily/logic/cubit/theme/theme_state.dart';
+import 'package:device_preview/device_preview.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
-  runApp(Newsily(appRoutter: AppRoutter()));
+  runApp(DevicePreview(enabled: true, builder: (context) => Newsily(appRoutter: AppRoutter())));
 }
 
 class Newsily extends StatelessWidget {
