@@ -51,4 +51,4 @@ class Newsily extends StatelessWidget {
   }
 }
 
-//project: Newsily finished
+//project status: Newsily finished
