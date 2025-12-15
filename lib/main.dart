@@ -50,3 +50,5 @@ class Newsily extends StatelessWidget {
     );
   }
 }
+
+//project: Newsily finished
