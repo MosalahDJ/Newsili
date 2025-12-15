@@ -1,9 +1,22 @@
+import java.io.File
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
+
+// Load Keystore Properties
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
+
+if (keystorePropertiesFile.exists()) {
+    FileInputStream(keystorePropertiesFile).use { keystoreProperties.load(it) }
+}
+
 
 android {
     namespace = "com.mo_salah_dj.newsily"
@@ -30,11 +43,33 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        create("release") {
+            // Use 'get' operator and cast to String for properties from the Properties object
+            storeFile = File(keystoreProperties.getProperty("storeFile") ?: throw Exception("storeFile not set in key.properties"))
+            storePassword = keystoreProperties.getProperty("storePassword")
+                ?: throw Exception("storePassword not set in key.properties")
+            keyAlias = keystoreProperties.getProperty("keyAlias")
+                ?: throw Exception("keyAlias not set in key.properties")
+            keyPassword = keystoreProperties.getProperty("keyPassword")
+                ?: throw Exception("keyPassword not set in key.properties")
+        }
+    }
+
     buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+        getByName("release") {
+            // Apply the signing config defined above
+            signingConfig = signingConfigs.getByName("release")
+            
+            // ProGuard/R8 settings (using Kotlin property syntax)
+            isMinifyEnabled = true
+            isShrinkResources = true
+            
+            // Use 'setProguardFiles' for the correct Kotlin function signature
+            setProguardFiles(listOf(
+                getDefaultProguardFile("proguard-android-optimize.txt"), 
+                "proguard-rules.pro"
+            ))
         }
     }
 }
