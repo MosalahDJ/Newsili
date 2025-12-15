@@ -1,5 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsily/constants/constant_enum.dart';
 import 'package:newsily/data/models/news_data_model.dart';
@@ -49,29 +47,6 @@ class FetchCubit extends Cubit<FetchState> {
       emit(DataError("$e"));
     }
   }
-
-  // _checkConnectivity(BuildContext context) async {
-  //   final theme = Theme.of(context);
-  //   // Check internet connectivity
-  //   final connectivityResult = await Connectivity().checkConnectivity();
-  //   if (connectivityResult.contains(ConnectivityResult.none)) {
-  //     // ignore: use_build_context_synchronously
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(
-  //         content: Text(
-  //           'Connectivity Issue: Cannot refresh feed. Check your internet connection.',
-  //           style: theme.textTheme.titleSmall?.copyWith(
-  //             height: 1.3,
-  //             color: theme.colorScheme.onSurface,
-  //           ),
-  //         ),
-  //         backgroundColor: theme.colorScheme.surface,
-  //         behavior: SnackBarBehavior.floating,
-  //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-  //       ),
-  //     );
-  //   }
-  // }
 
   void performSearch(String query) {
     if (state is! DataLoaded) return;
