@@ -53,4 +53,4 @@ class Newsily extends StatelessWidget {
 
 //project status: Newsily finished
 // I have some problems for fixing:
-//
+// the home scren schold present some data or text if ther is no,connection in first lunch
