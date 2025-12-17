@@ -55,3 +55,4 @@ class Newsily extends StatelessWidget {
 // I have some problems for fixing:
 // the home scren schold present some data or text if ther is no,connection in first lunch
 // the secnd problem is that the home page doesn't schow anything if we are in refresching lik tha schould present the schimmer effect
+// also I want to make the page cant change bettwen the other pages like bookmarks and categories if data is refresching for evit any problem of context
