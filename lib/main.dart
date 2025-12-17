@@ -52,3 +52,5 @@ class Newsily extends StatelessWidget {
 }
 
 //project status: Newsily finished
+// I have some problems for fixing:
+//
