@@ -54,3 +54,4 @@ class Newsily extends StatelessWidget {
 //project status: Newsily finished
 // I have some problems for fixing:
 // the home scren schold present some data or text if ther is no,connection in first lunch
+// the secnd problem is that the home page doesn't schow anything if we are in refresching lik tha schould present the schimmer effect
