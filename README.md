@@ -134,8 +134,6 @@ This separation keeps the app:
 
 NewsAPI free plan has request limits
 
-Flutter Web requires a proxy due to CORS (NewsAPI does not support CORS)
-
 📄 License
 
 This project is for educational and portfolio purposes.
