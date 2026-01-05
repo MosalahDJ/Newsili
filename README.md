@@ -139,6 +139,7 @@ NewsAPI free plan has request limits
 This project is for educational and portfolio purposes.
 News data provided by NewsAPI.org.
 
+
 👨‍💻 Author
 
 Newsily
