@@ -13,8 +13,7 @@ class StoryCubit extends Cubit<StoryState> {
 
   StoryCubit() : super(const StoryInitial());
 
-  // ========== INITIALIZATION ==========
-
+  // INITIALIZATION
   void initialize({
     required List<Articles> articles,
     int initialArticleIndex = 0,
