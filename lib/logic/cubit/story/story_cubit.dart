@@ -365,7 +365,7 @@ class StoryCubit extends Cubit<StoryState> {
     }
   }
 
-  // ========== DISPOSE ==========
+  // DISPOSE
 
   @override
   Future<void> close() {
