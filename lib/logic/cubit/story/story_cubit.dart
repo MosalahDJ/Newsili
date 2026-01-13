@@ -302,7 +302,7 @@ class StoryCubit extends Cubit<StoryState> {
     emit(currentState.copyWith(progress: clampedProgress));
   }
 
-  // ========== HELPER METHODS ==========
+  // HELPER METHODS 
 
   bool get isPlaying {
     final currentState = state;
