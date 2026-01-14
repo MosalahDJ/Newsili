@@ -238,7 +238,7 @@ class StoryCubit extends Cubit<StoryState> {
     emit(currentState.copyWith(showFullDescription: false));
   }
 
-  // ========== AUTO ADVANCE & PROGRESS ==========
+  // AUTO ADVANCE & PROGRESS 
 
   void _startAutoAdvance(StoryLoaded state) {
     if (state.isPaused || !_isInitialized) return;
